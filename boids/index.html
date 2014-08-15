@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Boids</title>
+
+	<script type="text/javascript" src="../common/utils.js"></script>
+	<script type="text/javascript" src="boidsEngine.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+
+	<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function(){
+		var canvas = document.getElementById("display");
+		load(canvas);
+	});    
+	</script>
+	<div class="container">
+		<canvas id="display" width="860" height="620"></canvas>
+		<div class="footer">
+			<p >Alejandro Echeverria 2014.</p>
+		</div>
+		<div class="controls">
+			<h3>
+				Boids	
+			</h3>	
+			<p>
+				An implementation of the <a href="http://www.red3d.com/cwr/boids/" target="_blank" >boids </a> flocking algorithm using HTML canvas. 
+			</p>
+			<p>	
+				Each boid ("bird droid") is influenced by four forces: separation (avoid crashing with the close neighbors), alignment (align to the general direction of the flock), cohesion (stay close to the center of the flock) and obstacle avoidance (avoid crashing with the boxes).
+			</p>
+			<p>	  
+				You can modify the algorithm parameters using the sliders below and add new obstacles by clicking with the mouse on the canvas <a href="https://github.com/vreyn/webtoys" target="_blank" >(source code).</a> 
+			</p>	
+			<p>
+				<input type="checkbox" id="showOverlayInput">Show forces on sample boid</input>
+			</p>
+			<div class="separation">
+				<p>
+					<label>Separation radius: </label> 
+					<br/>
+					<input type="RANGE" MIN="0" MAX="700" STEP="5" VALUE="60" id="separationRadiusInput"></input>
+				</p>
+				<p>
+					<label>Separation force intensity:</label>  
+					<br/>
+					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="7" id="separationForceInput"></input>
+				</p>
+			</div>
+			<div class="alignment">
+				<p>
+					<label>Alignment radius: </label> 
+					<br/>
+					<input type="RANGE" MIN="0" MAX="700" STEP="5" VALUE="400" id="alignmentRadiusInput"></input>
+				</p>
+				<p>
+					<label>Alignment force intensity:</label>  
+					<br/>
+					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="5" id="alignmentForceInput"></input>
+				</p>
+			</div>		
+			<div class="cohesion">
+				<p>
+					<label>Cohesion radius: </label> 
+					<br/>
+					<input type="RANGE" MIN="0" MAX="700" STEP="5" VALUE="700" id="cohesionRadiusInput"></input>
+				</p>
+				<p>
+					<label>Cohesion force intensity:</label>  
+					<br/>
+					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="5" id="cohesionForceInput"></input>
+				</p>
+			</div>		
+			<div class="obstacle">
+				<p>
+					<label>Obstacle radius: </label> 
+					<br/>
+					<input type="RANGE" MIN="0" MAX="600" STEP="5" VALUE="80" id="obstacleRadiusInput"></input>
+				</p>
+				<p>
+					<label>Obstacle force intensity:</label>  
+					<br/>
+					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="20" id="obstacleForceInput"></input>
+				</p>
+			</div>						
+		</div>
+	</div>
+	
+
+</body>
+</html>
