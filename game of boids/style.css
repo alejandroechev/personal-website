@@ -21,19 +21,16 @@
 			font-family: "Arial";
 			font-size: 11px;
 		}
-		.container .controls .exact{
+		.container .controls .separation{
 			color: #88FF88;
 		}
-		.container .controls .euler{
+		.container .controls .alignment{
 			color: #FF8888;
 		}
-		.container .controls .midPoint{
+		.container .controls .cohesion{
 			color: #FF88FF;
 		}
-		.container .controls .eulerCromer{
-			color: #FFFF88;
-		}
-		.container .controls .rk4{
+		.container .controls .obstacle{
 			color: #88FFFF;
 		}
 		.container .footer {

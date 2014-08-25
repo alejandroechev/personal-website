@@ -53,6 +53,7 @@ function Agent(position, speed, width, height, color) {
    this.height = height;
    this.color = color;
    this.fov = Math.PI/2;
+   this.tag = 0;
 }
 
 
@@ -72,7 +73,16 @@ Agent.prototype = {
         this.position = this.position.add(this.speed.multiply(dt));
     },
     isNeighbour: function(other, neighbourhoodRadius) {
-        if (this.position.distance(other.position) < neighbourhoodRadius) {
+        if (this.position.distance(other.position) < neighbourhoodRadius && this.tag == other.tag) {
+            var positionVector = other.position.substract(this.position).normalize();
+            var directionVector = this.speed.normalize();
+            var angle = Math.acos(positionVector.dot(directionVector));
+            return angle < this.fov;
+        }
+        return false;
+    },
+    isNeighbourWithTag: function(other, neighbourhoodRadius, tag) {
+        if (this.position.distance(other.position) < neighbourhoodRadius && tag == other.tag) {
             var positionVector = other.position.substract(this.position).normalize();
             var directionVector = this.speed.normalize();
             var angle = Math.acos(positionVector.dot(directionVector));

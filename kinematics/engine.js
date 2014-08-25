@@ -3,6 +3,8 @@ var currentContext;
 var width, height; 
 var frameUpdateDeltaTime = 1.0 / 60.0;
 var currentTime = 0;
+var previousNUmberOfStepsPerFrame = 50;
+var numberOfStepsPerFrame = 50;
 
 var springEuler, springEulerCromer, springRK4, springExact, springMidPoint;
 
@@ -15,9 +17,9 @@ function getMousePos(evt) {
     };
 }
 
-function onMouseClicked(event)
+function onTimeStepChanged(event)
 {
-	var pos = getMousePos(event);
+	numberOfStepsPerFrame = 100 / event.target.value;
 }
 
 
@@ -26,7 +28,7 @@ function load(canvas){
 	height = canvas.height;
 	currentContext = canvas.getContext("2d");
 
-	canvas.addEventListener("mousedown", onMouseClicked, false);
+	document.getElementById("timeStepSlider").addEventListener("change", onTimeStepChanged, false);
 
 	springExact = new Spring(5, 0.5, new Vector(width / 2, height / 6), new Vector(100, 0), new Vector(0, 0), '#88FF88');
 	springEuler = new Spring(5, 0.5, new Vector(width / 2, 2 * height / 6), new Vector(100, 0), new Vector(0, 0), '#FF8888');
@@ -42,14 +44,19 @@ function draw(){
 	currentContext.strokeStyle = 'white';
 	currentContext.fillRect(0,0,width,height);
 	currentContext.strokeRect(0,0,width,height);
-
-    currentTime = currentTime + frameUpdateDeltaTime;
-	springExact.updateExact(currentTime);
-	springEuler.updateEuler(frameUpdateDeltaTime);
-	springEulerCromer.updateEulerCromer(frameUpdateDeltaTime);
-	springMidPoint.updateMidPoint(frameUpdateDeltaTime);
-	springRK4.updateRK4(frameUpdateDeltaTime);
-
+	
+	previousNUmberOfStepsPerFrame = numberOfStepsPerFrame;
+	var stepSize = frameUpdateDeltaTime / previousNUmberOfStepsPerFrame;
+	for(var i = 0; i < previousNUmberOfStepsPerFrame; i++) {
+		
+		currentTime = currentTime + stepSize;
+		springExact.updateExact(currentTime);
+		springEuler.updateEuler(stepSize);
+		springEulerCromer.updateEulerCromer(stepSize);
+		springMidPoint.updateMidPoint(stepSize);
+		springRK4.updateRK4(stepSize);
+	};
+    
 	springExact.draw(currentContext);
 	springEuler.draw(currentContext);
 	springEulerCromer.draw(currentContext);

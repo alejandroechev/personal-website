@@ -27,65 +27,39 @@
 				Kinematic Solvers	
 			</h3>	
 			<p>
-				An implementation of the <a href="http://www.red3d.com/cwr/boids/" target="_blank" >boids </a> flocking algorithm using HTML canvas. 
-			</p>
-			<p>	
-				Each boid ("bird droid") is influenced by four forces: separation (avoid crashing with the close neighbors), alignment (align to the general direction of the flock), cohesion (stay close to the center of the flock) and obstacle avoidance (avoid crashing with the boxes).
+				Implementation of several numeric integration solvers to model the kinematics of a spring, comparing their accuracy respect to the exact solution.
 			</p>
 			<p>	  
-				You can modify the algorithm parameters using the sliders below and add new obstacles by clicking with the mouse on the canvas <a href="https://github.com/vreyn/webtoys" target="_blank" >(source code).</a> 
-			</p>	
-			<p>
-				<input type="checkbox" id="showOverlayInput">Show forces on sample boid</input>
+				You can modify the time step of the solvers using the slider below, try increasing the time step to appreciate the differences between the methods <a href="https://github.com/vreyn/webtoys" target="_blank" >(source code).</a> 
 			</p>
-			<div class="separation">
+
+			<div >
 				<p>
-					<label>Separation radius: </label> 
+					<label>Time step (min: 0.02 ms, max: 2 ms) </label> 
 					<br/>
-					<input type="RANGE" MIN="0" MAX="700" STEP="5" VALUE="60" id="separationRadiusInput"></input>
+					<input type="RANGE" MIN="1" MAX="100" STEP="1" VALUE="50" id="timeStepSlider"></input>
 				</p>
-				<p>
-					<label>Separation force intensity:</label>  
-					<br/>
-					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="7" id="separationForceInput"></input>
-				</p>
-			</div>
-			<div class="alignment">
-				<p>
-					<label>Alignment radius: </label> 
-					<br/>
-					<input type="RANGE" MIN="0" MAX="700" STEP="5" VALUE="400" id="alignmentRadiusInput"></input>
-				</p>
-				<p>
-					<label>Alignment force intensity:</label>  
-					<br/>
-					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="5" id="alignmentForceInput"></input>
-				</p>
-			</div>		
-			<div class="cohesion">
-				<p>
-					<label>Cohesion radius: </label> 
-					<br/>
-					<input type="RANGE" MIN="0" MAX="700" STEP="5" VALUE="700" id="cohesionRadiusInput"></input>
-				</p>
-				<p>
-					<label>Cohesion force intensity:</label>  
-					<br/>
-					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="5" id="cohesionForceInput"></input>
-				</p>
-			</div>		
-			<div class="obstacle">
-				<p>
-					<label>Obstacle radius: </label> 
-					<br/>
-					<input type="RANGE" MIN="0" MAX="600" STEP="5" VALUE="80" id="obstacleRadiusInput"></input>
-				</p>
-				<p>
-					<label>Obstacle force intensity:</label>  
-					<br/>
-					<input type="RANGE" MIN="0" MAX="20" STEP="0.5" VALUE="20" id="obstacleForceInput"></input>
-				</p>
-			</div>						
+			</div>	
+			<p>
+				<ul>
+					<div class="exact">
+						<li>Exact solution</li>			
+					</div>
+					<div class="euler">
+						<li>Euler method solver <a href="http://en.wikipedia.org/wiki/Euler_method">(wikipedia)</a></li>					
+					</div>
+					<div class="midPoint">
+						<li>Midpoint method solver <a href="http://en.wikipedia.org/wiki/Midpoint_method">(wikipedia)</a></li>				
+					</div>
+					<div class="eulerCromer">
+						<li>Euler-Cromer method solver <a href="http://en.wikipedia.org/wiki/Semi-implicit_Euler_method">(wikipedia)</a></li>				
+					</div>
+					<div class="rk4">
+						<li>Runge-Kutta 4th approximation solver<a href="http://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">(wikipedia)</a></li>				
+					</div>
+				</ul>
+			</p>
+			
 		</div>
 	</div>
 	
