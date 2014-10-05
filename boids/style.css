@@ -1,26 +1,4 @@
-		body { 
-			background-color: #000;
-			color: #FFF;
-		}
-		a:link {
-    		color: #ffb266;
-		}
-		a:visited {
-    		color: #99ccff;
-		}
-		.container { position: relative;}
-		.container .controls {
-			position: absolute;
-			top: 0;
-			right: 0;
-			background: #222;
-			
-			border: 1px solid white;
-			padding: 20px;
-			width: 340px;
-			font-family: "Arial";
-			font-size: 11px;
-		}
+
 		.container .controls .separation{
 			color: #88FF88;
 		}
@@ -33,6 +11,4 @@
 		.container .controls .obstacle{
 			color: #88FFFF;
 		}
-		.container .footer {
-			font-size: 11px;
-		}
+	
