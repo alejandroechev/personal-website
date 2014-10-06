@@ -1,0 +1,17 @@
+	
+		.container .controls .exact{
+			color: #88FF88;
+		}
+		.container .controls .euler{
+			color: #FF8888;
+		}
+		.container .controls .midPoint{
+			color: #FF88FF;
+		}
+		.container .controls .eulerCromer{
+			color: #FFFF88;
+		}
+		.container .controls .rk4{
+			color: #88FFFF;
+		}
+		
