@@ -25,4 +25,18 @@
 			font-family: "Arial";
 			font-size: 11px;
 		}
+
+		.container .menu {
+			padding: 20px;
+			width: 860px;
+			font-family: "Arial";
+			font-size: 11px;
+		}
+
+		#navlist li
+		{
+		display: inline;
+		list-style-type: none;
+		padding-right: 20px;
+		}
 		
