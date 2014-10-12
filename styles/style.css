@@ -35,8 +35,14 @@
 
 		#navlist li
 		{
-		display: inline;
-		list-style-type: none;
-		padding-right: 20px;
+			display: inline;
+			list-style-type: none;
+			padding-right: 20px;
+			
+		}
+
+		.icon
+		{
+			border: 1px solid white;
 		}
 		
