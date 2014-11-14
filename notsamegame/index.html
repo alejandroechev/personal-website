@@ -16,9 +16,45 @@
 	});    
 	</script>
 	<div class="container">
-		<canvas id="display" width="1340" height="620"></canvas>
+		<canvas id="display" width="920" height="620"></canvas>
 		<div class="footer">
 			<p >Alejandro Echeverria 2014.</p>
+		</div>
+		<div class="controls">
+			<h3>
+				NotSameGame	
+			</h3>	
+			<p>
+				A semi-procedural tool for creating 2D grid map/dungeons using the mechanics of <a href="http://en.wikipedia.org/wiki/SameGame" target="_blank">SameGame</a>. Click on any tile and neighbour tiles of the same colors will be cleared out. 
+			</p>
+			<p>	  
+				You can modify the number of colors, size of the grid and export the results as text <a href="https://github.com/vreyn/webtoys" target="_blank" >(source code).</a> 
+			</p>
+
+			<div >
+				<p>
+					<label>Number of colors </label> 
+					<br/>
+					<input type="RANGE" MIN="2" MAX="5" STEP="1" VALUE="3" id="colorSlider"></input>
+				</p>
+				<p>
+					<label>Number of rows </label> 
+					<br/>
+					<input type="RANGE" MIN="10" MAX="100" STEP="1" VALUE="25" id="rowsSlider"></input>
+				</p>
+				<p>
+					<label>Number of columns </label> 
+					<br/>
+					<input type="RANGE" MIN="10" MAX="100" STEP="1" VALUE="40" id="columnsSlider"></input>
+				</p>
+				<p>
+					<button id="updateButton">Update</button>
+				</p>
+				<p>
+					<textarea id="textGrid"></textarea>	
+				</p>
+			</div>	
+			
 		</div>
 	</div>
 	

@@ -36,3 +36,9 @@
 		.container .footer {
 			font-size: 11px;
 		}
+		textarea{
+			font-family: "Courier";
+			font-size: 8px;
+			width:100%;
+			height:250px;
+		}
