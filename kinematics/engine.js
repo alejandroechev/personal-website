@@ -3,8 +3,8 @@ var currentContext;
 var width, height; 
 var frameUpdateDeltaTime = 1.0 / 60.0;
 var currentTime = 0;
-var previousNUmberOfStepsPerFrame = 50;
-var numberOfStepsPerFrame = 50;
+var previousNUmberOfStepsPerFrame = 70;
+var numberOfStepsPerFrame = 70;
 
 var springEuler, springEulerCromer, springRK4, springExact, springMidPoint;
 
@@ -28,7 +28,7 @@ function load(canvas){
 	height = canvas.height;
 	currentContext = canvas.getContext("2d");
 
-	document.getElementById("timeStepSlider").addEventListener("change", onTimeStepChanged, false);
+	//document.getElementById("timeStepSlider").addEventListener("change", onTimeStepChanged, false);
 
 	springExact = new Spring(5, 0.5, new Vector(width / 2, height / 6), new Vector(100, 0), new Vector(0, 0), '#88FF88');
 	springEuler = new Spring(5, 0.5, new Vector(width / 2, 2 * height / 6), new Vector(100, 0), new Vector(0, 0), '#FF8888');
