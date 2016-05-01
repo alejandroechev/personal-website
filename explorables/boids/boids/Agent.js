@@ -28,6 +28,15 @@ var Boids;
             }
             return false;
         };
+        Agent.prototype.modularIsNeighbour = function (other, neighbourhoodRadius, bounds) {
+            if (this.position.modularDistance(other.position, bounds) < neighbourhoodRadius) {
+                var positionVector = other.position.substract(this.position).normalized();
+                var directionVector = this.speed.normalized();
+                var angle = Math.acos(positionVector.dot(directionVector));
+                return angle < this.fov;
+            }
+            return false;
+        };
         return Agent;
     })();
     Boids.Agent = Agent;

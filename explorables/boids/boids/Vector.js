@@ -27,6 +27,11 @@ var Boids;
         Vector2D.prototype.distance = function (other) {
             return Math.sqrt((this.x - other.x) * (this.x - other.x) + (this.y - other.y) * (this.y - other.y));
         };
+        Vector2D.prototype.modularDistance = function (other, bounds) {
+            var absX = Math.abs(this.x - other.x);
+            var absY = Math.abs(this.y - other.y);
+            return Math.sqrt(Math.pow(Math.min(absX, bounds.x - absX), 2) + Math.pow(Math.min(absY, bounds.y - absY), 2));
+        };
         Vector2D.prototype.dot = function (other) {
             return this.x * other.x + this.y * other.y;
         };

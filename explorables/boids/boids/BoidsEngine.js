@@ -2,34 +2,36 @@
 var Boids;
 (function (Boids) {
     var BoidsEngine = (function () {
-        function BoidsEngine(context, width, height, numberOfBoids, numberOfObstacles) {
+        function BoidsEngine(context, params) {
             this.context = context;
             this.frameUpdateDeltaTime = 1 / 60;
-            this.width = width;
-            this.height = height;
-            this.separationRadius = 60;
-            this.separationForceIntensity = 7;
-            this.alignmentRadius = 400;
-            this.alignmentForceIntensity = 5;
-            this.cohesionRadius = 700;
-            this.cohesionForceIntensity = 5;
-            this.obstacleRadius = 80;
-            this.obstacleForceIntensity = 20;
+            this.width = params.width;
+            this.height = params.height;
+            this.bounds = new Boids.Vector2D(this.width, this.height);
+            ;
+            this.separationRadius = params.separationRadius;
+            this.separationForceIntensity = params.separationForceIntensity;
+            this.alignmentRadius = params.alignmentRadius;
+            this.alignmentForceIntensity = params.alignmentForceIntensity;
+            this.cohesionRadius = params.cohesionRadius;
+            this.cohesionForceIntensity = params.cohesionForceIntensity;
+            this.obstacleRadius = params.obstacleRadius;
+            this.obstacleForceIntensity = params.obstacleForceIntensity;
             this.boids = new Array();
             var i;
-            for (i = 0; i < numberOfBoids; i++) {
-                var position = new Boids.Vector2D(0.1 * width + Math.random() * width * 0.8, 0.1 * height + Math.random() * height * 0.8);
+            for (i = 0; i < params.numberOfBoids; i++) {
+                var position = new Boids.Vector2D(0.1 * this.width + Math.random() * this.width * 0.8, 0.1 * this.height + Math.random() * this.height * 0.8);
                 var speed = new Boids.Vector2D(2 * Math.random() - 1, 2 * Math.random() - 1);
                 var fov = Math.PI / 2;
                 this.boids.push(new Boids.Agent(position, speed, fov, 8, 10, '#ffb266'));
             }
             this.obstacles = new Array();
-            for (i = 0; i < numberOfObstacles; i++) {
-                this.addObstacle(Math.random() * width, Math.random() * height);
+            for (i = 0; i < params.numberOfObstacles; i++) {
+                this.addObstacle(Math.random() * this.width, Math.random() * this.height);
             }
             ;
-            this.specialBoid = numberOfBoids / 2;
-            this.showOverlay = false;
+            this.specialBoid = params.numberOfBoids / 2;
+            this.showOverlay = true;
         }
         BoidsEngine.prototype.draw = function () {
             this.context.fillStyle = '#222';
@@ -115,7 +117,7 @@ var Boids;
         BoidsEngine.prototype.getSeparationForce = function (agent, agents, radius) {
             var accumulatedSeparation = new Boids.Vector2D(0, 0);
             for (var i = 0; i < agents.length; i++) {
-                if (agents[i] !== agent && agent.isNeighbour(agents[i], radius)) {
+                if (agents[i] !== agent && agent.modularIsNeighbour(agents[i], radius, this.bounds)) {
                     accumulatedSeparation = accumulatedSeparation.add(agent.position.substract(agents[i].position));
                 }
             }
@@ -125,7 +127,7 @@ var Boids;
             var averageAlignment = new Boids.Vector2D(0, 0);
             var numberOfNeighbours = 0;
             for (var i = 0; i < agents.length; i++) {
-                if (agents[i] !== agent && agent.isNeighbour(agents[i], radius)) {
+                if (agents[i] !== agent && agent.modularIsNeighbour(agents[i], radius, this.bounds)) {
                     averageAlignment = averageAlignment.add(agents[i].speed);
                     numberOfNeighbours += 1;
                 }
@@ -138,7 +140,7 @@ var Boids;
             var averagePosition = new Boids.Vector2D(0, 0);
             var numberOfNeighbours = 0;
             for (var i = 0; i < agents.length; i++) {
-                if (agents[i] !== agent && agent.isNeighbour(agents[i], radius)) {
+                if (agents[i] !== agent && agent.modularIsNeighbour(agents[i], radius, this.bounds)) {
                     averagePosition = averagePosition.add(agents[i].position);
                     numberOfNeighbours += 1;
                 }

@@ -19,37 +19,39 @@ namespace Boids {
         frameUpdateDeltaTime: number;
         specialBoid: number;
         showOverlay: boolean;
+        bounds: Vector2D;
 
-        constructor(context: CanvasRenderingContext2D, width: number, height: number, numberOfBoids: number, numberOfObstacles: number) {
+        constructor(context: CanvasRenderingContext2D, params) {
             this.context = context;
             this.frameUpdateDeltaTime = 1 / 60;
-            this.width = width;
-            this.height = height;
+            this.width = params.width;
+            this.height = params.height;
+            this.bounds = new Vector2D(this.width, this.height));
 
-            this.separationRadius = 60;
-            this.separationForceIntensity = 7;
-            this.alignmentRadius = 400;
-            this.alignmentForceIntensity = 5;
-            this.cohesionRadius = 700;
-            this.cohesionForceIntensity = 5;
-            this.obstacleRadius = 80;
-            this.obstacleForceIntensity = 20;
+            this.separationRadius = params.separationRadius;
+            this.separationForceIntensity = params.separationForceIntensity;
+            this.alignmentRadius = params.alignmentRadius;
+            this.alignmentForceIntensity = params.alignmentForceIntensity;
+            this.cohesionRadius = params.cohesionRadius;
+            this.cohesionForceIntensity = params.cohesionForceIntensity;
+            this.obstacleRadius = params.obstacleRadius;
+            this.obstacleForceIntensity = params.obstacleForceIntensity;
 
             this.boids = new Array<Agent>();
             var i: number;
-            for (i = 0; i < numberOfBoids; i++) {
-                var position = new Vector2D(0.1 * width + Math.random() * width * 0.8, 0.1 * height + Math.random() * height * 0.8);
+            for (i = 0; i < params.numberOfBoids; i++) {
+                var position = new Vector2D(0.1 * this.width + Math.random() * this.width * 0.8, 0.1 * this.height + Math.random() * this.height * 0.8);
                 var speed = new Vector2D(2 * Math.random() - 1, 2 * Math.random() - 1);
                 var fov = Math.PI / 2;
                 this.boids.push(new Agent(position, speed, fov, 8, 10, '#ffb266'));
             }
             this.obstacles = new Array<Agent>();
-            for (i = 0; i < numberOfObstacles; i++) {
-                this.addObstacle(Math.random() * width, Math.random() * height);
+            for (i = 0; i < params.numberOfObstacles; i++) {
+                this.addObstacle(Math.random() * this.width, Math.random() * this.height);
             };
 
-            this.specialBoid = numberOfBoids / 2;
-            this.showOverlay = false;
+            this.specialBoid = params.numberOfBoids / 2;
+            this.showOverlay = true;
 
         }
 
@@ -150,7 +152,7 @@ namespace Boids {
         getSeparationForce(agent: Agent, agents: Array<Agent>, radius: number) {
             var accumulatedSeparation = new Vector2D(0, 0);
             for (var i = 0; i < agents.length; i++) {
-                if (agents[i] !== agent && agent.isNeighbour(agents[i], radius)) {
+                if (agents[i] !== agent && agent.modularIsNeighbour(agents[i], radius, this.bounds)) {
                     accumulatedSeparation = accumulatedSeparation.add(agent.position.substract(agents[i].position));
                 }
             }
@@ -161,7 +163,7 @@ namespace Boids {
             var averageAlignment = new Vector2D(0, 0);
             var numberOfNeighbours = 0;
             for (var i = 0; i < agents.length; i++) {
-                if (agents[i] !== agent && agent.isNeighbour(agents[i], radius)) {
+                if (agents[i] !== agent && agent.modularIsNeighbour(agents[i], radius, this.bounds)) {
                     averageAlignment = averageAlignment.add(agents[i].speed);
                     numberOfNeighbours += 1;
                 }
@@ -176,7 +178,7 @@ namespace Boids {
             var averagePosition = new Vector2D(0, 0);
             var numberOfNeighbours = 0;
             for (var i = 0; i < agents.length; i++) {
-                if (agents[i] !== agent && agent.isNeighbour(agents[i], radius)) {
+                if (agents[i] !== agent && agent.modularIsNeighbour(agents[i], radius, this.bounds)) {
                     averagePosition = averagePosition.add(agents[i].position);
                     numberOfNeighbours += 1;
                 }

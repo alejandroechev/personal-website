@@ -5,3 +5,12 @@
 span {
     font-style: italic;
 }
+
+.centered {
+    display: inline-block;
+}
+
+#main {
+  width: 100%;
+  text-align: center;
+}
