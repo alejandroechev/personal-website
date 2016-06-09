@@ -1,0 +1,2765 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html xml:lang="es" > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="apunte02.tex"> 
+<meta name="date" content="2014-04-05 21:05:00"> 
+<link rel="stylesheet" type="text/css" href="apunte02.css"> 
+</head><body 
+> 
+<div class="center" 
+>
+<!--l. 13--><p class="noindent" >
+<!--l. 14--><p class="noindent" ><span 
+class="cmbx-10">IIC2343 Arquitectura de Computadores</span><br />
+<span 
+class="cmbx-12x-x-120">Operaciones Aritméticas y Lógicas</span><br />
+<span 
+class="cmbsy-6">©</span><span 
+class="cmbx-6">Alejandro Echeverría, Hans-Albert L</span><span 
+class="cmbx-6">öbel</span><br />
+</div>
+   <h3 class="sectionHead"><span class="titlemark">1.   </span> <a 
+ id="x1-10001"></a>Motivación</h3>
+<!--l. 24--><p class="noindent" >Para poder desarrollar un computador, el primer paso es implementar un mecanismo que automáticamente sea
+capaz de realizar operaciones básicas, como suma y resta. Dado que hay varias operaciones y además varios
+tipos de representaciones de datos (complemento a dos, punto flotante, etc.) necesitamos múltiples
+«máquinas»
+capaces de realizar estos cálculos e idealmente alguna técnica que nos permita diseñar estas máquinas de manera
+que sean matemáticamente correctas y que utilicen componentes físicamente construibles.
+<!--l. 26--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2.   </span> <a 
+ id="x1-20002"></a>Representación física de números binarios</h3>
+<!--l. 28--><p class="noindent" >Para poder realizar cálculos sobre números binarios, debemos primero definir una representación física para estos.
+Dado que los números binarios trabajan con sólo dos símbolos (0 y 1) es sencillo definir representaciones físicas del
+tipo «tener X cantidad de algo = 1»
+y «no tener nada = 0»
+. Por ejemplo, se podría pensar en ocupar una representación basada en líquidos: tener flujo del líquido se podría
+interpretar como un 1; no tener nada, como un 0.
+<!--l. 30--><p class="indent" >   Además de la representación se requiere un mecanismo de control que permita definir el valor de un bit. En el
+caso del líquido, por ejemplo, podría tenerse una válvula de control, que si está cerrada deja pasar el líquido,
+representando un 1 binario, y si está abierta no deja pasar líquido, representando un 0 binario. El problema de esto
+es que ahora además del líquido necesitamos un mecanismo de control, que podría implementarse a su vez con
+líquido, pero resulta complejo. Una mejor alternativa corresponde a usar flujo eléctrico en vez de ocupar
+flujo de un líquido. En esta representación, la presencia de una corriente eléctrica simboliza un 1; la
+ausencia de corriente un 0. La principal ventaja de esta representación es que la apertura de la válvula
+puede ser controlada a su vez por electricidad, y de esta forma simplificamos el funcionamiento del
+sistema.
+<!--l. 32--><p class="indent" >   Un componente eléctrico que cumple con las funciones que necesitamos para representar 1s y 0s son los relés.
+Los relés están formados por un cable de entrada, dos de salida y un cable de control. Si el cable de control no tiene
+corriente, la entrada está conectada a la 2da salida (este es el estado por defecto). Si se pasa corriente por el cable
+de control, la entrada estará conectada a la 1era salida. De esta forma, no tener corriente en el cable de
+                                                                                                  
+                                                                                                  
+control, implica que no habrá corriente en la 1era salida (lo que podemos interpretar como un 0) y si
+tener corriente, implica que si habrá corriente en la 1era salida (lo que podemos interpretar como un
+1).
+<!--l. 34--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-20011"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 36--><p class="noindent" ><img 
+src="png/relayOpen.png" alt="PIC" class="graphics" width="320" ><!--tex4ht:graphics  
+name="apunte021x.png" src="figs/relayOpen.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;1: </span><span  
+class="content">Relé abierto, representando un 0 binario.</span></div><!--tex4ht:label?: x1-20011 -->
+                                                                                                  
+                                                                                                  
+<!--l. 39--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 41--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-20022"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 43--><p class="noindent" ><img 
+src="png/relayClosed.png" alt="PIC" class="graphics" width="320" ><!--tex4ht:graphics  
+name="apunte022x.png" src="figs/relayClosed.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;2: </span><span  
+class="content">Relé cerrado, representando un 1 binario</span></div><!--tex4ht:label?: x1-20022 -->
+.
+                                                                                                  
+                                                                                                  
+<!--l. 46--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 48--><p class="indent" >   Saber la representación física de los números binarios, sin embargo, no nos ayuda a solucionar el problema de
+como realizar cálculos con ellos. Lo que sabemos es que debemos diseñar sistemas que sean capaces de funcionar con
+corriente eléctrica, pero necesitamos otras herramientas conceptuales para poder determinar que hacer con dicha
+corriente.
+   <h3 class="sectionHead"><span class="titlemark">3.   </span> <a 
+ id="x1-30003"></a>Lógica booleana</h3>
+<!--l. 53--><p class="noindent" >George Boole, un matemático inglés del siglo XIX, desarrolló un sistema formal para analizar la lógica. Este sistema
+lógico, denominado Lógica Booleana en su honor, fue creado sin ninguna relación directa con la problemática de
+automatizar el cálculo numérico, pero resultaría de suma relevancia en el siglo XX cuando se empezaron a construir
+los primeros computadores.
+<!--l. 55--><p class="indent" >   A continuación revisaremos los principales aspectos de la lógica de Boole, para luego hacer el vínculo con nuestro
+problema de cálculo numérico.
+<!--l. 57--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.1.   </span> <a 
+ id="x1-40003.1"></a>Proposiciones lógicas</h4>
+<!--l. 59--><p class="noindent" >La lógica booleana se basa en el concepto de proposiciones lógicas. Una proposición lógica es una oración o
+sentencia que puede ser verdadera o falsa. Por ejemplo, la sentencia: «<span 
+class="cmti-10x-x-109">está lloviendo.</span>»
+será verdad si se dice un día que efectivamente está lloviendo, y será falsa si se dice en un día que no está lloviendo.
+La sentencia «<span 
+class="cmti-10x-x-109">hoy es viernes.</span>»
+será verdadera todos los días viernes, y falsa todo el resto de los días.
+<!--l. 61--><p class="indent" >   Las proposiciones lógicas en el sistema definido por Boole, pueden tomar solamente uno de dos
+valores: verdadero (V) o falso (F). En este sistema no existe espacio para la ambigüedad («<span 
+class="cmti-10x-x-109">Puede estar</span>
+<span 
+class="cmti-10x-x-109">lloviendo.</span>»
+ni para las probabilidades «<span 
+class="cmti-10x-x-109">Lloverá con un 60</span><span style="margin-left:0.3em" class="thinspace"></span><span 
+class="cmti-10x-x-109">% de probabilidad.</span>»
+, sólo se consideran válidas sentencias que tienen una respuesta de verdad exacta.
+<!--l. 64--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.2.   </span> <a 
+ id="x1-50003.2"></a>Condiciones lógicas</h4>
+<!--l. 66--><p class="noindent" >La lógica booleana permite también conectar una secuencia de proposiciones ocupando una serie de condiciones
+lógicas básicas:
+     <ul class="itemize1">
+     <li class="itemize">podemos decir «<span 
+class="cmti-10x-x-109">está lloviendo.</span>»
+     <span 
+class="cmbx-10x-x-109">y </span>«<span 
+class="cmti-10x-x-109">hoy es viernes.</span>»
+     , lo cual forma una nueva proposición combinada que sólo será verdadera aquellos días viernes que
+     esté lloviendo (esta condición se conoce por su nombre en inglés como <span 
+class="cmbx-10x-x-109">and</span>);
+     </li>
+     <li class="itemize">podríamos decir también «<span 
+class="cmti-10x-x-109">está lloviendo.</span>»
+     <span 
+class="cmbx-10x-x-109">o </span>«<span 
+class="cmti-10x-x-109">hoy es viernes.</span>»
+     , lo cual será verdadero todos los días que llueva, será verdadero todos los días viernes y en particular
+     también será verdadero todos los días viernes que llueva (esta condición se conoce por su nombre en
+     inglés como <span 
+class="cmbx-10x-x-109">or</span>);
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize">podemos tener también una condición que se aplique sobre una sola proposición: <span 
+class="cmbx-10x-x-109">no </span>«<span 
+class="cmti-10x-x-109">está lloviendo.</span>»
+     la cual será verdadera todos los días que no llueva y falsa sólo los días que llueva (esta condición se
+     conoce por su nombre en inglés como <span 
+class="cmbx-10x-x-109">not</span>).</li></ul>
+<!--l. 73--><p class="indent" >   Cada una de estas condiciones lógicas define lo que se denomina una «tabla de verdad»
+, es decir una tabla que asocia cuando será verdadera (V) o falsa (F) una proposición creada a partir de una o más
+proposiciones combinadas con estas condiciones, detallando para todas las posibles combinaciones de verdad o
+falsedad de éstas, cuál será el resultado.<br 
+class="newline" />
+<!--l. 75--><p class="indent" >   La tabla de verdad de la condición lógica <span 
+class="cmbx-10x-x-109">not </span>al combinarla con una proposición A es:
+<div class="center" 
+>
+<!--l. 77--><p class="noindent" >
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1"></colgroup><colgroup id="TBL-1-2g"><col 
+id="TBL-1-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-2"  
+class="td11">not(A)</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-1"  
+class="td11"> F </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-2"  
+class="td11">  V   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-1"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-2"  
+class="td11">  F   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-4-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 86--><p class="indent" >   La tabla de verdad de la combinación de dos proposiciones lógicas A y B con la condición lógica <span 
+class="cmbx-10x-x-109">and</span>
+es:
+<div class="center" 
+>
+<!--l. 88--><p class="noindent" >
+<div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1"><col 
+id="TBL-2-2"></colgroup><colgroup id="TBL-2-3g"><col 
+id="TBL-2-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-2"  
+class="td11">B</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-3"  
+class="td11">A and B</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-1"  
+class="td11"> F </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-2"  
+class="td11">F</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-3"  
+class="td11"> F</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-1"  
+class="td11"> F </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-2"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-3"  
+class="td11">   F     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-4-1"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-4-2"  
+class="td11">F</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-4-3"  
+class="td11">   F     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-5-1"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-5-2"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-5-3"  
+class="td11">   V    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-6-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 99--><p class="indent" >   La tabla de verdad de la condición lógica <span 
+class="cmbx-10x-x-109">or </span>es:
+<div class="center" 
+>
+<!--l. 101--><p class="noindent" >
+<div class="tabular"> <table id="TBL-3" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-3-1g"><col 
+id="TBL-3-1"><col 
+id="TBL-3-2"></colgroup><colgroup id="TBL-3-3g"><col 
+id="TBL-3-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-1-2"  
+class="td11">B</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-1-3"  
+class="td11">A or B</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-2-1"  
+class="td11"> F </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-2-2"  
+class="td11">F</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-2-3"  
+class="td11"> F</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-3-1"  
+class="td11"> F </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-3-2"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-3-3"  
+class="td11">  V   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-4-1"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-4-2"  
+class="td11">F</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-4-3"  
+class="td11">  V   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-5-1"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-5-2"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-5-3"  
+class="td11">  V   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-6-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 112--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.3.   </span> <a 
+ id="x1-60003.3"></a>Álgebra booleana</h4>
+<!--l. 114--><p class="noindent" >Boole desarrolló un sistema algebraico a partir de su lógica, en la cual las condiciones lógicas representaban las
+operaciones posibles y las proposiciones, las variables. Con este sistema, se podían construir sentencias lógicas
+complejas que se ajustan a una determinada tabla de verdad, construyendo nuevas condiciones lógicas basadas en
+las tres básicas.
+<!--l. 116--><p class="indent" >   Por ejemplo, podríamos querer definir una condición lógica similar al <span 
+class="cmbx-10x-x-109">or </span>pero que sea verdadera sólo si una de
+las dos proposiciones es verdad y no si ambas lo son (lo que se conoce como un o exclusivo, en inglés como
+<span 
+class="cmbx-10x-x-109">exclusive or </span>o <span 
+class="cmbx-10x-x-109">xor</span>). La tabla de verdad de la condición lógica <span 
+class="cmbx-10x-x-109">xor </span>es:
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 118--><p class="noindent" >
+<div class="tabular"> <table id="TBL-4" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-4-1g"><col 
+id="TBL-4-1"><col 
+id="TBL-4-2"></colgroup><colgroup id="TBL-4-3g"><col 
+id="TBL-4-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-2"  
+class="td11">B</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-3"  
+class="td11">A xor B</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-1"  
+class="td11"> F </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-2"  
+class="td11">F</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-3"  
+class="td11"> F</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-1"  
+class="td11"> F </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-2"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-3"  
+class="td11">   V    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-1"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-2"  
+class="td11">F</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-3"  
+class="td11">   V    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-1"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-2"  
+class="td11">V</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-3"  
+class="td11">   F    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-6-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 129--><p class="indent" >   A través del álgebra diseñada por Boole, podemos construir una expresión ocupando <span 
+class="cmbx-10x-x-109">and</span>, <span 
+class="cmbx-10x-x-109">or </span>y <span 
+class="cmbx-10x-x-109">not </span>que
+represente esta tabla de verdad:
+<div class="center" 
+>
+<!--l. 131--><p class="noindent" >
+<!--l. 132--><p class="noindent" >A <span 
+class="cmbx-10x-x-109">xor </span>B = <span 
+class="cmbx-10x-x-109">not</span>(A) <span 
+class="cmbx-10x-x-109">and </span>B <span 
+class="cmbx-10x-x-109">or </span>A <span 
+class="cmbx-10x-x-109">and not </span>(B)</div>
+<!--l. 135--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.   </span> <a 
+ id="x1-70004"></a>Máquinas de cálculo basadas en lógica booleana</h3>
+<!--l. 137--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.1.   </span> <a 
+ id="x1-80004.1"></a>Compuertas binarias</h4>
+<!--l. 139--><p class="noindent" >En 1937, Claude Shannon, ingeniero del MIT, se dio cuenta de que el álgebra booleana podía ser utilizada para
+trabajar con números binarios: bastaba reemplazar todos los valores «Verdadero»
+por 1s y los «Falso»
+por 0s, y todas las técnicas y procedimientos del álgebra descrita por Boole podían ser usados también para hacer
+álgebra con números binarios. El gran aporte de esta idea fue que entregó una herramienta poderosa para diseñar
+componentes que permitieran realizar cálculos con números binarios.
+<!--l. 141--><p class="indent" >   Shannon definió el concepto de «compuertas binarias»
+las cuales corresponden a componentes que implementan una de las condiciones lógicas definidas por Boole. Cada
+compuerta se comporta según las tablas de verdad de Boole, pero en vez de asociar valores de verdad, asocia valores
+binarios. Las compuertas, de esta manera, representan «cajas negras»
+que reciben como input valores binarios y entregan un determinado output. A cada compuerta se le asignó un
+símbolo, de manera de permitir diseñar gráficamente combinaciones de estas.
+<!--l. 143--><p class="indent" >   A continuación se muestran las tablas de valores y los símbolos de las compuertas básicas:
+     <ul class="itemize1">
+     <li class="itemize">Tabla de valores y símbolo de la compuerta <span 
+class="cmbx-10x-x-109">not</span>:
+     <div class="center" 
+>
+<!--l. 149--><p class="noindent" >
+<!--l. 150--><p class="noindent" ><img 
+src="png/not.png" alt="PIC" class="graphics" width="320" ><!--tex4ht:graphics  
+name="apunte023x.png" src="figs/not.eps"  
+--><br />
+                                                                                                  
+                                                                                                  
+<div class="tabular"> <table id="TBL-5" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-5-1g"><col 
+id="TBL-5-1"></colgroup><colgroup id="TBL-5-2g"><col 
+id="TBL-5-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-2"  
+class="td11">not(A)</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-2"  
+class="td11">  1    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-2"  
+class="td11">  0    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-1"  
+class="td11">  </td>
+</tr></table></div></div>
+     </li>
+     <li class="itemize">Tabla de valores y símbolo de la compuerta <span 
+class="cmbx-10x-x-109">and</span>:
+     <div class="center" 
+>
+<!--l. 161--><p class="noindent" >
+<!--l. 162--><p class="noindent" ><img 
+src="png/and.png" alt="PIC" class="graphics" width="320" height="105" ><!--tex4ht:graphics  
+name="apunte024x.png" src="figs/and.eps"  
+--><br />
+<div class="tabular"> <table id="TBL-6" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-6-1g"><col 
+id="TBL-6-1"><col 
+id="TBL-6-2"></colgroup><colgroup id="TBL-6-3g"><col 
+id="TBL-6-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-6-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-1-2"  
+class="td11">B</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-1-3"  
+class="td11">A and B</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-2-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-2-3"  
+class="td11"> 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-3-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-3-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-3-3"  
+class="td11">   0     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-4-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-4-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-4-3"  
+class="td11">   0     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-5-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-5-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-5-3"  
+class="td11">   1     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-6-1"  
+class="td11">  </td>
+</tr></table></div></div>
+     </li>
+     <li class="itemize">Tabla de valores y símbolo de la compuerta <span 
+class="cmbx-10x-x-109">or</span>:
+     <div class="center" 
+>
+<!--l. 175--><p class="noindent" >
+<!--l. 176--><p class="noindent" ><img 
+src="png/or.png" alt="PIC" class="graphics" width="320" height="105" ><!--tex4ht:graphics  
+name="apunte025x.png" src="figs/or.eps"  
+--><br />
+<div class="tabular"> <table id="TBL-7" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-7-1g"><col 
+id="TBL-7-1"><col 
+id="TBL-7-2"></colgroup><colgroup id="TBL-7-3g"><col 
+id="TBL-7-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-7-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-1-2"  
+class="td11">B</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-1-3"  
+class="td11">A or B</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-2-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-2-3"  
+class="td11"> 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-3-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-3-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-3-3"  
+class="td11">  1    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-4-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-4-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-4-3"  
+class="td11">  1    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-5-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-5-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-5-3"  
+class="td11">  1    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-6-1"  
+class="td11">  </td>
+</tr></table></div></div>
+     </li>
+     <li class="itemize">Tabla de valores y símbolo de la compuerta <span 
+class="cmbx-10x-x-109">xor</span>:
+     <div class="center" 
+>
+<!--l. 189--><p class="noindent" >
+<!--l. 190--><p class="noindent" ><img 
+src="png/xor.png" alt="PIC" class="graphics" width="320" height="105" ><!--tex4ht:graphics  
+name="apunte026x.png" src="figs/xor.eps"  
+--><br />
+<div class="tabular"> <table id="TBL-8" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-8-1g"><col 
+id="TBL-8-1"><col 
+id="TBL-8-2"></colgroup><colgroup id="TBL-8-3g"><col 
+id="TBL-8-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-8-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-1-2"  
+class="td11">B</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-1-3"  
+class="td11">A xor B</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-2-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-2-3"  
+class="td11"> 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-3-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-3-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-3-3"  
+class="td11">   1     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-4-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-4-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-4-3"  
+class="td11">   1     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-5-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-5-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-5-3"  
+class="td11">   0     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-6-1"  
+class="td11">  </td>
+</tr></table></div></div>
+     </li></ul>
+                                                                                                  
+                                                                                                  
+<!--l. 204--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.2.   </span> <a 
+ id="x1-90004.2"></a>Implementación física de compuertas</h4>
+<!--l. 206--><p class="noindent" >El gran salto conceptual de Shannon de la lógica booleana a las compuertas binarias no tendría mayor utilidad si no
+hubiese también definido como implementar de manera física dichas compuertas. Shannon observó que una
+compuerta <span 
+class="cmbx-10x-x-109">and </span>se podía representar como un conjunto de dos relés ubicados en serie, dado que estos cumplen
+con la tabla de valores de la compuerta: habrá corriente en la salida, sólo si ambos relés dejan pasar
+corriente.
+<!--l. 208--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-90013"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 210--><p class="noindent" ><img 
+src="png/andRelay.png" alt="PIC" class="graphics" width="720" ><!--tex4ht:graphics  
+name="apunte027x.png" src="figs/andRelay.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;3: </span><span  
+class="content">Compuerta <span 
+class="cmbx-10x-x-109">and </span>construida con relés. Se muestra el caso A=1, B=1.</span></div><!--tex4ht:label?: x1-90013 -->
+                                                                                                  
+                                                                                                  
+<!--l. 213--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 215--><p class="indent" >   De manera similar, una compuerta <span 
+class="cmbx-10x-x-109">or </span>se podía representar como un circuito en paralelo, es decir, como dos relés
+que funcionan independientes y que se conectan sus salidas, cumpliendo con que la corriente pasa al final, si pasa
+por cualquiera.
+<!--l. 217--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-90024"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 219--><p class="noindent" ><img 
+src="png/orRelay.png" alt="PIC" class="graphics" width="520" ><!--tex4ht:graphics  
+name="apunte028x.png" src="figs/orRelay.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;4: </span><span  
+class="content">Compuerta <span 
+class="cmbx-10x-x-109">or </span>construida con relés. Se muestra el caso A=1, B=1.</span></div><!--tex4ht:label?: x1-90024 -->
+                                                                                                  
+                                                                                                  
+<!--l. 222--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 225--><p class="indent" >   Por último la compuerta <span 
+class="cmbx-10x-x-109">not </span>también podía implementarse con relés, básicamente considerando la 2da salida
+como la negación de la 1era.
+<!--l. 227--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-90035"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 229--><p class="noindent" ><img 
+src="png/notRelay.png" alt="PIC" class="graphics" width="360" ><!--tex4ht:graphics  
+name="apunte029x.png" src="figs/notRelay.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;5: </span><span  
+class="content">Compuerta <span 
+class="cmbx-10x-x-109">not </span>construida con relés. Se muestra el caso A=1.</span></div><!--tex4ht:label?: x1-90035 -->
+                                                                                                  
+                                                                                                  
+<!--l. 232--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 234--><p class="indent" >   La implementación física de estas tres compuertas nos permite construir sistemas más complejos, dado que al
+estar ocupando el álgebra de Boole, sabemos que podemos construir el resto de las combinaciones lógicas en base a
+estas tres compuertas.
+   <h4 class="subsectionHead"><span class="titlemark">4.3.   </span> <a 
+ id="x1-100004.3"></a>Circuitos binarios</h4>
+<!--l. 237--><p class="noindent" >El diseño a través de compuertas binarias sumado a su implementación física, nos entrega todo lo necesario para
+comenzar a construir circuitos de cálculo numérico. Vamos a comenzar con la operación más sencilla: suma de 1
+bit.
+<!--l. 239--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">4.3.1.   </span> <a 
+ id="x1-110004.3.1"></a>Sumador de 1 bit</h5>
+<!--l. 241--><p class="noindent" >Para ocupar las técnicas del diseño lógico, tenemos que pensar nuestras operaciones como tablas de verdad. La
+suma de 1 bit puede interpretarse como la siguiente tabla:
+<div class="center" 
+>
+<!--l. 243--><p class="noindent" >
+<div class="tabular"> <table id="TBL-9" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-9-1g"><col 
+id="TBL-9-1"><col 
+id="TBL-9-2"></colgroup><colgroup id="TBL-9-3g"><col 
+id="TBL-9-3"><col 
+id="TBL-9-4"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-9-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-1"  
+class="td11">A</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-2"  
+class="td11">B</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-3"  
+class="td11">C</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-4"  
+class="td11">S</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-4"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-4"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-4-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-4-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-4-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-4-4"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-5-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-5-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-5-3"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-5-4"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-6-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 254--><p class="indent" >   Observamos que la suma de 1 bit resulta en un número de 2 bits, y por tanto debemos diseñar dos circuitos
+binarios. Los bits de salida de la suma se denominan habitualmente como <span 
+class="cmmi-10x-x-109">S </span>o bit de suma y <span 
+class="cmmi-10x-x-109">C </span>o bit de carry. Si
+observamos cada salida de manera independiente, se observa que el bit de carry tiene la misma tabla de verdad que
+la compuerta <span 
+class="cmbx-10x-x-109">and </span>y el bit de suma, la misma tabla que la compuerta <span 
+class="cmbx-10x-x-109">xor</span>. De esta forma el circuito de un sumador
+de 1 bit queda de la siguiente manera:
+<!--l. 256--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-110016"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 258--><p class="noindent" ><img 
+src="png/halfadder.png" alt="PIC" class="graphics" width="320" ><!--tex4ht:graphics  
+name="apunte0210x.png" src="figs/halfadder.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;6: </span><span  
+class="content">Medio sumador de 1 bit (half-adder).</span></div><!--tex4ht:label?: x1-110016 -->
+                                                                                                  
+                                                                                                  
+<!--l. 261--><p class="indent" >   </div><hr class="endfigure">
+   <h5 class="subsubsectionHead"><span class="titlemark">4.3.2.   </span> <a 
+ id="x1-120004.3.2"></a>Sumador de 4 bits</h5>
+<!--l. 265--><p class="noindent" >Nos gustaría ahora escalar nuestro circuito para poder realizar operaciones con más bits. Para eso, sin embargo, no
+nos basta con el circuito sumador antes visto, lo que podemos entender viendo el siguiente ejemplo de
+suma:
+<div class="center" 
+>
+<!--l. 267--><p class="noindent" >
+<div class="tabular"> <table id="TBL-10" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-10-1g"><col 
+id="TBL-10-1"><col 
+id="TBL-10-2"><col 
+id="TBL-10-3"><col 
+id="TBL-10-4"><col 
+id="TBL-10-5"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-10-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-10-1-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-2"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-3"  
+class="td11"><span 
+class="cmr-6">1</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-4"  
+class="td11"><span 
+class="cmr-6">1</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-5"  
+class="td11"> </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-10-2-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-4"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-5"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-10-3-1"  
+class="td11">+</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-4"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-5"  
+class="td11">1</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-10-4-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-4-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-4-3"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-4-4"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-4-5"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-5-"><td  style="white-space:nowrap; text-align:right;" id="TBL-10-5-1"  
+class="td11"> </td></tr></table></div></div>
+<!--l. 277--><p class="indent" >   El problema está en que para la suma del segundo bit, necesitamos sumar también el acarreo, o sea se requieren
+sumar tres valores, y nuestro circuito previo sólo es capaz de sumar dos valores (por eso habitualmente se le
+denomina half-adder). Podemos utilizar el circuito anterior para construir nuestro sumador de 3 entradas (conocido
+como full-adder):
+<!--l. 279--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-120017"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 281--><p class="noindent" ><img 
+src="png/fulladder.png" alt="PIC" class="graphics" width="320" ><!--tex4ht:graphics  
+name="apunte0211x.png" src="figs/fulladder.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;7: </span><span  
+class="content">Sumador de 1 bit (full-adder).</span></div><!--tex4ht:label?: x1-120017 -->
+                                                                                                  
+                                                                                                  
+<!--l. 284--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 286--><p class="indent" >   El circuito completo del sumador de 4 bits consiste en simplemente unir 4 full-adders, conectando
+la salida de acarreo de cada uno, con la entrada de acarreo del siguiente, resultando en el siguiente
+circuito:
+<!--l. 288--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-120028"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 290--><p class="noindent" ><img 
+src="png/4bitadder.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte0212x.png" src="figs/4bitadder.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;8: </span><span  
+class="content">Sumador de 4 bits.</span></div><!--tex4ht:label?: x1-120028 -->
+                                                                                                  
+                                                                                                  
+<!--l. 293--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+   <h5 class="subsubsectionHead"><span class="titlemark">4.3.3.   </span> <a 
+ id="x1-130004.3.3"></a>Restador de 4 bits</h5>
+<!--l. 298--><p class="noindent" >El siguiente nivel de dificultad en operaciones está en la resta, para la cual debemos primero convertir el restando a
+complemento a dos, y luego hacer la suma normal. Con el circuito anterior ya tenemos lista esta última etapa, nos
+falta la conversión a complemento a 2.
+<!--l. 300--><p class="indent" >   El algoritmo de conversión a complemento a 2 tenía dos pasos:
+     <ul class="itemize1">
+     <li class="itemize">Invertir los bits
+     </li>
+     <li class="itemize">Sumar 1</li></ul>
+<!--l. 307--><p class="indent" >   Para invertir los bits, podemos ocupar la compuerta <span 
+class="cmbx-10x-x-109">not </span>que justamente realiza esto. Para la suma de 1,
+podríamos ocupar otro sumador más, pero una mejor solución es usar el mismo sumador que ya tenemos, e insertar
+el 1 como carry in para el primer bit. Con esto nos resulta el siguiente circuito:
+<!--l. 310--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-130019"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 312--><p class="noindent" ><img 
+src="png/4bitsub.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte0213x.png" src="figs/4bitsub.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;9: </span><span  
+class="content">Restador de 4 bits.</span></div><!--tex4ht:label?: x1-130019 -->
+                                                                                                  
+                                                                                                  
+<!--l. 315--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 317--><p class="indent" >   Podemos observar que ocupando las técnicas de la lógica booleana aplicadas a números binarios representados
+por circuitos eléctricos somos capaces de construir máquinas que realicen operaciones numéricas. Esta combinación
+de lógica con circuitos es el fundamento básico del diseño de los principales componentes de los computadores
+modernos. La única diferencia respecto a lo estudiado ahora, es que en vez de ocupar relés se utilizan transistores,
+que son componentes eléctricos conceptualmente equivalentes, pero de mucho menor tamaño y mayor
+velocidad.
+   <h3 class="sectionHead"><span class="titlemark">5.   </span> <a 
+ id="x1-140005"></a>Combinación de circuitos de operación</h3>
+<!--l. 321--><p class="noindent" >Los circuitos del sumador y restador de 4 bits vistos previamente representan dos ejemplos de máquinas de cálculo
+que pueden diseñarse para realizar operaciones dentro de un computador. Para permitir combinar estas distintas
+máquinas se requieren mecanismos especiales de control, y también abstracciones que permitan diseñar de manera
+más sencilla estas combinaciones.
+<!--l. 323--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">5.1.   </span> <a 
+ id="x1-150005.1"></a>Abstracción de componentes</h4>
+<!--l. 325--><p class="noindent" >Como se vio anteriormente, la base del diseño de componentes basados en compuertas binarias está en la
+modularización y abstracción. Para el sumador de 4 bits, por ejemplo, primero diseñamos el circuito del <span 
+class="cmti-10x-x-109">Half-Adder</span>
+a nivel de compuertas, luego el <span 
+class="cmti-10x-x-109">Full-Adder </span>como una combinación de <span 
+class="cmti-10x-x-109">Half-Adders </span>y finalmente el
+sumador de 4 bits como un conjunto de <span 
+class="cmti-10x-x-109">Full-Adders</span>. De esta manera pudimos ir aumentando el nivel de
+abstracción, lo que nos permite trabajar con módulos de más alto nivel que las compuertas básicas
+(por ejemplo el sumador de 4 bits) bastándonos saber que entradas y salidas tiene y que operación
+está realizando.
+<!--l. 327--><p class="indent" >   Otro elemento que permite abstraer el diseño de estos componentes es el concepto de <span 
+class="cmbx-10x-x-109">bus</span>. Un <span 
+class="cmbx-10x-x-109">bus </span>se
+puede definir como un conjunto de cables o líneas de corriente que agrupados representan un valor o
+unidad. Por ejemplo en el caso de los circuitos de sumador y restador antes vistos, podemos agrupar
+los 4 bits del operando A, los 4 bits del operando B y los bits del resultado S en tres <span 
+class="cmbx-10x-x-109">buses </span>de 4
+bits.
+<!--l. 329--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1500110"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 331--><p class="noindent" ><img 
+src="png/4bitadderbus.png" alt="PIC" class="graphics" width="440" height="280" ><!--tex4ht:graphics  
+name="apunte0214x.png" src="figs/4bitadderbus.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;10: </span><span  
+class="content">Sumador de 4 bits con notación de buses.</span></div><!--tex4ht:label?: x1-1500110 -->
+                                                                                                  
+                                                                                                  
+<!--l. 334--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 336--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1500211"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 338--><p class="noindent" ><img 
+src="png/4bitsubbus.png" alt="PIC" class="graphics" width="440" height="280" ><!--tex4ht:graphics  
+name="apunte0215x.png" src="figs/4bitsubbus.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;11: </span><span  
+class="content">Restador de 4 bits con notación de buses.</span></div><!--tex4ht:label?: x1-1500211 -->
+                                                                                                  
+                                                                                                  
+<!--l. 341--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 343--><p class="indent" >   El concepto de buses nos entrega una notación que simplifica el diseño de estos circuitos, y nos permite trabajar
+con un nivel de abstracción mayor, conceptualizando las operaciones directamente sobre los operandos completos
+(como A y B en los casos anteriores) en vez de operaciones unitarias sobre bits. Hay que señalar, sin embargo, que
+también podemos hablar de buses de 1 bit, en los casos que corresponda, de manera de generalizar toda señal que
+interactúe con circuitos como buses.
+<!--l. 345--><p class="indent" >   Un aspecto interesante de la notación de buses es que nos permite escalar los circuitos a operaciones de mayor
+precisión, por ejemplo 8 o 32 bits, sin tener que realizar modificaciones mayores <span 
+class="cmbx-10x-x-109">en el componente dibujado</span>. Es
+evidente que por debajo de la abstracción si será necesario realizar modificaciones para que dicho circuito funcione:
+en el caso del sumador de 8 bits necesitamos 8 Full-Adders conectados.
+<!--l. 347--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1500312"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 349--><p class="noindent" ><img 
+src="png/8bitadderbus.png" alt="PIC" class="graphics" width="440" height="280" ><!--tex4ht:graphics  
+name="apunte0216x.png" src="figs/8bitadderbus.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;12: </span><span  
+class="content">Sumador de 8 bits con notación de buses.</span></div><!--tex4ht:label?: x1-1500312 -->
+                                                                                                  
+                                                                                                  
+<!--l. 352--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+   <h4 class="subsectionHead"><span class="titlemark">5.2.   </span> <a 
+ id="x1-160005.2"></a>Circuitos de control</h4>
+<!--l. 357--><p class="noindent" >Una vez definidas las abstracciones de los componentes con las que trabajaremos, debemos agregar mecanismos que
+permitan controlar y combinar estos distintos componentes de cálculo para construir una unidad funcional de
+cálculo para el computador.
+<!--l. 359--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">5.2.1.   </span> <a 
+ id="x1-170005.2.1"></a>Enabler</h5>
+<!--l. 361--><p class="noindent" >Una primera funcionalidad que nos interesa agregar a nuestras máquinas de cálculo es la capacidad de
+controlar su salida. Los circuitos que hemos diseñado hasta ahora están siempre entregando en su
+salida el resultado, es decir el flujo de datos no está siendo controlado. En algunas circunstancias
+podría ser relevante tener el control para <span 
+class="cmbx-10x-x-109">habilitar </span>o <span 
+class="cmbx-10x-x-109">deshabilitar </span>que la salida del componente sea el
+resultado.
+<!--l. 363--><p class="indent" >   En particular nos interesaría que dado un bit de datos <span 
+class="cmmi-10x-x-109">A</span>0 podamos a través de otro valor <span 
+class="cmmi-10x-x-109">E </span>controlar si la salida
+<span 
+class="cmmi-10x-x-109">A</span>0<span 
+class="cmsy-8">&#x2032;</span> tendrá el valor de <span 
+class="cmmi-10x-x-109">A</span>0, es decir, «se deja pasar el flujo»
+, o tendrá un valor 0, es decir, «se corta el flujo»
+, lo que podemos representar con la siguiente tabla:
+<div class="center" 
+>
+<!--l. 365--><p class="noindent" >
+<div class="tabular"> <table id="TBL-11" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-11-1g"><col 
+id="TBL-11-1"></colgroup><colgroup id="TBL-11-2g"><col 
+id="TBL-11-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-11-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-11-1-1"  
+class="td11">E</td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-1-2"  
+class="td11">A0&#8217;</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-11-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-2-2"  
+class="td11"> 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-11-3-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-11-3-2"  
+class="td11">A0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-11-4-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 374--><p class="indent" >   Una compuerta que cumple exactamente con lo anterior es la compuerta <span 
+class="cmbx-10x-x-109">and </span>la cual en caso de
+tener una de sus entradas en 0 tendrá siempre salida 0 y en caso de tener una de sus entradas en
+1 tendrá como salida el valor de la segunda entrada. Si consideramos como una de las entradas de
+la compuerta a <span 
+class="cmmi-10x-x-109">E </span>y a la otra como <span 
+class="cmmi-10x-x-109">A</span>0 tenemos un circuito que cumple exactamente con la tabla
+anterior, el cual se denomina <span 
+class="cmti-10x-x-109">Enabler </span>o <span 
+class="cmti-10x-x-109">Habilitador </span>ya que permite o habilitar o deshabilitar el flujo de
+datos.
+<!--l. 376--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1700113"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 378--><p class="noindent" ><img 
+src="png/enabler.png" alt="PIC" class="graphics" width="240" height="300" ><!--tex4ht:graphics  
+name="apunte0217x.png" src="figs/enabler.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;13: </span><span  
+class="content">Enabler de 1 bit.</span></div><!--tex4ht:label?: x1-1700113 -->
+                                                                                                  
+                                                                                                  
+<!--l. 381--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 383--><p class="indent" >   Podemos extender este circuito a datos con mayor número de bits. Lo interesante está en que mantenemos una
+sola señal <span 
+class="cmmi-10x-x-109">E </span>para controlar la habilitación y deshabilitación.
+<!--l. 385--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1700214"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 387--><p class="noindent" ><img 
+src="png/4bitenabler.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte0218x.png" src="figs/4bitenabler.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;14: </span><span  
+class="content">Enabler de 4 bits.</span></div><!--tex4ht:label?: x1-1700214 -->
+                                                                                                  
+                                                                                                  
+<!--l. 390--><p class="indent" >   </div><hr class="endfigure">
+   <h5 class="subsubsectionHead"><span class="titlemark">5.2.2.   </span> <a 
+ id="x1-180005.2.2"></a>Multiplexor</h5>
+<!--l. 394--><p class="noindent" >El circuito del enabler nos permite regular el flujo de datos de una máquina de cálculo. Sin embargo no
+nos ayuda en el objetivo de tener múltiples operaciones simultáneamente. Necesitamos otro circuito
+que nos permita controlar que operación vamos a realizar, de manera que dada una salida común
+podamos obtener mediante esta tanto la suma o resta de dos operandos, dependiendo de un valor de
+control.
+<!--l. 396--><p class="indent" >   Veamos el problema primero a nivel de bits: supongamos que tenemos dos datos <span 
+class="cmmi-10x-x-109">A</span>0 y <span 
+class="cmmi-10x-x-109">B</span>0 y una salida común
+<span 
+class="cmmi-10x-x-109">M</span>0. Nos gustaría poder controlar que dato sale dependiendo de una señal de selección <span 
+class="cmmi-10x-x-109">S </span>que cuando sea 0
+entregue el valor de <span 
+class="cmmi-10x-x-109">A</span>0 y cuando sea 1 entregue el valor de <span 
+class="cmmi-10x-x-109">B</span>0, lo que se representa en la siguiente
+tabla:
+<div class="center" 
+>
+<!--l. 398--><p class="noindent" >
+<div class="tabular"> <table id="TBL-12" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-12-1g"><col 
+id="TBL-12-1"></colgroup><colgroup id="TBL-12-2g"><col 
+id="TBL-12-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-12-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-12-1-1"  
+class="td11">S</td><td  style="white-space:nowrap; text-align:center;" id="TBL-12-1-2"  
+class="td11">M0</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-12-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-12-2-2"  
+class="td11">A0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-12-3-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-12-3-2"  
+class="td11">B0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-12-4-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 407--><p class="indent" >   Para construir el circuito podemos utilizar el circuito del enabler (es decir la compuerta and) de la siguiente
+forma: podemos ocupar la señal <span 
+class="cmmi-10x-x-109">S </span>como señal de habilitación/deshabilitación de manera que cuando sea 1 habilite
+una de las dos salidas, por ejemplo <span 
+class="cmmi-10x-x-109">B</span>0 y <span 
+class="cmbx-10x-x-109">simultáneamente </span>deshabilite <span 
+class="cmmi-10x-x-109">A</span>0. De manera equivalente con un valor 0
+habilitará <span 
+class="cmmi-10x-x-109">A</span>0 y deshabilitará <span 
+class="cmmi-10x-x-109">B</span>0. Con esto nos aseguramos que dado un valor de <span 
+class="cmmi-10x-x-109">S </span>estamos obteniendo en las
+dos salidas siempre un valor y un 0. Si combinamos estas dos salidas mediante una compuerta <span 
+class="cmbx-10x-x-109">or</span>
+obtendremos como única salida el valor que hayamos seleccionado, circuito que se denomina <span 
+class="cmti-10x-x-109">Multiplexor </span>o
+<span 
+class="cmti-10x-x-109">Mux</span>.
+<!--l. 409--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1800115"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 411--><p class="noindent" ><img 
+src="png/mux.png" alt="PIC" class="graphics" width="240" ><!--tex4ht:graphics  
+name="apunte0219x.png" src="figs/mux.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;15: </span><span  
+class="content">Multiplexor de 2 entradas de 1 bit de datos.</span></div><!--tex4ht:label?: x1-1800115 -->
+                                                                                                  
+                                                                                                  
+<!--l. 414--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 416--><p class="indent" >   Al igual que en el enabler podemos escalar en el número de datos, usando varios multiplexores de 1 bit para
+obtener, por ejemplo, un multiplexor que elige entre dos valores de 4 bits.
+<!--l. 418--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1800216"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 420--><p class="noindent" ><img 
+src="png/4bitmux.png" alt="PIC" class="graphics" width="720" height="240" ><!--tex4ht:graphics  
+name="apunte0220x.png" src="figs/4bitmux.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;16: </span><span  
+class="content">Multiplexor de 2 entradas de 4 bits de datos.</span></div><!--tex4ht:label?: x1-1800216 -->
+                                                                                                  
+                                                                                                  
+<!--l. 423--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 425--><p class="indent" >   Podemos extender aún más la noción de multiplexor, pensando por ejemplo en un caso de que existan 4 entradas
+distintas que queramos seleccionar. La opción más simple sería escalonar 4 multiplexores, de manera que con 4 bits
+de control podamos controlar las 4 entradas. Podemos, sin embargo, optimizar este circuito de manera de ocupar
+sólo 2 bits de control: dado que 2 bits son capaces de representar 4 números (0 = 00, 1 = 01, 2 = 10, 3 = 11),
+podemos diseñar un circuito que dependiendo de la combinación de los dos bits de control entregue una de las
+cuatro entradas, como se observa en la siguiente tabla:
+<div class="center" 
+>
+<!--l. 427--><p class="noindent" >
+<div class="tabular"> <table id="TBL-13" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-13-1g"><col 
+id="TBL-13-1"><col 
+id="TBL-13-2"></colgroup><colgroup id="TBL-13-3g"><col 
+id="TBL-13-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-13-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-13-1-1"  
+class="td11">S1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-1-2"  
+class="td11">S1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-1-3"  
+class="td11">M</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-13-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-2-2"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-2-3"  
+class="td11">A</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-13-3-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-3-2"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-3-3"  
+class="td11">B</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-13-4-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-4-2"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-4-3"  
+class="td11">C</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-13-5-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-5-2"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-13-5-3"  
+class="td11">D</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-13-6-1"  
+class="td11">   </td></tr></table></div></div>
+<!--l. 438--><p class="indent" >   La implementación específica de este circuito no es relevante. Sólo nos interesa que existe como componente, y
+podemos trabajar con este abstrayéndonos de los detalles de su implementación:
+<!--l. 440--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1800317"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 442--><p class="noindent" ><img 
+src="png/4bitx4mux.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte0221x.png" src="figs/4bitx4mux.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;17: </span><span  
+class="content">Multiplexor de 4 entradas de 4 bits de datos.</span></div><!--tex4ht:label?: x1-1800317 -->
+                                                                                                  
+                                                                                                  
+<!--l. 445--><p class="indent" >   </div><hr class="endfigure">
+   <h4 class="subsectionHead"><span class="titlemark">5.3.   </span> <a 
+ id="x1-190005.3"></a>Buses de datos y control</h4>
+<!--l. 449--><p class="noindent" >Hay un elemento importante que surge como consecuencia del diseño de estos componentes. En los circuitos
+previamente estudiados (sumador y restador) los buses contenían los operandos y resultados, es decir eran <span 
+class="cmbx-10x-x-109">buses de</span>
+<span 
+class="cmbx-10x-x-109">datos</span>. En el caso del circuito enabler y multiplexor, en cambio, existen dos tipos de buses. Por una parte están los
+buses de datos, que transportan la información que será habilitada/deshabilitada o seleccionada, según el circuito
+que se utilice. Sin embargo, además se cuentan con las señales de control o <span 
+class="cmbx-10x-x-109">buses de control</span>, como el
+bit <span 
+class="cmmi-10x-x-109">E </span>en el enabler o los bits de selección en el mux. La importancia de esta diferencia es que para
+ambos buses estamos ocupando la misma representación numérica (números binarios) y física, por
+lo que, como veremos más adelante, podemos combinar la información de los distintos buses si lo
+necesitamos.
+<!--l. 451--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">6.   </span> <a 
+ id="x1-200006"></a>Unidades de ejecución</h3>
+<!--l. 453--><p class="noindent" >Ahora que conocemos los circuitos de control, podemos combinar las distintas máquinas de cálculo para armar una
+unidad de cálculo o <span 
+class="cmbx-10x-x-109">unidad de ejecución</span>. Nos enfocaremos en diseñar la unidad más básica de un computador,
+denominada <span 
+class="cmbx-10x-x-109">unidad aritmética y lógica </span>o <span 
+class="cmbx-10x-x-109">ALU </span>por sus siglas en inglés. Como su nombre lo señala, esta unidad
+permite realizar operaciones aritméticas básicas (suma y resta) y también operaciones lógicas simples (and, or, not,
+etc.). Algunos computadores tienen otras unidades de ejecución además de la ALU, por ejemplo una
+unidad aritmética para números de punto flotante o <span 
+class="cmbx-10x-x-109">FPU</span>, pero por ahora nos enfocaremos sólo en la
+ALU.
+<!--l. 455--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.1.   </span> <a 
+ id="x1-210006.1"></a>Sumador/Restador</h4>
+<!--l. 457--><p class="noindent" >El primer paso para completar la ALU es armar la unidad aritmética, que consta de un sumador y un restador.
+Ocupando el multiplexor de 4 bits de datos definido previamente podemos diseñar un sumador/restador de una
+salida <span 
+class="cmmi-10x-x-109">M</span>, y con una señal de control <span 
+class="cmmi-10x-x-109">S </span>que cumpla con:
+<div class="center" 
+>
+<!--l. 459--><p class="noindent" >
+<div class="tabular"> <table id="TBL-14" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-14-1g"><col 
+id="TBL-14-1"></colgroup><colgroup id="TBL-14-2g"><col 
+id="TBL-14-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-14-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-14-1-1"  
+class="td11">S</td><td  style="white-space:nowrap; text-align:center;" id="TBL-14-1-2"  
+class="td11"> M  </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-14-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-14-2-2"  
+class="td11">Suma</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-14-3-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-14-3-2"  
+class="td11">Resta</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-14-4-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 468--><p class="indent" >   Combinando los circuitos de sumador y restador con el multiplexor obtenemos un circuito sumador/restador:
+<!--l. 471--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-2100118"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 473--><p class="noindent" ><img 
+src="png/4bitaddersub.png" alt="PIC" class="graphics" width="720" ><!--tex4ht:graphics  
+name="apunte0222x.png" src="figs/4bitaddersub.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;18: </span><span  
+class="content">Sumador/Restador de 4 bits de datos.</span></div><!--tex4ht:label?: x1-2100118 -->
+                                                                                                  
+                                                                                                  
+<!--l. 476--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 478--><p class="indent" >   Este circuito cumple con permitir sumar y restar dos valores, entregando el resultado por la misma salida.
+Existe, sin embargo, una optimización que podemos hacer y tiene relación con el hecho de que el restador
+ocupa internamente un sumador, por lo que este circuito sumador/restador necesita de dos circuitos
+sumadores. Una forma en que se optimiza este circuito, es reutilizando un único sumador para ambas
+operaciones y agregando multiplexores a las entradas para seleccionar si entra directamente el segundo
+operando o su negación (para el caso de la resta). Este circuito es un ejemplo de lo que mencionamos
+previamente respecto a los buses de datos y control: en este caso el bus de control de selección se
+utiliza como dato: se agrega como carry in al sumador, de manera que cuando tiene el valor 1, lo
+que representa una resta, se le suma 1 para completar la conversión a complemento a 2 del segundo
+valor.
+<!--l. 480--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-2100219"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 482--><p class="noindent" ><img 
+src="png/4bitaddersuboptim.png" alt="PIC" class="graphics" width="720" ><!--tex4ht:graphics  
+name="apunte0223x.png" src="figs/4bitaddersuboptim.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;19: </span><span  
+class="content">Sumador/Restador de 4 bits de datos optimizado.</span></div><!--tex4ht:label?: x1-2100219 -->
+                                                                                                  
+                                                                                                  
+<!--l. 485--><p class="indent" >   </div><hr class="endfigure">
+   <h4 class="subsectionHead"><span class="titlemark">6.2.   </span> <a 
+ id="x1-220006.2"></a>Operaciones lógicas</h4>
+<!--l. 489--><p class="noindent" >La ALU además de permitir operaciones aritméticas, permite operaciones lógicas entre dos valores como <span 
+class="cmbx-10x-x-109">and</span>, <span 
+class="cmbx-10x-x-109">or </span>y
+<span 
+class="cmbx-10x-x-109">xor </span>y operaciones lógicas sobre un valor como <span 
+class="cmbx-10x-x-109">not</span>.
+<!--l. 491--><p class="indent" >   Las operaciones lógicas entre números de varios bits se interpretan como operaciones bit a bit. Por ejemplo un
+<span 
+class="cmbx-10x-x-109">and </span>entre los valores 1001 y 0011 sería:
+<div class="center" 
+>
+<!--l. 493--><p class="noindent" >
+<div class="tabular"> <table id="TBL-15" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-15-1g"><col 
+id="TBL-15-1"><col 
+id="TBL-15-2"><col 
+id="TBL-15-3"><col 
+id="TBL-15-4"><col 
+id="TBL-15-5"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-15-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-1-1"  
+class="td11">  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-1-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-1-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-1-4"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-1-5"  
+class="td11">1</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-2-1"  
+class="td11">and</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-2-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-2-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-2-4"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-2-5"  
+class="td11">1</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-3-1"  
+class="td11">   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-3-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-3-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-3-4"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-15-3-5"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-4-1"  
+class="td11">   </td></tr></table></div></div>
+<!--l. 502--><p class="indent" >   Un <span 
+class="cmbx-10x-x-109">or </span>entre los valores 1001 y 0011 sería:
+<div class="center" 
+>
+<!--l. 504--><p class="noindent" >
+<div class="tabular"> <table id="TBL-16" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-16-1g"><col 
+id="TBL-16-1"><col 
+id="TBL-16-2"><col 
+id="TBL-16-3"><col 
+id="TBL-16-4"><col 
+id="TBL-16-5"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-16-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-16-1-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-1-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-1-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-1-4"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-1-5"  
+class="td11">1</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-16-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-16-2-1"  
+class="td11">or</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-2-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-2-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-2-4"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-2-5"  
+class="td11">1</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-16-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-16-3-1"  
+class="td11">  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-3-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-3-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-3-4"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-3-5"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-16-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-16-4-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 513--><p class="indent" >   Un <span 
+class="cmbx-10x-x-109">xor </span>entre los valores 1001 y 0011 sería:
+<div class="center" 
+>
+<!--l. 515--><p class="noindent" >
+<div class="tabular"> <table id="TBL-17" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-17-1g"><col 
+id="TBL-17-1"><col 
+id="TBL-17-2"><col 
+id="TBL-17-3"><col 
+id="TBL-17-4"><col 
+id="TBL-17-5"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-17-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-17-1-1"  
+class="td11">  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-1-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-1-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-1-4"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-1-5"  
+class="td11">1</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-17-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-17-2-1"  
+class="td11">xor</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-2-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-2-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-2-4"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-2-5"  
+class="td11">1</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-17-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-17-3-1"  
+class="td11">   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-3-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-3-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-3-4"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-3-5"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-17-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-17-4-1"  
+class="td11">   </td></tr></table></div></div>
+<!--l. 524--><p class="indent" >   Por último un <span 
+class="cmbx-10x-x-109">not </span>del valor 0011 sería:
+<div class="center" 
+>
+<!--l. 526--><p class="noindent" >
+<div class="tabular"> <table id="TBL-18" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-18-1g"><col 
+id="TBL-18-1"><col 
+id="TBL-18-2"><col 
+id="TBL-18-3"><col 
+id="TBL-18-4"><col 
+id="TBL-18-5"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-18-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-1-1"  
+class="td11">not</td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-1-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-1-3"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-1-4"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-1-5"  
+class="td11">1</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-2-1"  
+class="td11">   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-2-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-2-3"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-2-4"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-2-5"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-3-1"  
+class="td11">   </td></tr></table>
+</div></div>
+<!--l. 534--><p class="indent" >   Podemos ocupar la notación de buses para representar estas operaciones con los símbolos de las
+compuertas:
+<!--l. 536--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-2200120"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 538--><p class="noindent" ><img 
+src="png/4bitand.png" alt="PIC" class="graphics" width="100" ><!--tex4ht:graphics  
+name="apunte0224x.png" src="figs/4bitand.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;20: </span><span  
+class="content">AND de 4 bits de datos.</span></div><!--tex4ht:label?: x1-2200120 -->
+                                                                                                  
+                                                                                                  
+<!--l. 541--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 543--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-2200221"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 545--><p class="noindent" ><img 
+src="png/4bitor.png" alt="PIC" class="graphics" width="100" ><!--tex4ht:graphics  
+name="apunte0225x.png" src="figs/4bitor.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;21: </span><span  
+class="content">OR de 4 bits de datos.</span></div><!--tex4ht:label?: x1-2200221 -->
+                                                                                                  
+                                                                                                  
+<!--l. 548--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 550--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-2200322"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 552--><p class="noindent" ><img 
+src="png/4bitxor.png" alt="PIC" class="graphics" width="100" ><!--tex4ht:graphics  
+name="apunte0226x.png" src="figs/4bitxor.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;22: </span><span  
+class="content">XOR de 4 bits de datos.</span></div><!--tex4ht:label?: x1-2200322 -->
+                                                                                                  
+                                                                                                  
+<!--l. 555--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 557--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-2200423"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 559--><p class="noindent" ><img 
+src="png/4bitnot.png" alt="PIC" class="graphics" width="75" ><!--tex4ht:graphics  
+name="apunte0227x.png" src="figs/4bitnot.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;23: </span><span  
+class="content">NOT de 4 bits de datos.</span></div><!--tex4ht:label?: x1-2200423 -->
+                                                                                                  
+                                                                                                  
+<!--l. 562--><p class="indent" >   </div><hr class="endfigure">
+   <h4 class="subsectionHead"><span class="titlemark">6.3.   </span> <a 
+ id="x1-230006.3"></a>Operaciones de desplazamiento o shifting</h4>
+<!--l. 566--><p class="noindent" >Otra operación relevante que es posible implementar con compuertas lógicas es la operación de desplazamiento o
+shifting. Esta operación permite, dado un cierto número binario, «desplazarlo»
+hacia la izquierda o la derecha. Por ejemplo si se tiene almacenado el número de 4 bits 0101, al hacer un
+<span 
+class="cmti-10x-x-109">shift </span>o desplazamiento a la izquierda obtenemos el número 1010, es decir se movieron los bits una
+posición a la izquierda. Si hubiésemos hecho un <span 
+class="cmti-10x-x-109">shift </span>a la derecha, habríamos obtenido el número
+0010.
+<!--l. 568--><p class="indent" >   La relevancia de esta operación tiene que ver con la interpretación aritmética de la operación de shift. Un shift a
+la izquierda puede ser interpretado como una multiplicación por 2; un shift a la derecha puede ser interpretado
+como una división por 2. Esta característica hace que este circuito sea muchas veces agregado junto a la ALU como
+una unidad de ejecución adicional denominada <span 
+class="cmbx-10x-x-109">shifter</span>, permitiendo hacer shifts a la izquierda y a la
+derecha.
+<!--l. 570--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">6.4.   </span> <a 
+ id="x1-240006.4"></a>Unidad aritmética y lógica: ALU</h4>
+<!--l. 572--><p class="noindent" >Ya con todas las operaciones de la ALU definidas, nos interesa diseñar el componente completo. Dado que las
+operaciones que queremos agregar son 8: 2 operaciones aritméticas (suma y resta), 4 operaciones lógicas (and, or,
+xor, y not) y 2 operaciones de desplazamiento (shift left y shift right), necesitamos un multiplexor de 8 entradas y 3
+señales de control, que cumpla con la siguiente tabla:
+<div class="center" 
+>
+<!--l. 574--><p class="noindent" >
+<div class="tabular"> <table id="TBL-19" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-19-1g"><col 
+id="TBL-19-1"><col 
+id="TBL-19-2"><col 
+id="TBL-19-3"></colgroup><colgroup id="TBL-19-4g"><col 
+id="TBL-19-4"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-19-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-1-1"  
+class="td11">S2</td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-1-2"  
+class="td11">S1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-1-3"  
+class="td11">S0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-1-4"  
+class="td11">   M     </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-2-2"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-2-3"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-2-4"  
+class="td11"> Suma</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-3-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-3-2"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-3-3"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-3-4"  
+class="td11">  Resta   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-4-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-4-2"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-4-3"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-4-4"  
+class="td11"> And</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-5-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-5-2"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-5-3"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-5-4"  
+class="td11">   Or     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-6-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-6-2"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-6-3"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-6-4"  
+class="td11">   Not    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-7-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-7-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-7-2"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-7-3"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-7-4"  
+class="td11">   Xor    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-8-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-8-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-8-2"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-8-3"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-8-4"  
+class="td11"> Shift left </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-9-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-9-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-9-2"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-9-3"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-9-4"  
+class="td11">Shift right</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-10-"><td  style="white-space:nowrap; text-align:center;" id="TBL-19-10-1"  
+class="td11">   </td></tr></table></div></div>
+<!--l. 590--><p class="indent" >   El componente completo de la ALU lo podemos representar con la abstracción de la figura que
+aparece a continuación. Es importante destacar que para estos componentes ya no nos basta con el
+«dibujo»
+y el nombre del componente para saber la funcionalidad (como si era el caso del sumador). Acá necesitamos tener
+también la información de la tabla anterior, indicando que operaciones se realizan con que señales de
+control.
+<!--l. 592--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-2400124"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 594--><p class="noindent" ><img 
+src="png/alu.png" alt="PIC" class="graphics" width="560" ><!--tex4ht:graphics  
+name="apunte0228x.png" src="figs/alu.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;24: </span><span  
+class="content">ALU de 4 bits de datos y 5 operaciones.</span></div><!--tex4ht:label?: x1-2400124 -->
+                                                                                                  
+                                                                                                  
+<!--l. 597--><p class="indent" >   </div><hr class="endfigure">
+   <h3 class="sectionHead"><span class="titlemark">7.   </span> <a 
+ id="x1-250007"></a>Ejercicios</h3>
+     <ul class="itemize1">
+     <li class="itemize">Implemente un circuito 2 bit Multiplier, que realice la multiplicación entre dos valores de 2 bits.
+     </li>
+     <li class="itemize">Escriba un programa que simule el funcionamiento de un multiplexor de 2 entradas de 4 bits, ocupando
+     variables boolean para representar bits, y los operadores lógicos &amp;, &#8212;, <span 
+class="cmsy-10x-x-109">&#x2227; </span>y para representar compuertas
+     lógicas.</li></ul>
+<!--l. 605--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">8.   </span> <a 
+ id="x1-260008"></a>Referencias</h3>
+     <ul class="itemize1">
+     <li class="itemize">Shannon, C.; A Symbolic Analysis of Relays and Switching Circuits, MIT Press, 1937.</li></ul>
+                                                                                                  
+                                                                                                  
+<!--l. 613--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">9.   </span> <a 
+ id="x1-270009"></a>Apéndice: Operaciones Bitwise (lógicas y shifts) en lenguajes de programación</h3>
+<!--l. 615--><p class="noindent" >Las operaciones lógicas bit a bit <span 
+class="cmbx-10x-x-109">and</span>, <span 
+class="cmbx-10x-x-109">or</span>, <span 
+class="cmbx-10x-x-109">xor </span>y <span 
+class="cmbx-10x-x-109">not</span>, así como las operaciones de desplazamiento o <span 
+class="cmbx-10x-x-109">shift</span>, pueden
+ser ocupadas en los lenguajes de programación tradicionales como C, C++, Java y C#. A continuación se presentan
+los símbolos habitualmente usados:
+<!--l. 618--><p class="indent" >   Sean las variables <span 
+class="cmtt-10x-x-109">a</span>, <span 
+class="cmtt-10x-x-109">b </span>y <span 
+class="cmtt-10x-x-109">n</span>:
+     <ul class="itemize1">
+     <li class="itemize">la operación <span 
+class="cmtt-10x-x-109">a and b </span>se escribe como: <br 
+class="newline" /><span 
+class="cmtt-10x-x-109">a &amp; b</span>;
+     </li>
+     <li class="itemize">la operación <span 
+class="cmtt-10x-x-109">a or b </span>se escribe como: <br 
+class="newline" /><span 
+class="cmtt-10x-x-109">a | b</span>;
+     </li>
+     <li class="itemize">la operación <span 
+class="cmtt-10x-x-109">a xor b </span>se escribe como: <br 
+class="newline" /><span 
+class="cmtt-10x-x-109">a </span><span 
+class="cmsy-10x-x-109">&#x2227; </span><span 
+class="cmtt-10x-x-109">b</span>;
+     </li>
+     <li class="itemize">la operación not <span 
+class="cmtt-10x-x-109">a </span>se escribe como:
+                                                                                                  
+                                                                                                  
+     <div class="verbatim" id="verbatim-1">
+     &#x00A0;&#x00A0;&#x00A0;~&#x00A0;a
+     &#x00A0;<br />&#x00A0;
+</div>
+     <!--l. 625--><p class="nopar" >
+     </li>
+     <li class="itemize">la operación <span 
+class="cmtt-10x-x-109">shift left a en n bits </span>se escribe como:<br 
+class="newline" /><span 
+class="cmtt-10x-x-109">a </span><span 
+class="cmmi-10x-x-109">&#x003C;&#x003C; </span><span 
+class="cmtt-10x-x-109">n</span>;
+     </li>
+     <li class="itemize">la operación <span 
+class="cmtt-10x-x-109">shift right a en n bits </span>se escribe como:<br 
+class="newline" /><span 
+class="cmtt-10x-x-109">a </span><span 
+class="cmmi-10x-x-109">&#x003E;&#x003E; </span><span 
+class="cmtt-10x-x-109">n</span>;
+     </li></ul>
+<!--l. 631--><p class="noindent" >Las operaciones bitwise tienen la ventaja de permitir modificar valores en bits específicos de un determinado número,
+debido a esto permiten implementar una serie de funcionalidades útiles:
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Máscaras</span>: La idea de una máscara numérica es similar al de una máscara física, en este caso una máscara
+     numérica corresponde a un valor que al ser «superpuesto»
+     en otro valor, «deja ver»
+     solamente parte del número original. Esto es importante en caso de que las distintas partes de un número
+     representen distinta información. Un ejemplo práctico son las máscaras de subred, usadas en las
+     configuraciones de red de los computadores. La utilidad en este caso es que dado un IP en un computador (por
+     ejemplo 10.10.10.101), una parte de este IP se puede ocupar para enviar un mensaje a la subred completa de
+     computadores en la cual se encuentra el computador. Una subred posible es la 10.10.10.0, otra la 10.10.0.0. En
+     general el IP de subred se puede obtener al aplicar una máscara al IP, y dependiendo de la máscara se
+     obtendrá la subred requerida. La operación de máscara numérica corresponde a realizar un and bit
+     a bit entre la máscara y el valor a enmascarar. En el ejemplo anterior, una posible máscara
+     de subred es 255.255.255.0, que en binario corresponde a una secuencia de 24 unos seguido de
+     8 ceros (cada valor entre puntos de un IP es un número de 8 bits). Al aplicar esa máscara al
+     IP 10.10.10.101, los primeros 24 bits se conservan, dado que un and con 1 conserva el valor.
+     Los 8 bits finales en cambio se pasan a 0, obteniendo 10.10.10.0, que sería en este caso el IP de
+     subred.
+     <!--l. 639--><p class="noindent" >A continuación se presenta un ejemplo en Java de la operación de enmascaramiento, ocupando
+     representación hexadecimal para los números, lo que permite ver más fácilmente el resultado del
+     enmascaramiento:
+     <!--l. 644-->
+     <div class="lstlisting" id="listing-1"><span class="label"><a 
+ id="x1-27001r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">static</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">void</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascaras</span><span 
+class="cmtt-8">()</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27002r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27003r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">xF0</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27004r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27005r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">xA1</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27006r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27007r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num3</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&amp;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num2</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27008r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27009r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">String</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">format</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span style="margin-left:0.3em" class="thinspace"></span><span 
+class="cmtt-8">%</span><span 
+class="cmtt-8">x</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num3</span><span 
+class="cmtt-8">));</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27010r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span>
+     
+     </div>
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Flags</span>: Otra utilidad práctica de las operaciones bitwise es la posibilidad de guardar múltiple información en
+     un solo número binario. Un ejemplo de esto son los flags, valores que pueden estar activos o no activos
+     indicando con eso alguna propiedad. El sistema de permisos de archivos de Linux, por ejemplo, define tres
+     posibles permisos: Lectura (Read), Escritura (Write), Ejecución (Execute). Para almacenar la información de
+     si los flags están activos o no necesitamos solamente 1 bit por flag, por lo cual podemos ocupar un número
+     binario de 3 bits para codificar esta información.
+     <!--l. 661--><p class="noindent" >Para ocupar flags de 1 bit son necesarias dos funcionalidades: poder setear si cada flag está activo o no, <span 
+class="cmbx-10x-x-109">de</span>
+     <span 
+class="cmbx-10x-x-109">manera independiente</span>, y poder obtener la información del estado de cada flag. Para realizar lo primero, si
+     se quiere setear como activo el flag, basta con hacer un or con una máscara que tenga en uno el bit en la
+     posición del flag, y ceros en el resto de los bits. Con esto, al hacer or con ceros no se pierden los estados de los
+     otros flags, y se modifica a uno el bit correspondiente. En el caso de necesitar setear el flag en 0, basta con
+     hacer un and con una máscara que tenga unos en todos los bits, menos en el que se quiere dejar en
+     0.
+     <!--l. 663--><p class="noindent" >Para poder obtener información de cada flag, se requiere ocupar las mismas máscaras de seteo de flag activo,
+     pero esta vez se aplica un and con el valor. Al hacer esto, el número será distinto de cero, solo si el bit del cual
+     se quiere tener información estaba en cero, con lo cual se puede revisar esa condición para saber el
+     estado.
+     <!--l. 665--><p class="noindent" >A continuación se muestran ejemplos de código que implementan el seteo y obtención de valores de
+     flags.
+     <!--l. 670-->
+     <div class="lstlisting" id="listing-2"><span class="label"><a 
+ id="x1-27011r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">static</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">void</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">setFlagsOn</span><span 
+class="cmtt-8">()</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27012r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27013r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x0</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27014r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27015r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara0</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x1</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27016r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x2</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27017r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x4</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27018r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27019r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">|</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara0</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">|</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">|</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara2</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27020r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27021r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27022r12"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27023r13"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27024r14"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27025r15"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27026r16"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">static</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">void</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">setFlagsOff</span><span 
+class="cmtt-8">()</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27027r17"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27028r18"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x7</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27029r19"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27030r20"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara0</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x6</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27031r21"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x5</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27032r22"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x3</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27033r23"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27034r24"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&amp;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara0</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&amp;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&amp;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara2</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27035r25"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27036r26"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27037r27"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27038r28"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27039r29"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27040r30"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27041r31"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">static</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">void</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">getFlags</span><span 
+class="cmtt-8">()</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27042r32"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27043r33"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x7</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27044r34"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27045r35"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara0</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x1</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27046r36"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x2</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27047r37"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x4</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27048r38"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27049r39"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">get0</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&amp;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara0</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27050r40"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27051r41"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">if</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">get0</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">==</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27052r42"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">No</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">tiene</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permiso</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27053r43"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">else</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27054r44"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">Tiene</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permiso</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27055r45"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27056r46"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">get1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&amp;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara1</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27057r47"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27058r48"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">if</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">get1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">==</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27059r49"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">No</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">tiene</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permiso</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">1</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27060r50"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">else</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27061r51"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">Tiene</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permiso</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">1</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27062r52"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27063r53"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">get2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permisos</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&amp;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mascara2</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27064r54"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27065r55"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">if</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">get2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">==</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27066r56"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">No</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">tiene</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permiso</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">2</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27067r57"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">else</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27068r58"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">Tiene</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">permiso</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">2</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27069r59"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27070r60"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span>
+     
+     </div>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Xor Clear</span>: El xor también es un operando bitwise que permite realizar funcionalidades útiles. Un ejemplo
+     que se muestra a continuación es que un número al que se le aplica xor consigo mismo resulta siempre en 0,
+     por lo cual se puede pensar esta operación como un «clear»
+     para setear en 0 un cierto número:
+     <!--l. 739-->
+     <div class="lstlisting" id="listing-3"><span class="label"><a 
+ id="x1-27071r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">static</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">void</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">xorClear</span><span 
+class="cmtt-8">()</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27072r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27073r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">x7</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27074r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27075r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">^</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27076r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27077r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">String</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">format</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">"</span><span style="margin-left:0.3em" class="thinspace"></span><span 
+class="cmtt-8">%</span><span 
+class="cmtt-8">x</span><span 
+class="cmtt-8">"</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num2</span><span 
+class="cmtt-8">));</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27078r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span>
+     
+     </div>
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">División y Multiplicación por potencias de 2</span>:
+     <!--l. 754--><p class="noindent" >Las operaciones de desplazamiento tienen una importante utilidad, dado que un shift a la derecha de un
+     número binario, por ejemplo (1010)<sub><span 
+class="cmr-8">2</span></sub> = 10 resulta en (0101)<sub><span 
+class="cmr-8">2</span></sub> = 5 el cual corresponde al número original
+     dividido en 2. De manera similar, un shift a la izquierda corresponde a multiplicar por 2, en el ejemplo:
+     (10100)<sub><span 
+class="cmr-8">2</span></sub> = 20. El hecho de que ocurra esto es evidente, si pensamos que en base de 10, desplazar un dígito a la
+     derecha o izquierda se interpreta también como dividir o multiplicar por 10. En el caso de un
+     número binario, como la base es 2, las operaciones que se logran son multiplicar y dividir por
+     2.
+     <!--l. 757--><p class="noindent" >El siguiente código muestra la operación de shift en Java:
+     <!--l. 762-->
+     <div class="lstlisting" id="listing-4"><span class="label"><a 
+ id="x1-27079r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">static</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">void</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">shift</span><span 
+class="cmtt-8">()</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27080r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27081r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">10;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27082r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27083r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x003E;&#x003E;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">1;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27084r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27085r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">int</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num3</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">num1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x003C;&#x003C;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">1;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27086r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27087r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">num2</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27088r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">System</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">out</span><span 
+class="cmtt-8">.</span><span 
+class="cmtt-8">println</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">num3</span><span 
+class="cmtt-8">);</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-27089r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span>
+     
+     </div>
+     </li></ul>
+    
+</body></html> 
+
+                                                                                                  
+
+

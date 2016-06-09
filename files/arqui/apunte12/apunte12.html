@@ -1,0 +1,1635 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html xml:lang="es" > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="apunte12.tex"> 
+<meta name="date" content="2014-04-05 21:55:00"> 
+<link rel="stylesheet" type="text/css" href="apunte12.css"> 
+</head><body 
+>
+<div class="center" 
+>
+<!--l. 16--><p class="noindent" >
+<!--l. 17--><p class="noindent" ><span 
+class="cmbx-10">IIC2343 Arquitectura de Computadores</span><br />
+<span 
+class="cmbx-12x-x-120">Multiprogramación</span><br />
+<span 
+class="cmbsy-6">©</span><span 
+class="cmbx-6">Alejandro Echeverría, Hans-Albert L</span><span 
+class="cmbx-6">öbel</span><br />
+</div>
+   <h3 class="sectionHead"><span class="titlemark">1.   </span> <a 
+ id="x1-10001"></a>Motivación</h3>
+<!--l. 26--><p class="noindent" >Una de las ventajas de tener una máquina multipropósito como un computador es la posibilidad de correr múltiples
+programas que realicen distintas operaciones. Para lograr que un computador ejecute y almacene múltiples
+programas son necesarias diversas mejoras y modificaciones al hardware.
+<!--l. 28--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2.   </span> <a 
+ id="x1-20002"></a>Multiprogramación</h3>
+<!--l. 30--><p class="noindent" >El concepto de multiprogramación se refiere a la idea general de poder cargar múltiples programas
+dentro de un mismo computador para que sean ejecutados en un determinado momento. Para lograr
+manejar múltiples programas, es necesario primero definir que compone a un programa. En general,
+podemos decir que un programa está compuesto por dos partes: su <span 
+class="cmbx-10x-x-109">representación en memoria</span>
+que incluye el código, datos y stack del programa, y su <span 
+class="cmbx-10x-x-109">estado de ejecución </span>que incluye los valores
+almacenados en los registros de la CPU (PC, registros acumuladores, SP, Status register, etc.) que indican el
+estado actual del programa en la máquina. Para lograr trabajar con múltiples programas, entonces,
+es necesario permitir el manejo de múltiples representaciones en memoria y de múltiples estados de
+ejecución.
+<!--l. 32--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.1.   </span> <a 
+ id="x1-30002.1"></a>Manejo de múltiples representaciones en memoria</h4>
+<!--l. 34--><p class="noindent" >Supongamos que queremos representar en memoria dos programas que originalmente funcionaban como programa
+único de un determinado computador. Los códigos de ambos programas (P1 y P2) se muestran a
+continuación:
+<!--l. 36--><p class="indent" >   <span 
+class="cmbx-10x-x-109">P1:   </span><!--l. 40-->
+   <div class="lstlisting" id="listing-1"><span class="label"><a 
+ id="x1-3001r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3002r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(100)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3003r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(101)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3004r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3005r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(102),</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span>
+   
+   </div>
+                                                                                                  
+                                                                                                  
+<!--l. 53--><p class="indent" >   <span 
+class="cmbx-10x-x-109">P2:   </span><!--l. 57-->
+   <div class="lstlisting" id="listing-2"><span class="label"><a 
+ id="x1-3008r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3009r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(100)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3010r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(101)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3011r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SUB</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3012r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(102),</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span>
+   
+   </div>
+<!--l. 67--><p class="indent" >   Ambos programas tienen sus instrucciones y datos almacenados en memoria. En este caso particular, además,
+ambos programas ocupan las mismas direcciones de memoria para almacenar sus tres variables. Es claro que no es
+posible utilizar el mismo espacio físico de memoria para ambos programas, por lo que es necesario desarrollar alguna
+modificación para poder almacenar los dos programas.
+<!--l. 69--><p class="indent" >   Una primera solución que se puede pensar es modificar los programas de manera que las instrucciones y datos
+estén en ubicaciones distintas de memoria. Con este esquema, se podría almacenar en una parte de la memoria
+un programa completo, y en otra parte otro programa, como se observa en el diagrama de la figura
+<a 
+href="#x1-30151">1<!--tex4ht:ref: fig:memsimple1 --></a>:
+<!--l. 71--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30151"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 73--><p class="noindent" ><img 
+src="png/memsimple1.png" alt="PIC" class="graphics" width="120" height="240" ><!--tex4ht:graphics  
+name="apunte121x.png" src="figs3/memsimple1.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;1: </span><span  
+class="content">Esquema simple de almacenamiento de dos programas en memoria.</span></div><!--tex4ht:label?: x1-30151 -->
+                                                                                                  
+                                                                                                  
+<!--l. 76--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 78--><p class="indent" >   Para lograr que este esquema funcione, es necesario colocar el código del segundo programa luego del espacio del
+primer programa y además es necesario modificar las posiciones de las direcciones de memoria de las variables
+usadas por el programa, por ejemplo a las direcciones 200, 201 y 202, como se observa en el siguiente código del
+programa 2 modificado:
+<!--l. 80--><p class="indent" >   <span 
+class="cmbx-10x-x-109">P2:   </span><!--l. 84-->
+   <div class="lstlisting" id="listing-3"><span class="label"><a 
+ id="x1-3016r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3017r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(200)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3018r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(201)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3019r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SUB</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-3020r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(202),</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span>
+   
+   </div>
+<!--l. 94--><p class="indent" >   Con este esquema entonces, es necesario modificar las direcciones de memoria originales de al menos uno de los
+programas, como se observa en el siguiente diagrama:
+<!--l. 96--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30232"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 98--><p class="noindent" ><img 
+src="png/memsimple2.png" alt="PIC" class="graphics" width="120" height="240" ><!--tex4ht:graphics  
+name="apunte122x.png" src="figs3/memsimple2.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;2: </span><span  
+class="content">En el esquema simple de manejo de múltiples programas en memoria, es necesario modificar la
+ubicación en memoria del código y los datos de al menos uno de los programas.</span></div><!--tex4ht:label?: x1-30232 -->
+                                                                                                  
+                                                                                                  
+<!--l. 100--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 102--><p class="indent" >   Este esquema presenta tres problemas importantes:
+     <ul class="itemize1">
+     <li class="itemize">Es necesario modificar uno de los programas para poder hacerlo calzar en su nueva ubicación de
+     memoria.
+     </li>
+     <li class="itemize">No existe protección de la memoria: el programa 1 puede escribir en los datos del programa 2 y
+     viceversa, lo que claramente no es deseado.
+     </li>
+     <li class="itemize">Cada programa está limitado solo a ocupar una parte de la memoria y no a todo el espacio direccionable.</li></ul>
+<!--l. 109--><p class="indent" >   Para solucionar estas tres dificultades presentadas por este esquema simple, los sistemas de multiprogramación
+utilizan el concepto de <span 
+class="cmbx-10x-x-109">memoria virtual</span>. En un sistema de memoria virtual, se distinguen las direcciones que
+ocupa internamente un programa (direcciones virtuales) de las direcciones físicas donde se almacena la información.
+Cada programa tendrá un espacio virtual de direcciones, que corresponde al tamaño del espacio de direcciones de la
+memoria completa habitualmente. De esta forma, cada programa tiene la percepción de ser el único programa en la
+máquina.
+<!--l. 111--><p class="indent" >   En la práctica sin embargo, cada programa sigue estando mapeado a un lugar físico distinto en la memoria
+física, pero a nivel del programa esto es transparente y por tanto el programa no se preocupa de saber en que
+ubicación física está, ya que solo le interesa su espacio virtual (figura <a 
+href="#x1-30243">3<!--tex4ht:ref: fig:memvirtual1 --></a>).
+<!--l. 113--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30243"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 115--><p class="noindent" ><img 
+src="png/memvirtual1.png" alt="PIC" class="graphics" width="320" ><!--tex4ht:graphics  
+name="apunte123x.png" src="figs3/memvirtual1.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;3: </span><span  
+class="content">Cada programa tiene un espacio virtual de memoria que se mapea a una ubicación física. </span></div><!--tex4ht:label?: x1-30243 -->
+                                                                                                  
+                                                                                                  
+<!--l. 118--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 120--><p class="indent" >   De esta forma, en el ejemplo de los programas anteriores no es necesario modificar las direcciones del programa
+2, ya que para éste, sus variables siguen estando ubicadas en las direcciones 100, 101 y 102, de su espacio virtual. En
+la práctica, estas direcciones son mapeadas internamente a otras ubicaciones físicas (200, 201 y 202 por ejemplo),
+pero a nivel del código esto no afecta (figura <a 
+href="#x1-30243">3<!--tex4ht:ref: fig:memvirtual1 --></a>).
+<!--l. 122--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30254"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 124--><p class="noindent" ><img 
+src="png/memvirtual2.png" alt="PIC" class="graphics" width="360" ><!--tex4ht:graphics  
+name="apunte124x.png" src="figs3/memvirtual2.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;4: </span><span  
+class="content">Cada programa puede acceder a las direcciones de memoria del espacio virtual completo, sin
+preocuparse de topar con direcciones de otro programa.</span></div><!--tex4ht:label?: x1-30254 -->
+                                                                                                  
+                                                                                                  
+<!--l. 127--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 129--><p class="indent" >   El sistema de memoria virtual es capaz de solucionar los tres problemas antes descritos:
+     <ul class="itemize1">
+     <li class="itemize">No es necesario modificar los programas ya que cada programa tiene la impresión de estar solo en el
+     computador.
+     </li>
+     <li class="itemize">Al poder acceder solo a su espacio virtual, un programa no puede escribir en los datos de otro, agregando
+     protección de memoria.
+     </li>
+     <li class="itemize">Cada programa puede direccionar el espacio completo de memoria, y por tanto no hay problemas de
+     limitación.</li></ul>
+<!--l. 136--><p class="indent" >   Para implementar un sistema de memoria virtual, es necesario agregar a la CPU un componente de hardware
+que realice la traducción de una dirección virtual a una dirección física. Este componente se conoce como
+<span 
+class="cmbx-10x-x-109">Memory Management Unit (MMU) </span>y es parte de la CPU. La MMU se encargará de traducir las
+solicitudes de memoria que vengan desde la CPU, mapeando para el programa actual la dirección física
+correspondiente.
+<!--l. 138--><p class="indent" >   En el caso de los programas anteriores, una solicitud a la dirección virtual 100 de parte del programa 2,
+será traducida como solicitud a la dirección física 200: <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30265"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 141--><p class="noindent" ><img 
+src="png/mmu.png" alt="PIC" class="graphics" width="520" ><!--tex4ht:graphics  
+name="apunte125x.png" src="figs3/mmu.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;5: </span><span  
+class="content">Traducción de dirección virtual a física.</span></div><!--tex4ht:label?: x1-30265 -->
+                                                                                                  
+                                                                                                  
+<!--l. 143--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 145--><p class="indent" >   Una solicitud a la dirección virtual 100 de parte del programa 1, en cambio, será traducida como solicitud a la
+dirección física 100. <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30276"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 148--><p class="noindent" ><img 
+src="png/mmu2.png" alt="PIC" class="graphics" width="520" ><!--tex4ht:graphics  
+name="apunte126x.png" src="figs3/mmu2.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;6: </span><span  
+class="content">Traducción de dirección virtual a física.</span></div><!--tex4ht:label?: x1-30276 -->
+                                                                                                  
+                                                                                                  
+<!--l. 150--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 152--><p class="indent" >   Para realizar la traducción la MMU debe almacenar una tabla que tenga la asociación virtual - física. La opción
+más simple para esto es almacenar todos los pares de direcciones virtual-física, lo que en el caso de los programas 1
+y 2 serían los siguientes:
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 154--><p class="indent" >   <a 
+ id="x1-30281"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 155--><p class="noindent" >
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1"></colgroup><colgroup id="TBL-1-2g"><col 
+id="TBL-1-2"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"  
+class="td11">Dirección virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-2"  
+class="td11">Dirección física</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"  
+class="td11">100 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-2"  
+class="td11">100</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-1"  
+class="td11">101                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-2"  
+class="td11">101               </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-1"  
+class="td11">102                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-2"  
+class="td11">102               </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-1"  
+class="td11">               </td></tr></table></div></div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;1: </span><span  
+class="content">Tabla de mapeo virtual-físico del programa 1.</span></div><!--tex4ht:label?: x1-30281 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 169--><p class="indent" >   <a 
+ id="x1-30292"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 170--><p class="noindent" >
+<div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1"></colgroup><colgroup id="TBL-2-2g"><col 
+id="TBL-2-2"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-1"  
+class="td11">Dirección virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-2"  
+class="td11">Dirección física</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-1"  
+class="td11">100 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-2"  
+class="td11">200</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-1"  
+class="td11">101                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-2"  
+class="td11">201               </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-1"  
+class="td11">102                   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-2"  
+class="td11">202               </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-1"  
+class="td11">               </td></tr></table></div></div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;2: </span><span  
+class="content">Tabla de mapeo virtual-físico del programa 2.</span></div><!--tex4ht:label?: x1-30292 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+<!--l. 184--><p class="indent" >   El problema de almacenar todos los mapeos posibles está en que se necesita para cada programa una tabla con
+tantas entradas como direcciones virtuales disponibles hay, y por tanto se requeriría para cada programa un espacio
+de almacenamiento igual al tamaño de la memoria física, lo que claramente no es implementable en la
+práctica.
+<!--l. 186--><p class="indent" >   Para solucionar el problema del tamaño de la tabla de mapeo virtual-físico, se agrega el concepto de
+<span 
+class="cmbx-10x-x-109">paginación</span>. La paginación corresponde a dividir la memoria en bloques de palabras contiguos conocidos como
+<span 
+class="cmbx-10x-x-109">páginas </span>en el espacio virtual o <span 
+class="cmbx-10x-x-109">marcos </span>en el espacio físico. De esta manera, cada programa tendrá asociada una
+cierta cantidad de páginas de memoria virtual, las cuales estarán mapeadas a marcos físicos (figura <a 
+href="#x1-30307">7<!--tex4ht:ref: fig:paginacion --></a>). Con este
+esquema, las tablas de mapeo, denominadas <span 
+class="cmbx-10x-x-109">tablas de páginas</span>, pueden tener un tamaño razonable lo que permite
+implementar el sistema en la práctica.
+<!--l. 188--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30307"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 190--><p class="noindent" ><img 
+src="png/paginacion.png" alt="PIC" class="graphics" width="280" height="280" ><!--tex4ht:graphics  
+name="apunte127x.png" src="figs3/paginacion.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;7: </span><span  
+class="content">En un sistema de paginación, cada programa utiliza páginas de memoria virtual, las cuales están
+mapeadas a marcos de memoria física. </span></div><!--tex4ht:label?: x1-30307 -->
+                                                                                                  
+                                                                                                  
+<!--l. 193--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 195--><p class="indent" >   Suponiendo por ejemplo una memoria física de 256 bytes y páginas de 32 bytes, se tendrían 8 marcos físicos
+posibles. Si los programas 1 y 2 del ejemplo anterior se quieren almacenar en esta memoria, y suponiendo que
+ocupan tres páginas virtuales, las posibles tablas de página serían las siguientes:
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 197--><p class="indent" >   <a 
+ id="x1-30313"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 198--><p class="noindent" >
+<div class="tabular"> <table id="TBL-3" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-3-1g"><col 
+id="TBL-3-1"></colgroup><colgroup id="TBL-3-2g"><col 
+id="TBL-3-2"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-2"  
+class="td11">Marco físico</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-2"  
+class="td11">2              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-1"  
+class="td11">1                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-2"  
+class="td11">3              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-2"  
+class="td11">4              </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-5-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;3: </span><span  
+class="content">Tabla de página del programa 1.</span></div><!--tex4ht:label?: x1-30313 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 212--><p class="indent" >   <a 
+ id="x1-30324"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 213--><p class="noindent" >
+<div class="tabular"> <table id="TBL-4" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-4-1g"><col 
+id="TBL-4-1"></colgroup><colgroup id="TBL-4-2g"><col 
+id="TBL-4-2"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-2"  
+class="td11">Marco físico</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-2"  
+class="td11">5              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-1"  
+class="td11">1                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-2"  
+class="td11">6              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-2"  
+class="td11">7              </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;4: </span><span  
+class="content">Tabla de página del programa 2.</span></div><!--tex4ht:label?: x1-30324 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+<!--l. 227--><p class="indent" >   En un sistema de memoria virtual con paginación, la dirección de memoria será interpretada como dos partes:
+una que indica el número de página, y otra que indica el offset dentro de la página. En el caso anterior, al ser el
+espacio de direccionamiento de 8 bits (2<sup><span 
+class="cmr-8">8</span></sup> = 256 palabras en memoria), la dirección de 8 bits se dividirá en los 3 bits
+más significativos para indicar el número de página (2<sup><span 
+class="cmr-8">3</span></sup> = 8 páginas), y los 5 bits restantes para indicar el offset
+(2<sup><span 
+class="cmr-8">5</span></sup> = 32 palabras por página).
+<!--l. 229--><p class="indent" >   Para determinar la ubicación física de la dirección virtual 70 del programa 2, por ejemplo, se debe realizar los
+siguientes pasos:
+     <ul class="itemize1">
+     <li class="itemize">Primero es necesario obtener la dirección en binario: 70 = 01000110.
+     </li>
+     <li class="itemize">Los tres primeros bits de la dirección (010 = 2) indican el número de página, los siguientes cinco bits
+     (00110 = 6) indican el offset dentro de la página.
+     </li>
+     <li class="itemize">La página virtual debe ser traducida a un marco físico ocupando la tabla de página correspondiente.
+     En este caso la página 2 esta mapeada al marco 7 = 111.
+     </li>
+     <li class="itemize">Ocupando el número del marco físico (111) más el offset original (00110) se obtiene la dirección física
+     real: 11100110 = 230.</li></ul>
+<!--l. 238--><p class="indent" >   Como se señaló previamente, la paginación se utiliza para reducir el tamaño de las tablas de mapeo. En los
+computadores personales el tamaño de página es habitualmente de 1KB (2<sup><span 
+class="cmr-8">10</span></sup> bytes). Pensando por ejemplo en un
+computador con 1GB (2<sup><span 
+class="cmr-8">30</span></sup> bytes) de memoria, se tendrían 2<sup><span 
+class="cmr-8">30</span><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">10</span></sup> = 2<sup><span 
+class="cmr-8">20</span></sup> = 1<span 
+class="cmmi-10x-x-109">M </span>páginas, es decir el tamaño de la tabla
+de página de cada programa sería alrededor de 1MB, lo que es una proporción razonable considerando el tamaño de
+la memoria.
+<!--l. 240--><p class="indent" >   Las tablas de página de cada programa contienen la información completa del mapeo del espacio virtual del
+programa al espacio físico. Esto quiere decir que se deben tener almacenadas entradas para todas las
+posibles páginas, aunque estas no estén utilizadas. Para diferenciar las páginas que están correctamente
+mapeadas a un marco físico de las que no, se agrega a la tabla de páginas un <span 
+class="cmbx-10x-x-109">bit de validez </span>el cual
+cuando tiene el valor 1 indica que esa entrada es válida, y cuando tiene el valor 0 indica que no lo
+es.
+<!--l. 242--><p class="indent" >   Para el ejemplo de los programas 1 y 2 antes vistos, las tablas de páginas completas serían las
+siguientes:
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 244--><p class="indent" >   <a 
+ id="x1-30335"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 245--><p class="noindent" >
+<div class="tabular"> <table id="TBL-5" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-5-1g"><col 
+id="TBL-5-1"></colgroup><colgroup id="TBL-5-2g"><col 
+id="TBL-5-2"></colgroup><colgroup id="TBL-5-3g"><col 
+id="TBL-5-3"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-2"  
+class="td11">Marco físico</td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-3"  
+class="td11">Validez</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-2"  
+class="td11">2              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-3"  
+class="td11">1        </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-1"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-2"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-4-2"  
+class="td11">4              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-4-3"  
+class="td11">1        </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-5-1"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-5-2"  
+class="td11">x </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-5-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-6-1"  
+class="td11">4                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-6-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-6-3"  
+class="td11">0        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-7-1"  
+class="td11">5                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-7-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-7-3"  
+class="td11">0        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-8-1"  
+class="td11">6                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-8-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-8-3"  
+class="td11">0        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-9-1"  
+class="td11">7                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-9-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-9-3"  
+class="td11">0        </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-10-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;5: </span><span  
+class="content">Tabla de página con bit de validez del programa 1.</span></div><!--tex4ht:label?: x1-30335 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 264--><p class="indent" >   <a 
+ id="x1-30346"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 265--><p class="noindent" >
+<div class="tabular"> <table id="TBL-6" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-6-1g"><col 
+id="TBL-6-1"></colgroup><colgroup id="TBL-6-2g"><col 
+id="TBL-6-2"></colgroup><colgroup id="TBL-6-3g"><col 
+id="TBL-6-3"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-2"  
+class="td11">Marco físico</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-2"  
+class="td11">5              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-3"  
+class="td11">1</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-1"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-2"  
+class="td11">6 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-2"  
+class="td11">7              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-3"  
+class="td11">1</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-1"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-2"  
+class="td11">x </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-1"  
+class="td11">4                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-7-1"  
+class="td11">5                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-7-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-7-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-8-1"  
+class="td11">6                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-8-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-8-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-9-1"  
+class="td11">7                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-9-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-9-3"  
+class="td11">0</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-10-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;6: </span><span  
+class="content">Tabla de página con bit de validez del programa 2.</span></div><!--tex4ht:label?: x1-30346 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+<!--l. 284--><p class="indent" >   Las tablas de páginas de todos los programas son almacenadas en la memoria principal, en el espacio
+correspondiente al <span 
+class="cmbx-10x-x-109">sistema operativo </span>que será el programa encargado de controlar qué programa está activo,
+como se verá más adelante. El problema de tener las tablas de página en memoria, es que para cada acceso a
+memoria de un programa dado, se requieren dos accesos en la práctica: uno para ir a buscar el mapeo virtual-físico
+en la tabla de página y otro para realizar el acceso real.
+<!--l. 286--><p class="indent" >   Para mejorar el rendimiento en los accesos a memoria, y evitar que siempre ocurra este doble acceso, se agrega
+una caché especialmente dedicada a almacenar entradas de tabla de página, la cual se conoce como <span 
+class="cmbx-10x-x-109">Translation</span>
+<span 
+class="cmbx-10x-x-109">Lookaside Buffer (TLB)</span>. La TLB almacenará algunas de las entradas de la tabla de página del programa que
+actualmente está en ejecución. En el ejemplo anterior, un posible estado de una TLB de dos entradas para la tabla
+de páginas del programa 2 sería el siguiente:
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 288--><p class="indent" >   <a 
+ id="x1-30357"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 289--><p class="noindent" >
+<div class="tabular"> <table id="TBL-7" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-7-1g"><col 
+id="TBL-7-1"></colgroup><colgroup id="TBL-7-2g"><col 
+id="TBL-7-2"></colgroup><colgroup id="TBL-7-3g"><col 
+id="TBL-7-3"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-1-2"  
+class="td11">Marco físico</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-2-2"  
+class="td11">5              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-2-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-3-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-3-2"  
+class="td11">6              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-3-3"  
+class="td11">1</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-4-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;7: </span><span  
+class="content">TLB para el programa 2.</span></div><!--tex4ht:label?: x1-30357 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+                                                                                                  
+                                                                                                  
+<!--l. 304--><p class="indent" >   La TLB tendrá el mismo funcionamiento que las cachés tradicionales, basándose en los principios de localidad de
+referencia espacial y temporal para mejorar el rendimiento de los accesos. En caso de ocurrir un hit en la caché, el
+acceso a memoria tomará el tiempo que se necesite en acceder a la TLB y el tiempo de acceso a memoria.
+En caso de ocurrir un miss en la caché, el acceso a memoria tomará el tiempo de acceso a la TLB,
+más el tiempo de ir a memoria a buscar la entrada a la tabla de página y traerla a caché, más el
+tiempo de acceso al valor real en memoria, es decir, al igual que con cualquier caché, el miss penalty
+será mayor que un acceso sin caché, por lo que es fundamental que el hit rate sea alto para que sea
+efectiva.
+<!--l. 306--><p class="indent" >   Una última situación a considerar en el manejo de memoria virtual corresponde a saber qué ocurre
+cuando un programa solicita acceso a una página de manera dinámica, mientras se está ejecutando. Al
+ocurrir esto, el programa le cede el control de la CPU al sistema operativo, el cual se encargará de
+mapear un marco físico disponible a una nueva página del programa, actualizando la tabla de página
+correspondiente.
+<!--l. 308--><p class="indent" >   Con este esquema un programa puede solicitar más memoria mientras está siendo ejecutado. Por ejemplo, en el
+caso anterior de los programas 1 y 2, podría ocurrir que el programa 1 solicite acceso a su página 3, y esta se mapee
+al marco 0, y que el programa 2 solicite acceso a su página 3, y está se mapee al marco 1, como se observa en el
+siguiente diagrama y las siguientes tablas de página:
+<!--l. 310--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30368"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 312--><p class="noindent" ><img 
+src="png/pagefault.png" alt="PIC" class="graphics" width="280" ><!--tex4ht:graphics  
+name="apunte128x.png" src="figs3/pagefault.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;8: </span><span  
+class="content">Mapeo de memoria virtual al agregar páginas 3 a ambos programas. </span></div><!--tex4ht:label?: x1-30368 -->
+                                                                                                  
+                                                                                                  
+<!--l. 314--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 318--><p class="indent" >   <a 
+ id="x1-30378"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 319--><p class="noindent" >
+<div class="tabular"> <table id="TBL-8" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-8-1g"><col 
+id="TBL-8-1"></colgroup><colgroup id="TBL-8-2g"><col 
+id="TBL-8-2"></colgroup><colgroup id="TBL-8-3g"><col 
+id="TBL-8-3"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-2"  
+class="td11">Marco físico</td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-3"  
+class="td11">Validez</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-2"  
+class="td11">2              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-3"  
+class="td11">1        </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-1"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-2"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-2"  
+class="td11">4              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-3"  
+class="td11">1        </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-1"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-2"  
+class="td11">0 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-5-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-1"  
+class="td11">4                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-6-3"  
+class="td11">0        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-1"  
+class="td11">5                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-7-3"  
+class="td11">0        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-1"  
+class="td11">6                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-8-3"  
+class="td11">0        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-1"  
+class="td11">7                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-9-3"  
+class="td11">0        </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-10-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;8: </span><span  
+class="content">Tabla de página del programa 1 luego de acceder a la página 3.</span></div><!--tex4ht:label?: x1-30378 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 338--><p class="indent" >   <a 
+ id="x1-30389"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 339--><p class="noindent" >
+<div class="tabular"> <table id="TBL-9" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-9-1g"><col 
+id="TBL-9-1"></colgroup><colgroup id="TBL-9-2g"><col 
+id="TBL-9-2"></colgroup><colgroup id="TBL-9-3g"><col 
+id="TBL-9-3"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-1-2"  
+class="td11">Marco físico</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-2-2"  
+class="td11">5              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-2-3"  
+class="td11">1</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-3-1"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-3-2"  
+class="td11">6 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-3-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-4-2"  
+class="td11">7              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-4-3"  
+class="td11">1</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-5-1"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-5-2"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-5-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-6-1"  
+class="td11">4                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-6-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-6-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-7-1"  
+class="td11">5                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-7-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-7-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-8-1"  
+class="td11">6                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-8-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-8-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-9-1"  
+class="td11">7                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-9-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-9-3"  
+class="td11">0</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-10-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;9: </span><span  
+class="content">Tabla de página del programa 2 luego de acceder a la página 3.</span></div><!--tex4ht:label?: x1-30389 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+                                                                                                  
+                                                                                                  
+<!--l. 360--><p class="indent" >   El problema ocurre si ahora uno de los programas quiere acceder a otra página, por ejemplo el
+programa 1 a la página 4. En este momento, la memoria física está ocupada completamente; es decir, al
+momento de ir a asociar un marco a la página 4 del programa 1, el sistema operativo se encuentra con
+que no hay marcos físicos disponibles. Esta situación se conoce como una <span 
+class="cmbx-10x-x-109">falta de página </span>o <span 
+class="cmbx-10x-x-109">page</span>
+<span 
+class="cmbx-10x-x-109">fault</span>:
+<!--l. 362--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-30399"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 364--><p class="noindent" ><img 
+src="png/pagefault2.png" alt="PIC" class="graphics" width="280" height="320" ><!--tex4ht:graphics  
+name="apunte129x.png" src="figs3/pagefault2.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;9: </span><span  
+class="content">Programa 1 necesita espacio para su página 4, pero la memoria física está completa.</span></div><!--tex4ht:label?: x1-30399 -->
+                                                                                                  
+                                                                                                  
+<!--l. 366--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 370--><p class="indent" >   Para solucionar esta situación, se utiliza el disco duro como almacenamiento de respaldo para los marcos de
+memoria. Para lograr esto se reserva un espacio especial en el disco, denominado <span 
+class="cmbx-10x-x-109">swap file</span>, el cual
+será utilizado para respaldar marcos. De esta forma cuando un programa requiere un marco, pero la memoria
+está completamente ocupada, se copiará un marco de memoria al disco para dejar espacio para la nueva
+solicitud. Este proceso de respaldo de memoria a disco se conoce como <span 
+class="cmbx-10x-x-109">swap out</span>. Para determinar que
+marco reemplazar, se utiliza un algoritmo de reemplazo, como por ejemplo FIFO, LFU o LRU. Se
+debe agregar un nuevo bit de información a la tabla de páginas, indicando si la página está en disco o
+no.
+<!--l. 372--><p class="indent" >   A continuación se muestra la secuencia de pasos desde que ocurre el swap out, hasta que se actualiza la tabla de
+páginas, asumiendo algoritmo de reemplazo FIFO:
+<!--l. 374--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-304010"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 376--><p class="noindent" ><img 
+src="png/pagefault3.png" alt="PIC" class="graphics" height="320" ><!--tex4ht:graphics  
+name="apunte1210x.png" src="figs3/pagefault3.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;10: </span><span  
+class="content">El swap out se realiza por el algoritmo de reemplazo FIFO, llevando a disco al marco 2, que
+está mapeado a la página 0 del programa 1.</span></div><!--tex4ht:label?: x1-304010 -->
+                                                                                                  
+                                                                                                  
+<!--l. 378--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 382--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-304111"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 384--><p class="noindent" ><img 
+src="png/pagefault4.png" alt="PIC" class="graphics" height="320" ><!--tex4ht:graphics  
+name="apunte1211x.png" src="figs3/pagefault4.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;11: </span><span  
+class="content">La nueva página es mapeada al marco 2, ahora disponible. </span></div><!--tex4ht:label?: x1-304111 -->
+                                                                                                  
+                                                                                                  
+<!--l. 386--><p class="indent" >   </div><hr class="endfigure">
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 388--><p class="indent" >   <a 
+ id="x1-304210"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 389--><p class="noindent" >
+<div class="tabular"> <table id="TBL-10" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-10-1g"><col 
+id="TBL-10-1"></colgroup><colgroup id="TBL-10-2g"><col 
+id="TBL-10-2"></colgroup><colgroup id="TBL-10-3g"><col 
+id="TBL-10-3"></colgroup><colgroup id="TBL-10-4g"><col 
+id="TBL-10-4"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-2"  
+class="td11">Marco físico</td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-3"  
+class="td11">Validez</td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-4"  
+class="td11">Disco</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-2"  
+class="td11">2              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-3"  
+class="td11">1        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-4"  
+class="td11">1      </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-1"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-2"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-3"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-4"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-2"  
+class="td11">4              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-3"  
+class="td11">1        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-4"  
+class="td11">0      </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-5-1"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-5-2"  
+class="td11">0 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-5-3"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-5-4"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-6-1"  
+class="td11">4                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-6-2"  
+class="td11">2              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-6-3"  
+class="td11">1        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-6-4"  
+class="td11">0      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-7-1"  
+class="td11">5                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-7-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-7-3"  
+class="td11">0        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-7-4"  
+class="td11">0      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-8-1"  
+class="td11">6                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-8-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-8-3"  
+class="td11">0        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-8-4"  
+class="td11">0      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-9-1"  
+class="td11">7                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-9-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-9-3"  
+class="td11">0        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-9-4"  
+class="td11">0      </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-10-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;10: </span><span  
+class="content">La tabla de páginas se actualiza con el nuevo mapeo. El mapeo de la página 0 al marco 2 se
+marca indicando que está en disco.</span></div><!--tex4ht:label?: x1-304210 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+<!--l. 408--><p class="indent" >   Una vez actualizada la tabla y completado el respaldo, si ahora el programa 1 requiere acceso a la página 0,
+respaldada en disco, ocurrirá una falta de página debido a la invalidez de la entrada:
+<!--l. 410--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-304312"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 412--><p class="noindent" ><img 
+src="png/pagefault5.png" alt="PIC" class="graphics" height="320" ><!--tex4ht:graphics  
+name="apunte1212x.png" src="figs3/pagefault5.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;12: </span><span  
+class="content">Falta de página en acceso a la página 0 del programa 1, que está en disco </span></div><!--tex4ht:label?: x1-304312 -->
+                                                                                                  
+                                                                                                  
+<!--l. 414--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 418--><p class="indent" >   Al igual que en el caso anterior, se debe abrir espacio en memoria para el nuevo marco, para lo cual se realiza
+swap out del siguiente marco que corresponde respaldar, en este caso el marco 3:
+<!--l. 420--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-304413"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 422--><p class="noindent" ><img 
+src="png/pagefault6.png" alt="PIC" class="graphics" height="320" ><!--tex4ht:graphics  
+name="apunte1213x.png" src="figs3/pagefault6.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;13: </span><span  
+class="content">Swap out del marco 3 para dejar espacio</span></div><!--tex4ht:label?: x1-304413 -->
+                                                                                                  
+                                                                                                  
+<!--l. 424--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 428--><p class="indent" >   El sistema operativo revisa si la página solicitada está en disco, en cuyo caso realiza un <span 
+class="cmbx-10x-x-109">swap in </span>de disco a
+memoria, restaurando el mapeo de la página original:
+<!--l. 430--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-304514"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 432--><p class="noindent" ><img 
+src="png/pagefault7.png" alt="PIC" class="graphics" height="320" ><!--tex4ht:graphics  
+name="apunte1214x.png" src="figs3/pagefault7.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;14: </span><span  
+class="content">Swap in del marco asociado a la página 0 del programa 1 </span></div><!--tex4ht:label?: x1-304514 -->
+                                                                                                  
+                                                                                                  
+<!--l. 434--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 436--><p class="indent" >   El nuevo estado de la memoria y de las tablas de página se observa a continuación:
+<!--l. 438--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-304615"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 440--><p class="noindent" ><img 
+src="png/pagefault8.png" alt="PIC" class="graphics" height="320" ><!--tex4ht:graphics  
+name="apunte1215x.png" src="figs3/pagefault8.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;15: </span><span  
+class="content">Estado de la memoria luego del swap in </span></div><!--tex4ht:label?: x1-304615 -->
+                                                                                                  
+                                                                                                  
+<!--l. 442--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+   <div class="table">
+                                                                                                  
+                                                                                                  
+<!--l. 446--><p class="indent" >   <a 
+ id="x1-304711"></a><hr class="float"><div class="float" 
+>
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 447--><p class="noindent" >
+<div class="tabular"> <table id="TBL-11" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-11-1g"><col 
+id="TBL-11-1"></colgroup><colgroup id="TBL-11-2g"><col 
+id="TBL-11-2"></colgroup><colgroup id="TBL-11-3g"><col 
+id="TBL-11-3"></colgroup><colgroup id="TBL-11-4g"><col 
+id="TBL-11-4"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-1"  
+class="td11">Página virtual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-2"  
+class="td11">Marco físico</td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-3"  
+class="td11">Validez</td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-4"  
+class="td11">Disco</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-1"  
+class="td11">0                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-2"  
+class="td11">3              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-3"  
+class="td11">1        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-4"  
+class="td11">0      </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-1"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-2"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-3"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-4"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-1"  
+class="td11">2                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-2"  
+class="td11">4              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-3"  
+class="td11">1        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-4"  
+class="td11">0      </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-1"  
+class="td11">3 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-2"  
+class="td11">0 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-3"  
+class="td11">1 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-4"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-1"  
+class="td11">4                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-2"  
+class="td11">2              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-3"  
+class="td11">1        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-4"  
+class="td11">0      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-7-1"  
+class="td11">5                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-7-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-7-3"  
+class="td11">0        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-7-4"  
+class="td11">0      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-8-1"  
+class="td11">6                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-8-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-8-3"  
+class="td11">0        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-8-4"  
+class="td11">0      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-9-1"  
+class="td11">7                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-9-2"  
+class="td11">x              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-9-3"  
+class="td11">0        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-9-4"  
+class="td11">0      </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-10-1"  
+class="td11">             </td></tr></table></div><br />
+</div>
+<br /> <div class="caption" 
+><span class="id">Tabla&#x00A0;11: </span><span  
+class="content">Tabla de página del programa 1 luego del swap in.</span></div><!--tex4ht:label?: x1-304711 -->
+                                                                                                  
+                                                                                                  
+   </div><hr class="endfloat" />
+   </div>
+   <h4 class="subsectionHead"><span class="titlemark">2.2.   </span> <a 
+ id="x1-40002.2"></a>Manejo de múltiples estados de ejecución</h4>
+<!--l. 469--><p class="noindent" >Además de poder representar múltiples programas en memoria, es necesario poder ejecutar múltiples programas en
+la CPU. Asumiendo que se trata de un sistema uniprocesador, solamente un programa podrá estar corriendo en un
+determinado instante de tiempo en el computador. Para poder ejecutar más programas, es necesario de alguna
+forma ir intercalando la ejecución de estos.
+<!--l. 471--><p class="indent" >   Para revisar que posibilidades hay para implementar la ejecución de múltiples programas en un procesador, es
+necesario primero definir el concepto de <span 
+class="cmbx-10x-x-109">proceso</span>. Un proceso corresponde a la representación de memoria de un
+programa más su estado actual en la CPU. De esta forma, el objetivo de la multiprogramación es lograr que
+distintos procesos puedan ejecutarse en el computador.
+<!--l. 473--><p class="indent" >   Existen distintas formas de lograr la ejecución de múltiples procesos en un computador. La forma más simple se
+conoce como <span 
+class="cmbx-10x-x-109">batch processing</span>. En un esquema batch, la idea es que cada proceso se ejecutará completamente y
+una vez que termine le entregará la CPU al siguiente programa. Para intermediar el acceso a la CPU,
+el proceso no entrega directamente el control al siguiente, sino que le entrega primero el control del
+computador al sistema operativo mediante un <span 
+class="cmbx-10x-x-109">supervisor call</span>, instrucción especial que permite ceder
+el control de la CPU y entregárselo al SO, notificando el fin del proceso o <span 
+class="cmbx-10x-x-109">end of process </span>(figura
+<a 
+href="#x1-400116">16<!--tex4ht:ref: fig:batch --></a>).
+<!--l. 475--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-400116"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 477--><p class="noindent" ><img 
+src="png/bacth.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte1216x.png" src="figs3/bacth.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;16: </span><span  
+class="content">Secuencia de procesos de un sistema batch</span></div><!--tex4ht:label?: x1-400116 -->
+                                                                                                  
+                                                                                                  
+<!--l. 480--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 483--><p class="indent" >   El sistema operativo, a pesar de ser un proceso más, tiene privilegios especiales. Para diferenciar al sistema
+operativo de los procesos normales, se agrega a la CPU un bit en el registro de status que indica el
+modo en que está funcionando la CPU: <span 
+class="cmbx-10x-x-109">modo supervisor </span>o <span 
+class="cmbx-10x-x-109">modo usuario</span>. Cuando el sistema
+operativo esté corriendo, la CPU estará en modo supervisor; en cualquier otro caso, estará en modo
+usuario.
+<!--l. 485--><p class="indent" >   Dentro de los permisos especiales que tiene el sistema operativo al ejecutar en modo supervisor está la capacidad
+de definir la ubicación de la tabla de páginas que se utilizará por el siguiente programa a ejecutar. Para esto, se
+agrega también a la CPU un registro especial denominado <span 
+class="cmbx-10x-x-109">Page Table Base Register (PTBR) </span>el cual solo
+puede ser escrito en modo supervisor, e indicará la posición inicial de la tabla de página actualmente
+usada.
+<!--l. 487--><p class="indent" >   El sistema operativo debe realizar una serie de pasos desde que recibe el control de parte del proceso 1, hasta
+que se lo entrega al proceso 2:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-4003x1">P1 envía la señal de fin del proceso. La CPU pasa a modo supervisor y se carga el SO como proceso
+     actual a ejecutarse en la CPU.
+     </li>
+     <li 
+  class="enumerate" id="x1-4005x2">SO va a buscar el P2 a disco.
+     </li>
+     <li 
+  class="enumerate" id="x1-4007x3">SO le asigna marcos de memoria a las páginas del P2, completando su tabla de páginas.
+     </li>
+     <li 
+  class="enumerate" id="x1-4009x4">SO modifica el PTBR para que apunte a la tabla de páginas del P2.
+     </li>
+     <li 
+  class="enumerate" id="x1-4011x5">SO limpia la TLB, que tenía entradas correspondientes a la tabla de páginas del P1.
+     </li>
+     <li 
+  class="enumerate" id="x1-4013x6">SO setea el program counter, apuntando a la primera instrucción del P2.
+     </li>
+     <li 
+  class="enumerate" id="x1-4015x7">SO entrega el control al P2, retornando la CPU a modo usuario
+     </li>
+     <li 
+  class="enumerate" id="x1-4017x8">P2 comienza a ejecutarse.</li></ol>
+<!--l. 499--><p class="indent" >   El problema de un sistema batch está en que es necesario esperar que un proceso termine para poder
+ejecutar otro. En algunas circunstancias esto puede ser suficiente, pero si se quiere poder estar realizando
+distintas operaciones en paralelo, este sistema no funciona. Para que se pueda lograr la ilusión de
+paralelismo, es necesario que los procesos vayan intercalándose en su uso de la CPU, y que el SO pueda
+«agendar»
+el uso de la CPU entre los procesos, lo que se conoce como <span 
+class="cmbx-10x-x-109">scheduling</span>.
+<!--l. 501--><p class="indent" >   Un primer mecanismo de scheduling se conoce como <span 
+class="cmbx-10x-x-109">cooperative scheduling</span>. En este mecanismo, cada
+proceso puede entregar voluntariamente el control de la CPU al SO, antes de terminar, lo que se conoce como un
+<span 
+class="cmbx-10x-x-109">yield</span>. Cuando ocurre esto, el SO se encarga de realizar un <span 
+class="cmbx-10x-x-109">cambio de contexto</span>, entregándole la CPU a otro
+proceso (figura <a 
+href="#x1-401817">17<!--tex4ht:ref: fig:cooperative --></a>).
+<!--l. 504--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-401817"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 506--><p class="noindent" ><img 
+src="png/cooperative.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte1217x.png" src="figs3/cooperative.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;17: </span><span  
+class="content">Secuencia de procesos de un sistema con cooperative scheduling.</span></div><!--tex4ht:label?: x1-401817 -->
+                                                                                                  
+                                                                                                  
+<!--l. 509--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 511--><p class="indent" >   A diferencia del batch, en este caso un proceso que entrega el control, va a necesitar volver a usar
+la CPU en el futuro. Debido a esto, el SO debe almacenar el estado actual del proceso, para poder
+reiniciarlo. Para esto, el SO tiene en su memoria para cada proceso un <span 
+class="cmbx-10x-x-109">Process Control Block</span>
+<span 
+class="cmbx-10x-x-109">(PCB) </span>donde se almacenará el valor de los registros antes de que el proceso devuelva el control al
+SO.
+<!--l. 513--><p class="indent" >   Con este esquema, los pasos que ocurren entre la ejecución de un proceso y otro son lo siguientes:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-4020x1">P1 envía la señal de yield. La CPU pasa a modo supervisor y se carga el SO como proceso actual a
+     ejecutarse en la CPU.
+     </li>
+     <li 
+  class="enumerate" id="x1-4022x2">SO guarda el estado del P1 en su PCB.
+     </li>
+     <li 
+  class="enumerate" id="x1-4024x3">SO va a buscar el P2 a disco.
+     </li>
+     <li 
+  class="enumerate" id="x1-4026x4">SO le asigna marcos de memoria a las páginas del P2, completando su tabla de páginas.
+     </li>
+     <li 
+  class="enumerate" id="x1-4028x5">SO modificar el PTBR para que apunte a la tabla de páginas del P2.
+     </li>
+     <li 
+  class="enumerate" id="x1-4030x6">SO limpia la TLB, que tenía entradas correspondientes a la tabla de páginas del P1.
+     </li>
+     <li 
+  class="enumerate" id="x1-4032x7">SO setea el program counter, apuntando a la primera instrucción del P2.
+     </li>
+     <li 
+  class="enumerate" id="x1-4034x8">SO entrega el control al P2, retornando la CPU a modo usuario
+     </li>
+     <li 
+  class="enumerate" id="x1-4036x9">P2 comienza a ejecutarse.</li></ol>
+<!--l. 526--><p class="indent" >   Aunque con cooperative scheduling es posible lograr algún grado de paralelismo, al permitir intercalar procesos,
+se tiene el problema de que se depende de que cada programa entregue voluntariamente la CPU para lograrlo, lo
+que no es óptimo y se corre el riesgo de que un programa no suelte la CPU. Para solucionar esto, los sistemas
+modernos utilizan <span 
+class="cmbx-10x-x-109">preemptive scheduling</span>. En este esquema, en vez de esperar que el proceso entregue el control
+al SO, se agrega al computador un timer que estará generando interrupciones periódicamente a la CPU.
+Será mediante estas interrupciones que el SO ganará control de la CPU, permitiendo en ese momento entregar el
+control a otro proceso (figura <a 
+href="#x1-403718">18<!--tex4ht:ref: fig:preemptive --></a>).
+<!--l. 528--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-403718"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 530--><p class="noindent" ><img 
+src="png/preemptive.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte1218x.png" src="figs3/preemptive.eps"  
+--><br />
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;18: </span><span  
+class="content">Secuencia de procesos en un sistema con preemptive scheduling.</span></div><!--tex4ht:label?: x1-403718 -->
+                                                                                                  
+                                                                                                  
+<!--l. 533--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 535--><p class="indent" >   En este esquema, los pasos son prácticamente los mismos que en cooperative, salvo en el mecanismo que genera
+el cambio de contexto:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-4039x1">Timer interrumpe a P1 gatillando ISR que manejará el SO. La CPU pasa a modo supervisor y se carga
+     el SO como proceso actual a ejecutarse en la CPU.
+     </li>
+     <li 
+  class="enumerate" id="x1-4041x2">SO guarda el estado del P1 en su PCB.
+     </li>
+     <li 
+  class="enumerate" id="x1-4043x3">SO va a buscar el P2 a disco.
+     </li>
+     <li 
+  class="enumerate" id="x1-4045x4">SO le asigna marcos de memoria a las páginas del P2, completando su tabla de páginas.
+     </li>
+     <li 
+  class="enumerate" id="x1-4047x5">SO modificar el PTBR para que apunte a la tabla de páginas del P2.
+     </li>
+     <li 
+  class="enumerate" id="x1-4049x6">SO limpia la TLB, que tenía entradas correspondientes a la tabla de páginas del P1.
+     </li>
+     <li 
+  class="enumerate" id="x1-4051x7">SO setea el program counter, apuntando a la primera instrucción del P2.
+     </li>
+     <li 
+  class="enumerate" id="x1-4053x8">SO entrega el control al P2, retornando la CPU a modo usuario
+     </li>
+     <li 
+  class="enumerate" id="x1-4055x9">P2 comienza a ejecutarse.</li></ol>
+   <h3 class="sectionHead"><span class="titlemark">3.   </span> <a 
+ id="x1-50003"></a>Anexo</h3>
+<!--l. 550--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.1.   </span> <a 
+ id="x1-60003.1"></a>Memoria Virtual y Caché</h4>
+<!--l. 552--><p class="noindent" >El análisis previo de memoria virtual no consideró que pasaba si el sistema de memoria tenía caché. A continuación
+se presenta el detalle de los distintos pasos que ocurren en un sistema que tiene tanto memoria caché como memoria
+virtual:
+<!--l. 554--><p class="indent" >
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-6002x1">El programa quiere acceder a una <span 
+class="cmbx-10x-x-109">dirección virtual</span>, el primer paso siempre será ir a buscar la entrada de la
+     tabla de páginas correspondiente a la <span 
+class="cmbx-10x-x-109">TLB</span>. Acá hay dos opciones, que la TLB tenga la entrada o
+     no:
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-6004x1">En caso de que la TLB tenga la entrada de la tabla de página, esta es capaz de generar la <span 
+class="cmbx-10x-x-109">dirección</span>
+          <span 
+class="cmbx-10x-x-109">física </span>asociada. Con esta dirección física se puede ir a caché a buscar la palabra. Nuevamente, hay dos
+          opciones: que la caché tenga la palabra o no:
+                                                                                                  
+                                                                                                  
+              <ol  class="enumerate3" >
+              <li 
+  class="enumerate" id="x1-6006x1">En caso de que la caché tenga la palabra, o sea que haya un hit, se le envía esta a la CPU, y se
+              termina el acceso. Este es el «happy path»
+              de acceso a memoria.
+              </li>
+              <li 
+  class="enumerate" id="x1-6008x2">En caso de que la caché no tenga la palabra, o sea que haya un miss, el controlador de caché debe ir
+              a buscarla a memoria principal, generando un <span 
+class="cmbx-10x-x-109">memory stall</span>, en el cual la CPU debe esperar que le
+              llegue la palabra y perder ciclos. Una vez que la palabra es recuperada se vuelve al paso previo, y se
+              intenta acceder nuevamente a caché, esta vez con seguridad de que se encontrará la
+              palabra</li></ol>
+          </li>
+          <li 
+  class="enumerate" id="x1-6010x2">En caso de que la TLB no tenga la entrada, ocurre una excepción denominada <span 
+class="cmbx-10x-x-109">TLB miss exception </span>la
+          cual entrega el control al <span 
+class="cmbx-10x-x-109">sistema operativo </span>para que este vaya a buscar a la tabla de páginas del
+          proceso actual la entrada, y la copie a la TLB. Cuando el sistema operativo vaya a buscar la entrada, hay
+          dos posibilidades: si la entrada está marcada como que está en memoria, o si está marcada como que
+          está en disco:
+              <ol  class="enumerate3" >
+              <li 
+  class="enumerate" id="x1-6012x1">Si está marcada que está en memoria, el SO copia la entrada a la TLB, y se repite el acceso
+              a esta, está vez ocurriendo un hit.
+              </li>
+              <li 
+  class="enumerate" id="x1-6014x2">Si está marcada que está en disco, ocurre un <span 
+class="cmbx-10x-x-109">page fault </span>y el SO debe hacer un <span 
+class="cmbx-10x-x-109">swap in </span>del marco
+              correspondiente desde el <span 
+class="cmbx-10x-x-109">swap file</span>, reemplazar algún marco de memoria física, actualizar la tabla de
+              páginas, y copiar la entrada a la TLB. Una vez completado esto se repite el acceso a la TLB y ahora
+              habrá un hit. Este es el «worst path»
+              de acceso a memoria</li></ol>
+          </li></ol>
+     </li></ol>
+<!--l. 571--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.   </span> <a 
+ id="x1-70004"></a>Referencias e información adicional</h3>
+     <ul class="itemize1">
+     <li class="itemize">Hennessy, J.; Patterson, D.: Computer Organization and Design: The Hardware/Software Interface, 4
+     Ed., Morgan-Kaufmann, 2008. Chapter 5: Large and fast: exploiting the memory hierarchy.</li></ul>
+    
+</body></html> 
+
+                                                                                                  
+
+

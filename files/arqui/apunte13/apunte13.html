@@ -1,0 +1,1767 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html xml:lang="es" > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="apunte13.tex"> 
+<meta name="date" content="2014-04-05 22:00:00"> 
+<link rel="stylesheet" type="text/css" href="apunte13.css"> 
+</head><body 
+>
+<div class="center" 
+>
+<!--l. 17--><p class="noindent" >
+<!--l. 18--><p class="noindent" ><span 
+class="cmbx-10">IIC2343 Arquitectura de Computadores</span><br />
+<span 
+class="cmbx-12x-x-120">ILP: Paralelismo a nivel de instrucción</span><br />
+<span 
+class="cmbsy-6">©</span><span 
+class="cmbx-6">Alejandro Echeverría, Hans-Albert L</span><span 
+class="cmbx-6">öbel</span><br />
+</div>
+   <h3 class="sectionHead"><span class="titlemark">1.   </span> <a 
+ id="x1-10001"></a>Motivación</h3>
+<!--l. 29--><p class="noindent" >Las principales mejoras en eficiencia de los computadores no ocurren sólo por mejoras en la tecnología de
+construcción de estos, sino también por el desarrollo de técnicas que permiten aprovechar procesamiento paralelo en
+el computador. Existen distintos niveles a los cuales se puede aprovechar el paralelismo, siendo el más básico el
+paralelismo a nivel de la instrucción.
+<!--l. 31--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2.   </span> <a 
+ id="x1-20002"></a>Ciclo de la instrucción</h3>
+<!--l. 33--><p class="noindent" >Cada instrucción que se ejecuta en un computador pasa por un ciclo, que va desde que es seleccionada desde
+memoria hasta que completa su objetivo. Este ciclo, aunque es similar en todas las arquitecturas de computadores,
+presenta algunas variaciones, dependiendo de la complejidad de la microarquitectura y de decisiones de diseño. El
+computador básico Harvard (figura <a 
+href="#x1-20011">1<!--tex4ht:ref: fig:computadorbasico --></a>), por ejemplo, tendrá un cierto ciclo, pero este no será exactamente igual al de
+una arquitectura x86 o de un PIC16F87AA.
+<!--l. 35--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-20011"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 37--><p class="noindent" ><img 
+src="png/computadorbasico.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte131x.png" src="figs4/computadorbasico.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;1: </span><span  
+class="content">Diagrama computador básico.</span></div><!--tex4ht:label?: x1-20011 -->
+                                                                                                  
+                                                                                                  
+<!--l. 40--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 42--><p class="indent" >   El ciclo actual de una instrucción en el computador básico Harvard que se ha estudiado, aunque es simple,
+presenta algunos elementos que harán innecesariamente difícil el análisis que realizaremos es este capítulo. Para
+evitar estos problemas y trabajar con un ciclo más simple, se usará una versión simplificada del computador básico,
+la cual se muestra en la figura <a 
+href="#x1-20022">2<!--tex4ht:ref: fig:compmodificado --></a>.
+<!--l. 44--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-20022"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 46--><p class="noindent" ><img 
+src="png/compmodificado.png" alt="PIC" class="graphics" width="600" height="440" ><!--tex4ht:graphics  
+name="apunte132x.png" src="figs4/compmodificado.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;2: </span><span  
+class="content">Diagrama computador básico modificado.</span></div><!--tex4ht:label?: x1-20022 -->
+                                                                                                  
+                                                                                                  
+<!--l. 49--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 51--><p class="indent" >   Las principales diferencias son las siguientes:
+     <ul class="itemize1">
+     <li class="itemize">Se elimina el soporte de stack, eliminando el Stack Pointer y las conexiones del PC con memoria.
+     </li>
+     <li class="itemize">Se  simplifican  los  saltos  condicionales,  soportando  ahora  solamente  el  condition  code  Z,  y  las
+     instrucciones <span 
+class="cmtt-10x-x-109">JEQ </span>y <span 
+class="cmtt-10x-x-109">JNE</span>. Adicionalmente, esta instrucción realizará la comparación (<span 
+class="cmmi-10x-x-109">A </span><span 
+class="cmsy-10x-x-109">- </span><span 
+class="cmmi-10x-x-109">B</span>) y el salto
+     en un mismo ciclo, por lo que se elimina también el Status Register.
+     </li>
+     <li class="itemize">Se elimina la conexión entre la salida de memoria y el MUX B. Ahora la salida de memoria no se puede
+     ocupar como parámetro en la ALU, y solo puede ser usada para cargar los registros A y B, es decir
+     sólo se soportan instrucciones de transferencia desde la memoria.
+     </li>
+     <li class="itemize">La entrada de datos de la memoria ahora sólo puede provenir de los registros A y B, y no de la ALU,
+     es decir sólo se soportan instrucciones de transferencia hacia la memoria
+     </li>
+     <li class="itemize">La dirección de la memoria ahora proviene de la ALU, lo que permite los mismos direccionamientos
+     que antes (directo, indirecto por registro B), y agrega otros tipos de direccionamiento (indirecto por
+     registro A, indirecto con índice, etc.)
+     </li>
+     <li class="itemize">La unidad de salto, parte de la unidad de control encargada de determinar si corresponde un salto
+     condicional, se separó de la unidad de control.</li></ul>
+<!--l. 62--><p class="indent" >   La idea detrás de estas modificaciones es, por un lado, simplificar el computador, pero también lograr que el
+ciclo de las instrucciones sea más uniforme que en la versión original. Con estas modificaciones es posible
+reorganizar las partes del computador, para mostrar con más claridad las distintas partes del ciclo, lo que se observa
+en la figura <a 
+href="#x1-20033">3<!--tex4ht:ref: fig:compciclo --></a>.
+<!--l. 64--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-20033"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 66--><p class="noindent" ><img 
+src="png/compciclo.png" alt="PIC" class="graphics" width="640" height="280" ><!--tex4ht:graphics  
+name="apunte133x.png" src="figs4/compciclo.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;3: </span><span  
+class="content">Diagrama computador básico modificado reordenado.</span></div><!--tex4ht:label?: x1-20033 -->
+                                                                                                  
+                                                                                                  
+<!--l. 69--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 71--><p class="indent" >   El ciclo de la instrucción para este computador contará de 5 etapas: <span 
+class="cmbx-10x-x-109">instruction fetch</span>, <span 
+class="cmbx-10x-x-109">instruction decode</span>,
+<span 
+class="cmbx-10x-x-109">execute</span>, <span 
+class="cmbx-10x-x-109">memory </span>y <span 
+class="cmbx-10x-x-109">writeback</span>.
+   <h4 class="likesubsectionHead"><a 
+ id="x1-30002"></a>Instruction fetch (IF)</h4>
+<!--l. 74--><p class="noindent" >Corresponde a la primera etapa del ciclo, en la cual se va a buscar a la memoria de instrucciones la siguiente
+instrucción, apuntada por el valor actual del Program Counter. La salida de esta etapa es la instrucción obtenida
+desde memoria, la cual se separará en un opcode y en el parámetro.
+<!--l. 76--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-40002"></a>Instruction decode (ID)</h4>
+<!--l. 77--><p class="noindent" >La segunda etapa del ciclo corresponde al instruction decode, es decir la decodificación de la instrucción y la
+generación de las señales de control. La unidad de control se encargará de transformar el opcode de la
+instrucción obtenida en las señales de control específicas que le indicarán al procesador que tarea
+ejecutar.
+<!--l. 79--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-50002"></a>Execute (EX)</h4>
+<!--l. 80--><p class="noindent" >La tercera etapa corresponde a la ejecución, la cual es realizada mediante la ALU. Esta, como única
+unidad de ejecución en este computador, se encargará de realizar la operación seleccionada en la etapa
+previa, con los parámetros seleccionados también por las señales de control, obteniendo un resultado.
+Adicionalmente, la ALU también generará el condition code Z, dependiendo del resultado de la operación
+obtenida.
+<!--l. 82--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-60002"></a>Memory (MEM)</h4>
+<!--l. 83--><p class="noindent" >La cuarta etapa corresponde a la lectura o escritura en memoria de datos. Esta etapa solo estará presente si a la
+instrucción ejecutada le correspondía una transferencia hacia o desde memoria (por ejemplo la instrucción <span 
+class="cmtt-10x-x-109">MOV</span>
+<span 
+class="cmtt-10x-x-109">(var1), A</span>). En esta etapa se podrá haber escrito en memoria u obtenido un dato de esta para luego ser
+almacenado en un registro.
+<!--l. 85--><p class="indent" >   Adicionalmente al manejo de memoria, en esta etapa también se incluirá la definición si corresponde saltar o no,
+por parte de la unidad de salto. Aunque este proceso no tiene relación con la memoria de datos, se incluye en esta
+etapa debido a que solo luego de ejecutar la operación en la ALU se podrá tener la información necesaria para esta
+decisión.
+<!--l. 87--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-70002"></a>Writeback (WB)</h4>
+<!--l. 88--><p class="noindent" >La última etapa del ciclo también estará presente sólo en algunas instrucciones. En esta etapa de writeback,
+corresponderá escribir en los registros, ya sea un resultado de la ALU o un dato obtenido desde memoria (por
+ejemplo las instrucciones <span 
+class="cmtt-10x-x-109">ADD A,B </span>y <span 
+class="cmtt-10x-x-109">MOV A, (var1)</span>).
+<!--l. 90--><p class="indent" >   El resumen de las 5 etapas, indicando las unidades funcionales asociadas a cada una, se observa en la figura
+<a 
+href="#x1-70014">4<!--tex4ht:ref: fig:compcicloetapas --></a>.
+<!--l. 92--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70014"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 94--><p class="noindent" ><img 
+src="png/compcicloetapas.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte134x.png" src="figs4/compcicloetapas.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;4: </span><span  
+class="content">Ciclo de la instrucción.</span></div><!--tex4ht:label?: x1-70014 -->
+                                                                                                  
+                                                                                                  
+<!--l. 97--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 100--><p class="indent" >   A continuación se presentan una serie de ejemplos con los ciclos de distintas instrucciones. En cada caso se
+muestra el tiempo que tomaría hipotéticamente en completarse cada fase, y el tiempo total que tomaría la
+instrucción:
+<!--l. 102--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70025"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 104--><p class="noindent" ><img 
+src="png/addab.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte135x.png" src="figs4/addab.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;5: </span><span  
+class="content">Ciclo de instrucción ADD A,B</span></div><!--tex4ht:label?: x1-70025 -->
+                                                                                                  
+                                                                                                  
+<!--l. 106--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 108--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70036"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 110--><p class="noindent" ><img 
+src="png/movavar1.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte136x.png" src="figs4/movavar1.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;6: </span><span  
+class="content">Ciclo de instrucción MOV A, (var1)</span></div><!--tex4ht:label?: x1-70036 -->
+                                                                                                  
+                                                                                                  
+<!--l. 112--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 114--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70047"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 116--><p class="noindent" ><img 
+src="png/movvar1a.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte137x.png" src="figs4/movvar1a.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;7: </span><span  
+class="content">Ciclo de instrucción MOV (var1), A</span></div><!--tex4ht:label?: x1-70047 -->
+                                                                                                  
+                                                                                                  
+<!--l. 118--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 120--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70058"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 122--><p class="noindent" ><img 
+src="png/jeqlabel.png" alt="PIC" class="graphics" width="640" ><!--tex4ht:graphics  
+name="apunte138x.png" src="figs4/jeqlabel.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;8: </span><span  
+class="content">Ciclo de instrucción JEQ label</span></div><!--tex4ht:label?: x1-70058 -->
+                                                                                                  
+                                                                                                  
+<!--l. 124--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 127--><p class="indent" >   Como se observa en los ejemplos anteriores, cada una de las etapas del ciclo de la instrucción tendrá una
+duración determinada, dependiendo de que instrucción se ejecute. De esta forma el tiempo total de
+ejecución de una instrucción variará de acuerdo a que etapas estén involucradas. En un computador de un
+ciclo por instrucción, como el computador básico, se debe cumplir que el tiempo que dura el ciclo
+(indicado por la frecuencia del clock) no puede ser menor que el tiempo que toma la instrucción más
+lenta (en este ejemplo <span 
+class="cmtt-10x-x-109">MOV A, (var1)</span>). Debido a esto en un computador de una instrucción por ciclo,
+la frecuencia del clock queda limitada por el tiempo que se demora en procesar la instrucción más
+lenta.
+   <h3 class="sectionHead"><span class="titlemark">3.   </span> <a 
+ id="x1-80003"></a>Instruction pipeline</h3>
+<!--l. 131--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.1.   </span> <a 
+ id="x1-90003.1"></a>Fundamentos</h4>
+<!--l. 133--><p class="noindent" >El ciclo de una instrucción se caracteriza por corresponder a una secuencia de pasos que debe recorrer esta, cada
+uno de los cuales estará a cargo de una unidad funcional del computador distinta. Este tipo de procesos secuenciales
+con etapas independientes se conoce como <span 
+class="cmbx-10x-x-109">pipeline</span>. Existen diversos procesos que pueden ser modelados como un
+pipeline, siendo los más comunes las líneas de ensamblaje industriales, en las cuales distintas tareas son ejecutadas
+sobre un producto (e.g. automóvil) y luego de ejecutar todas las tareas se obtiene un producto final
+terminado.
+<!--l. 135--><p class="indent" >   En el caso del procesamiento de la instrucción, esta secuencia de etapas se conoce como <span 
+class="cmbx-10x-x-109">instruction pipeline</span>,
+que contiene las distintas partes del ciclo de la instrucción antes descrito. A diferencia de las líneas de ensamblaje,
+en el <span 
+class="cmbx-10x-x-109">instruction pipeline </span>no se obtiene un producto final, sino que el resultado corresponde a lo que haya
+ocurrido a lo largo del proceso.
+<!--l. 137--><p class="indent" >   La gran ventaja de un pipeline de ensamblaje está en que es posible paralelizar la producción de un producto
+(e.g. auto), dado que al mismo tiempo que se le esté aplicando un proceso a un elemento (e.g. agregar las puertas),
+es posible estar ejecutando otra tarea sobre otro elemento (e.g. construir el chasis). De esta forma, al dividir la
+producción completa en tareas menores se logra reducir el tiempo, ya que se aprovecha que cada parte del proceso
+es independiente y que por tanto queda «libre»
+una vez que un determinado elemento ha pasado por esta.
+<!--l. 139--><p class="indent" >   En el <span 
+class="cmbx-10x-x-109">instruction pipeline </span>ocurre lo mismo que en el pipeline de ensamblaje: la idea es poder reutilizar cada
+una de las subetapas para ir procesando otras instrucciones de manera simultánea. Supongamos el siguiente
+ejemplo: se quiere ejecutar 3 instrucciones seguidas en el computador básico modificado. Como señalamos
+anteriormente, dado que la instrucción más lenta toma 12 nanosegundos (ns), el ciclo del clock debe tardar
+ese tiempo como mínimo siempre. Considerando esto, las tres instrucciones tomarían 36 ns (figura
+<a 
+href="#x1-90019">9<!--tex4ht:ref: fig:diagsinpipeline --></a>).
+<!--l. 141--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-90019"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 143--><p class="noindent" ><img 
+src="png/diagsinpipeline.png" alt="PIC" class="graphics" width="600" height="240" ><!--tex4ht:graphics  
+name="apunte139x.png" src="figs4/diagsinpipeline.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;9: </span><span  
+class="content">Diagrama ejecución sin pipeline</span></div><!--tex4ht:label?: x1-90019 -->
+                                                                                                  
+                                                                                                  
+<!--l. 146--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 149--><p class="indent" >   Para poder aprovechar el instruction pipeline, hay que considerar que cada instrucción se ejecuta en una
+secuencia de etapas, cada una de las cuales ocupa una unidad funcional distinta (al igual que en la línea
+de ensamblaje) y por tanto, una vez que se desocupa una etapa de procesar una instrucción, puede
+inmediatamente comenzar a procesar la siguiente. Para lograr esto, es necesario que en cada ciclo del clock no se
+procese toda una instrucción, sino sólo una etapa del ciclo, con lo que podemos tener ciclos de clocks
+más rápidos. El tiempo del ciclo estará limitado ahora no por la instrucción más lenta, sino por la
+etapa más lenta, lo que continuando con el ejemplo anterior serían 4 ns para las etapas de acceso a
+memoria.
+<!--l. 151--><p class="indent" >   Con esta modificación, el procesamiento de las 3 instrucciones quedaría de la siguiente manera:
+<!--l. 153--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-900210"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 155--><p class="noindent" ><img 
+src="png/diagconpipeline.png" alt="PIC" class="graphics" height="240" ><!--tex4ht:graphics  
+name="apunte1310x.png" src="figs4/diagconpipeline.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;10: </span><span  
+class="content">Diagrama ejecución con pipeline</span></div><!--tex4ht:label?: x1-900210 -->
+                                                                                                  
+                                                                                                  
+<!--l. 157--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 159--><p class="indent" >   Se observa una reducción de tiempo de los 36ns originales a 28ns. Esta reducción puede parecer menor, pero hay
+que considerar que un programa contiene millones de instrucciones. Si se considera ahora un ejemplo con un millón
+de instrucciones, el tiempo que tomaría procesarlas sin pipeline sería de 12 millones de nanosegundos (12 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>1
+millón). En el caso del procesador con pipeline, el cálculo no es tan directo. Hay que observar que pasa con más
+instrucciones en el diagrama:
+<!--l. 161--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-900311"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 163--><p class="noindent" ><img 
+src="png/diagmaspipeline.png" alt="PIC" class="graphics" height="210" ><!--tex4ht:graphics  
+name="apunte1311x.png" src="figs4/diagmaspipeline.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;11: </span><span  
+class="content">Diagrama ejecución con pipeline y 6 instrucciones</span></div><!--tex4ht:label?: x1-900311 -->
+                                                                                                  
+                                                                                                  
+<!--l. 165--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 167--><p class="indent" >   Se puede observar que a partir de la quinta instrucción, el pipeline está «lleno»
+es decir, todas las etapas están procesando algo. Con esto a partir de esta instrucción, se logra procesar <span 
+class="cmbx-10x-x-109">una</span>
+<span 
+class="cmbx-10x-x-109">instrucción por ciclo</span>, pero un ciclo mucho más rápido que en el caso anterior 4ns. Sólo en las 4 primeras
+instrucciones el pipeline está funcionando parcialmente, por lo que la regla para determinar cuánto se demoraría
+para este pipeline de 5 etapas es <span 
+class="cmmi-10x-x-109">Tiempociclo </span><span 
+class="cmsy-10x-x-109">&#x00D7; </span><span 
+class="cmmi-10x-x-109">N</span><sup><span 
+class="cmmi-8">o</span></sup><span 
+class="cmmi-10x-x-109">instrucciones </span>+ <span 
+class="cmmi-10x-x-109">Tiempociclo </span><span 
+class="cmsy-10x-x-109">&#x00D7; </span>4. En este ejemplo
+serían entonces 4 millones 16 nanosegundos, es decir se reduce prácticamente a un tercio del tiempo
+original.
+<!--l. 169--><p class="indent" >   La gran paradoja del instruction pipeline es que, el tiempo para procesar cada instrucción no disminuye, sino
+que aumenta: en este caso, el tiempo de procesar cada instrucción es de 20 ns, mayor que los 12 ns
+anteriores. Esto se debe a que la etapa más lenta indicará la velocidad del clock y por tanto ese tiempo se
+multiplicará por todas las etapas. Lo que mejora considerablemente con un sistema que ocupa pipeline es el
+<span 
+class="cmbx-10x-x-109">throughput </span>de las instrucciones de un programa, es decir, cuántas instrucciones son procesadas en un cierto
+tiempo. En el ejemplo anterior, en los mismos 12 millones de nanosegundos que toma el computador sin
+pipeline en ejecutar 1 millón de instrucciones, el computador con pipeline ejecutará 3 millones de
+instrucciones.
+<!--l. 171--><p class="indent" >   La siguiente es una lista de términos relevantes en el contexto de pipeline (figura <a 
+href="#x1-900412">12<!--tex4ht:ref: fig:diagpipeline --></a>):
+     <ul class="itemize1">
+     <li class="itemize">La <span 
+class="cmbx-10x-x-109">profundidad (depth) </span>del pipeline corresponde al número de etapas de este. En nuestro ejemplo
+     son 5 etapas.
+     </li>
+     <li class="itemize">El período al comenzar el procesamiento de una secuencia de instrucciones, en el cual no todas las
+     etapas del pipeline están ocupadas, se conoce como <span 
+class="cmbx-10x-x-109">llenado o filling</span>.
+     </li>
+     <li class="itemize">El período en el cual todas las etapas están ocupadas se dice que el pipeline está <span 
+class="cmbx-10x-x-109">lleno o full</span>.
+     </li>
+     <li class="itemize">El período al terminar el procesamiento de una secuencia de instrucciones, en el cual no todas las
+     etapas del pipeline están ocupadas, se conoce como <span 
+class="cmbx-10x-x-109">vaciado o emptying</span>.</li></ul>
+<!--l. 180--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-900412"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 182--><p class="noindent" ><img 
+src="png/diagpipeline.png" alt="PIC" class="graphics" width="520" height="280" ><!--tex4ht:graphics  
+name="apunte1312x.png" src="figs4/diagpipeline.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;12: </span><span  
+class="content">Terminología de pipeline</span></div><!--tex4ht:label?: x1-900412 -->
+                                                                                                  
+                                                                                                  
+<!--l. 185--><p class="indent" >   </div><hr class="endfigure">
+   <h4 class="subsectionHead"><span class="titlemark">3.2.   </span> <a 
+ id="x1-100003.2"></a>Soporte de Hardware</h4>
+<!--l. 189--><p class="noindent" >Para implementar un procesador con pipeline es necesario ir almacenando los resultados de las distintas etapas y
+propagándolos, de manera que en el siguiente ciclo se puedan utilizar para la siguiente etapa. Para lograr esto, se
+utiliza una serie de registros que se ubican entre las distintas etapas. Los conjuntos de registros se denominan de
+acuerdo al par de etapas que comuniquen: registros IF/ID, ID/EX, EX/MEM y MEM/WB (figura <a 
+href="#x1-1000113">13<!--tex4ht:ref: fig:comppipeline --></a>). Para la
+etapa de write back no se requieren registros adicionales, ya que el resultado de esta etapa se almacena en los
+registros propios de la CPU.
+<!--l. 191--><p class="indent" >   En cada uno de estos registros se almacenará los distintos resultados de cada etapa, para el computador básico
+estos serían:
+     <ul class="itemize1">
+     <li class="itemize">IF/ID: almacena la instrucción obtenida desde la memoria de instrucciones, incluyendo el opcode y el
+     parámetro
+     </li>
+     <li class="itemize">ID/EX: almacena los dos parámetros de la ALU, el valor del registro seleccionado para ser copiado a
+     memoria (si corresponde) y el parámetro de la instrucción. Este último se debe ir propagando para el
+     caso de las instrucciones de salto, ya que es necesario que sea cuando se revise si va a haber salto (en
+     la etapa MEM) que se cargue el PC con la dirección de memoria a saltar.
+     </li>
+     <li class="itemize">EX/MEM:  resultado  de  la  ALU,  el  valor  del  registro  seleccionado  para  escribir  en  memoria  y  el
+     parámetro de la instrucción ambos que se propagaron de la etapa anterior.
+     </li>
+     <li class="itemize">MEM/WB: resultado de la ALU y el valor leído de memoria, los cuales serán utilizados en WB para
+     escribir (si corresponde) en los registros.
+     </li>
+     <li class="itemize">El resultado de la etapa WB se almacena en los registros A o B, por lo que no se requieren registros
+     especiales.</li></ul>
+<!--l. 200--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1000113"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 202--><p class="noindent" ><img 
+src="png/comppipeline.png" alt="PIC" class="graphics" width="720" ><!--tex4ht:graphics  
+name="apunte1313x.png" src="figs4/comppipeline.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;13: </span><span  
+class="content">Soporte de hardware para propagación de datos</span></div><!--tex4ht:label?: x1-1000113 -->
+                                                                                                  
+                                                                                                  
+<!--l. 205--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 207--><p class="indent" >   Además de almacenar datos, los registros intermedios deben almacenar las señales de control, generadas en la
+etapa ID, que son necesarias en etapas siguientes (figura <a 
+href="#x1-1000214">14<!--tex4ht:ref: fig:comppipelinecontrol --></a>):
+     <ul class="itemize1">
+     <li class="itemize">ID/EX: almacena todas las señales de control necesarias para todas las siguientes etapas: operación
+     de la ALU (AluOP), señal de escritura en Memoria (W), señales de carga en los registros (LoadA
+     y LoadB), señal de selección de que se va a escribir en los registros (RegIn) y señal que indica si la
+     instrucción actual es de salto (Jmp).
+     </li>
+     <li class="itemize">EX/MEM: en la etapa EX se utilizó la señal AluOp, por lo que no es necesario propagarla, se propagan
+     todas las demás.
+     </li>
+     <li class="itemize">MEM/WB: En la etapa MEM se utilizan las señales Jmp y W, solo se requiere propagar la señal RegIn
+     y las señales LoadA y LoadB.</li></ul>
+<!--l. 214--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1000214"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 216--><p class="noindent" ><img 
+src="png/comppipelinecontrol.png" alt="PIC" class="graphics" width="720" ><!--tex4ht:graphics  
+name="apunte1314x.png" src="figs4/comppipelinecontrol.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;14: </span><span  
+class="content">Soporte de hardware para propagación de control</span></div><!--tex4ht:label?: x1-1000214 -->
+                                                                                                  
+                                                                                                  
+<!--l. 219--><p class="indent" >   </div><hr class="endfigure">
+   <h4 class="subsectionHead"><span class="titlemark">3.3.   </span> <a 
+ id="x1-110003.3"></a>Hazards</h4>
+<!--l. 223--><p class="noindent" >Al incorporar un pipeline en el computador, se genera una serie de problemas que son conocidos como
+<span 
+class="cmbx-10x-x-109">hazards</span>. Estos problemas ocurren por distintas razones, pero en general se deben al hecho de empezar a
+procesar una instrucción antes de que se haya procesado la anterior. Existen tres tipos de hazards:
+hazards de datos (data hazards), hazards de control (control hazards) y hazards estructurales (structural
+hazards).
+<!--l. 225--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.3.1.   </span> <a 
+ id="x1-120003.3.1"></a>Hazards de datos</h5>
+<!--l. 227--><p class="noindent" >Para entender los data hazards, revisemos el siguiente ejemplo de un programa en el que se ejecutan la instrucción
+<span 
+class="cmtt-10x-x-109">ADD A,B </span>y luego la instrucción <span 
+class="cmtt-10x-x-109">AND B,A</span>. Se puede observar que la segunda instrucción ocupa como parámetro el
+registro A. La primera instrucción va a modificar el valor de A, por lo que es necesario que haya terminado de
+ejecutarse para que las siguientes instrucciones tengan el valor correcto. El diagrama de pipeline de estas dos
+instrucciones es el siguiente:
+<!--l. 229--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1200115"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 231--><p class="noindent" ><img 
+src="png/ejforwarding.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1315x.png" src="figs4/ejforwarding.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;15: </span><span  
+class="content">Ejemplo de data hazard, las flechas rojas indican las dependencias de datos</span></div><!--tex4ht:label?: x1-1200115 -->
+                                                                                                  
+                                                                                                  
+<!--l. 233--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 235--><p class="indent" >   Como se observa en el diagrama, la primera instrucción <span 
+class="cmtt-10x-x-109">ADD A,B </span>va a actualizar el valor del registro A en su
+etapa de <span 
+class="cmbx-10x-x-109">WB</span>, es decir en el ciclo 5. El problema es que la siguiente instrucción <span 
+class="cmtt-10x-x-109">AND B,A</span>, necesita obtener el valor
+de A en su etapa <span 
+class="cmbx-10x-x-109">ID</span>, la que ocurre en el ciclo 3. La causa de este problema es que la secuencia de instrucciones del
+ejemplo presenta <span 
+class="cmbx-10x-x-109">dependencia entre los datos </span>que utiliza. Si la instrucción 2 no ocupara el registro A, no habría
+problema, pero como depende de tener el valor que se genera en la primera instrucción, ocurre un
+error.
+<!--l. 237--><p class="indent" >   Si observamos el diagrama de la figura <a 
+href="#x1-1200216">16<!--tex4ht:ref: fig:ejforwarding2 --></a> observamos que aunque efectivamente es en la etapa WB de la
+instrucción 1 cuando el registro A se actualiza, el nuevo valor de A se generó antes, en la etapa EX, la cual ocurre
+en el ciclo 3 de ejecución. Para la instrucción 2 además, tenemos que aunque el valor de A se capta en la etapa ID,
+este se necesitará en la etapa EX, es decir en el ciclo 4. De esta forma, cuando el nuevo valor de A se necesita (ciclo
+4), este ya se generó (ciclo 3), y está almacenado en los registros de la etapa ID/EX. Lo que necesitamos entonces es
+una forma de propagar el valor que se generó en la ALU al procesar la primera instrucción luego de la ejecución
+para que pueda ser ocupado como parámetro en la ejecución de las siguientes etapas EX, de la segunda
+instrucción (figura <a 
+href="#x1-1200216">16<!--tex4ht:ref: fig:ejforwarding2 --></a>). Este mecanismo de propagación que se agrega a un pipeline se conoce como
+<span 
+class="cmbx-10x-x-109">forwarding</span>.
+<!--l. 239--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1200216"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 241--><p class="noindent" ><img 
+src="png/ejforwarding2.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1316x.png" src="figs4/ejforwarding2.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;16: </span><span  
+class="content">Ejemplo de data hazard, las flechas azules indican cuando hay que hacer forwarding</span></div><!--tex4ht:label?: x1-1200216 -->
+                                                                                                  
+                                                                                                  
+<!--l. 244--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 246--><p class="indent" >   La idea de forwarding es, al estar ejecutando una instrucción, detectar si va a ocurrir un data hazard, y en ese
+caso realizar la propagación correspondiente. Esta detección debe realizarse en la etapa EX de la instrucción
+actual, antes de que se ejecute la operación de la ALU, que es lo primero que va a necesitar algún
+parámetro.
+<!--l. 248--><p class="indent" >   Existen varias situaciones en las cuales puede ocurrir esta detección, dependiendo de que instrucción previa
+genera dependencia, y en que etapa se genera:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-12004x1">Instrucción previa escribe en registro; instrucción actual utiliza registro en la ALU:<br 
+class="newline" />
+     <!--l. 254--><p class="noindent" >La primera situación que requiere forwarding es en el caso de que una instrucción vaya a realizar
+     una operación con la ALU, y requiera como parámetro un registro que está siendo modificado por la
+     instrucción anterior. En el ejemplo anterior esto es lo que ocurre con la segunda instrucción, <span 
+class="cmtt-10x-x-109">AND B,A</span>
+     .
+     <!--l. 256--><p class="noindent" >Para detectar este tipo de hazards hay que obtener la siguiente información:
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-12006x1">La  instrucción  previa  tiene  que  estar  escribiendo  en  registro,  es  decir  las  señales  LoadA  o
+          LoadB deben haberse activado en el decode de dicha instrucción. Como la instrucción previa
+          está  en  la  etapa  MEM  en  este  momento,  las  señales  de  control  correspondientes  estarán  en
+          el  registro  EX/MEM.  La  nomenclatura  para  referirse  a  estas  señales  es  EX/MEM.LoadA  y
+          EX/MEM.LoadB.
+          </li>
+          <li 
+  class="enumerate" id="x1-12008x2">La  instrucción  actual  ocupa  como  uno  de  sus  parámetros  el  mismo  registro  que  se
+          escribió previamente. Para saber esto necesitamos saber que valores se eligieron como parámetros
+          de la ALU en los MuxA y MuxB, lo cual estará almacenado en las señales de control AluA y
+          AluB asociados a la instrucción actual, las cuales ahora deben ser propagadas entre las etapas ID
+          y EX. Como la instrucción actual está en la etapa EX, las señales de control que nos interesan
+          están en los registros ID/EX, y por tanto la nomenclatura para estas señales es ID/EX.AluA y
+          ID/EX.AluB.</li></ol>
+     <!--l. 263--><p class="noindent" >En base a esta información se puede decidir si corresponde hacer forwarding a la entrada A o B
+     de la ALU. Lo que se tiene que propagar es el resultado de la ALU que se tenga almacenado
+     en la etapa MEM. Para saber si ese resultado debe ingresar a la entrada A o B, se revisa lo
+     siguiente:
+          <ul class="itemize1">
+          <li class="itemize">Si  EX/MEM.LoadA  ==  1  y  ID/EX.AluA  ==  A  (se  eligió  el  registro  A  como  parámetro),
+          corresponde hacer forwarding del resultado de la ALU de la etapa MEM a la entrada A de la
+          ALU.
+          </li>
+          <li class="itemize">Si  EX/MEM.LoadB  ==  1  y  ID/EX.AluB  ==  B  (se  eligió  el  registro  B  como  parámetro),
+          corresponde hacer forwarding del resultado de la ALU de la etapa MEM a la entrada B de la
+          ALU.</li></ul>
+     </li>
+     <li 
+  class="enumerate" id="x1-12010x2">Instrucción previa a la anterior escribe en registro; instrucción actual utiliza registro en la ALU:<br 
+class="newline" />
+                                                                                                  
+                                                                                                  
+     <!--l. 271--><p class="noindent" >La segunda situación en que es necesario propagar ocurre cuando una instrucción que va a operar con la ALU
+     requiere como parámetro un registro que está siendo modificado por la instrucción de dos ciclos
+     atrás:
+     <!--l. 273--><p class="noindent" ><hr class="figure"><div class="figure" 
+><a 
+ id="x1-1201117"></a> <img 
+src="png/ejforwarding3inst.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1317x.png" src="figs4/ejforwarding3inst.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;17: </span><span  
+class="content">Ejemplo de data hazard en que una instrucción afecta a la subsiguiente.</span></div><!--tex4ht:label?: x1-1201117 -->
+     <!--l. 277--><p class="noindent" ></div><hr class="endfigure">
+     <!--l. 279--><p class="noindent" >Aunque este caso es similar al anterior, y también es posible detectarlo ocupando el mismo tipo de condiciones
+     antes descritas, existen un par de diferencias. En primer lugar, cuando la instrucción que va a sufrir un data
+     hazard esté en la etapa EX (<span 
+class="cmtt-10x-x-109">AND B,A </span>en el ejemplo), la instrucción que generará el hazard (<span 
+class="cmtt-10x-x-109">AND B,A</span>) estará en
+     la etapa WB, y por tanto las señales LoadA y LoadB que interesa revisar estarán en los registros MEM/WB
+     (MEM/WB.LoadA y MEM/WB.LoadB). Lo segundo es qué ocurre si la instrucción intermedia
+     genera también dependencia de datos con la tercera instrucción, como en el ejemplo de la figura
+     <a 
+href="#x1-1201218">18<!--tex4ht:ref: fig:ejforwardingMEMWB --></a>. En este caso, no es necesario hacer el forwarding desde la instrucción 1 a la 3, dado que
+     para la instrucción 3 lo que importa es el último valor de A, que será obtenido en la instrucción
+     2.
+     <!--l. 281--><p class="noindent" ><hr class="figure"><div class="figure" 
+><a 
+ id="x1-1201218"></a> <img 
+src="png/ejforwardingMEMWB.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1318x.png" src="figs4/ejforwardingMEMWB.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;18: </span><span  
+class="content">Ejemplo de data hazard: para la tercera instrucción sólo importa la última modificación sobre el
+registro A, por lo que la dependencia entre la 1era y 3era instrucción (flecha morada) no necesita forwarding.</span></div><!--tex4ht:label?: x1-1201218 -->
+     <!--l. 286--><p class="noindent" ></div><hr class="endfigure">
+     <!--l. 288--><p class="noindent" >Considerando esto, la información para detectar este tipo de hazards es:
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-12014x1">La instrucción anterior a la previa tiene que estar escribiendo en registro, es decir las señales
+          LoadA o LoadB deben haberse activado en el decode de dicha instrucción. Como la instrucción
+          anterior a la previa está en la etapa WB en este momento, las señales de control correspondientes
+          estarán en el registro MEM/WB: MEM/WB.LoadA y MEM/WB.LoadB.
+          </li>
+          <li 
+  class="enumerate" id="x1-12016x2">La  instrucción  actual  ocupa  como  uno  de  sus  parámetros  el  mismo  registro  que  se
+          escribió previamente. Para saber esto necesitamos saber que valores se eligieron como parámetros
+          de la ALU en los MuxA y MuxB, lo cual estará almacenado en las señales de control AluA y
+          AluB asociados a la instrucción actual: ID/EX.AluA y ID/EX.AluB.
+                                                                                                  
+                                                                                                  
+          </li>
+          <li 
+  class="enumerate" id="x1-12018x3">Si la instrucción previa también modificó los registros A o B, esta información estará en los
+          registros EX/MEM: EX/MEM.LoadA y EX/MEM.LoadB.</li></ol>
+     <!--l. 297--><p class="noindent" >En base a esta información se puede decidir si corresponde hacer forwarding a la entrada A o B de la ALU. Lo
+     que se tiene que propagar es el resultado de la ALU que se tenga almacenado en la etapa WB. Para saber si
+     ese resultado debe ingresar a la entrada A o B, se revisa lo siguiente:
+          <ul class="itemize1">
+          <li class="itemize">Si MEM/WB.LoadA == 1, ID/EX.AluA == A y EX/MEM.LoadA == 0 (es decir, no hubo
+          escritura en la instrucción anterior), corresponde hacer forwarding del resultado de la ALU de la
+          etapa WB a la entrada A de la ALU.
+          </li>
+          <li class="itemize">Si MEM/WB.LoadB == 1, ID/EX.AluB == B y EX/MEM.LoadB == 0 (es decir, no hubo
+          escritura en la instrucción anterior), corresponde hacer forwarding del resultado de la ALU de la
+          etapa WB a la entrada B de la ALU.</li></ul>
+     </li>
+     <li 
+  class="enumerate" id="x1-12020x3">Instrucción previa escribe en registro; instrucción actual escribe en memoria valor del registro
+     modificado:<br 
+class="newline" />
+     <!--l. 305--><p class="noindent" >Los últimos casos en que es necesario propagar son cuando la instrucción actual está escribiendo en memoria
+     el valor de un registro que está siendo modificado por la instrucción previa:
+     <!--l. 307--><p class="noindent" ><hr class="figure"><div class="figure" 
+><a 
+ id="x1-1202119"></a> <img 
+src="png/ejforwarding3.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1319x.png" src="figs4/ejforwarding3.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;19: </span><span  
+class="content">Ejemplo de data hazard: la segunda instrucción necesita el nuevo valor de A para escribir en
+memoria. Se debe realizar forwarding de la salida de la etapa WB previa a la etapa MEM actual.</span></div><!--tex4ht:label?: x1-1202119 -->
+     <!--l. 311--><p class="noindent" ></div><hr class="endfigure">
+     <!--l. 313--><p class="noindent" >En este caso, la dependencia de datos está entre la etapa ID de la instrucción actual, donde se elige el registro
+     que será escrito en memoria, y la etapa WB de la instrucción anterior, donde se está modificando ese registro.
+     A diferencia de los casos anteriores, la etapa a la cual es necesario propagarle datos es la etapa MEM. La
+     información para detectar este tipo de hazards es:
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-12023x1">La instrucción anterior tiene que estar escribiendo en registro, es decir las señales LoadA o LoadB
+          deben haberse activado en el decode de dicha instrucción. Como la instrucción anterior está en
+          la etapa WB en este momento, las señales de control correspondientes estarán en el registro
+          MEM/WB: MEM/WB.LoadA y MEM/WB.LoadB.
+          </li>
+          <li 
+  class="enumerate" id="x1-12025x2">La  instrucción  actual  está  escribiendo  en  memoria  (EX/MEM.W  =  1)  y  ocupa  como  dato
+          de  entrada  en  memoria  el  mismo  registro  que  fue  modificado  (EX/MEM.MuxDin  =  A  o
+          EX/MEM.MuxDin = B).</li></ol>
+                                                                                                  
+                                                                                                  
+     <!--l. 320--><p class="noindent" >En base a esta información se puede decidir si corresponde hacer forwarding al valor de entrada de la
+     memoria. Lo que se tiene que propagar en este caso es la salida del Mux RegIn de la etapa WB, ya que esta
+     situación puede ocurrir tanto si la instrucción previa fue ocupando la ALU o leyendo de memoria. Las
+     condiciones para revisar este caso son:
+          <ul class="itemize1">
+          <li class="itemize">Si MEM/WB.LoadA == 1, EX/MEM.MemDin == A, EX/MEM.W == 1 corresponde hacer
+          forwarding del RegIn de la etapa WB a la entrada de memoria.
+          </li>
+          <li class="itemize">Si MEM/WB.LoadB == 1, EX/MEM.MemDin == B, EX/MEM.W == 1 corresponde hacer
+          forwarding del RegIn de la etapa WB a la entrada de memoria.</li></ul>
+     </li></ol>
+<!--l. 328--><p class="indent" >   Para lograr detectar el forwarding e implementarlo cuando corresponda, se agrega una pieza de hardware
+denominada <span 
+class="cmbx-10x-x-109">forwarding unit</span>, la cual se encarga de revisar si ocurrió un data hazard y en caso de haber ocurrido
+uno, propaga los valores a las entradas de la ALU correspondiente, a través de dos multiplexores que se agregan a
+estas entradas (figura <a 
+href="#x1-1202620">20<!--tex4ht:ref: fig:pipelineFWD --></a>).
+<!--l. 330--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1202620"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 332--><p class="noindent" ><img 
+src="png/pipelineFWD.png" alt="PIC" class="graphics" width="800" height="360" ><!--tex4ht:graphics  
+name="apunte1320x.png" src="figs4/pipelineFWD.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;20: </span><span  
+class="content">Soporte de hardware para forwarding.</span></div><!--tex4ht:label?: x1-1202620 -->
+                                                                                                  
+                                                                                                  
+<!--l. 335--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 337--><p class="indent" >   Al agregar forwarding al procesador se solucionan los casos de data hazard antes descritos, pero no es suficiente
+para manejar todos los posibles casos. En particular, existe otro tipo de data hazard, que ocurre cuando un valor se
+lee de memoria en una instrucción, y luego se utiliza como parámetro en la ALU de la instrucción siguiente, como se
+observa en el ejemplo de la figura <a 
+href="#x1-1202721">21<!--tex4ht:ref: fig:ejstalling --></a>.
+<!--l. 339--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1202721"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 341--><p class="noindent" ><img 
+src="png/ejstalling.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1321x.png" src="figs4/ejstalling.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;21: </span><span  
+class="content">Ejemplo de data hazard, producido por una lectura de memoria.</span></div><!--tex4ht:label?: x1-1202721 -->
+                                                                                                  
+                                                                                                  
+<!--l. 344--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 346--><p class="indent" >   El problema en este caso es que a diferencia de los hazards anteriores, acá el valor modificado no se obtiene en la
+etapa EX, sino en la etapa MEM. Si intentamos hacer forwarding ocurre lo que se observa en la figura <a 
+href="#x1-1202822">22<!--tex4ht:ref: fig:ejstalling2 --></a>: el valor
+que requerimos propagar solo se obtendrá al final del ciclo en que se ejecuta MEM, pero es requerido al principio de
+ese mismo ciclo por la etapa EX de la siguiente instrucción. Esto hace imposible lograr el forwarding ya que
+en el momento que tenemos el valor ya es muy tarde y se ejecutó la operación siguiente con el valor
+erróneo. En estos casos se requiere agregar un mecanismo que permita que la siguiente instrucción
+«espere»
+mientras se obtiene el valor necesario, lo que se conoce como <span 
+class="cmbx-10x-x-109">stalling</span>.
+<!--l. 348--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1202822"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 350--><p class="noindent" ><img 
+src="png/ejstalling2.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1322x.png" src="figs4/ejstalling2.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;22: </span><span  
+class="content">Ejemplo de data hazard, producido por una lectura de memoria.</span></div><!--tex4ht:label?: x1-1202822 -->
+                                                                                                  
+                                                                                                  
+<!--l. 353--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 356--><p class="indent" >   En el mecanismo de stalling, la idea es hacer que la instrucción siguiente no entre en la etapa
+EX hasta que se haya obtenido el dato desde memoria. Para lograr esto hay dos mecanismos: uno
+implementado por hardware y otro por software. En el mecanismo por hardware, el procesador debe detectar
+esta situación y detener el avance del pipeline por un ciclo, insertando lo que se conoce como una
+«burbuja»
+en el pipeline (figura <a 
+href="#x1-1202923">23<!--tex4ht:ref: fig:ejstallingBubble --></a>). Esta detención permite que se mantenga la consistencia de los datos, pero a costo de
+perder un ciclo de CPU.
+<!--l. 358--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1202923"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 360--><p class="noindent" ><img 
+src="png/ejstallingBubble.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1323x.png" src="figs4/ejstallingBubble.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;23: </span><span  
+class="content">Stalling del pipeline para solucionar data hazard de lectura. Se agrega una «burbuja»
+al pipeline.</span></div><!--tex4ht:label?: x1-1202923 -->
+                                                                                                  
+                                                                                                  
+<!--l. 363--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 365--><p class="indent" >   Las condiciones que se deben dar para que haya stalling para este computador, son las siguientes:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-12031x1">La instrucción anterior tiene que estar escribiendo en registro desde memoria, lo que se puede observar
+     en la señal de control RegIn.
+     </li>
+     <li 
+  class="enumerate" id="x1-12033x2">La instrucción actual ocupa como parámetro de la ALU el registro escrito.</li></ol>
+<!--l. 372--><p class="indent" >   En este caso, la idea es detectar lo antes posible el hazard para perder la menor cantidad de ciclos. Debido a
+esto, la detección de este tipo de hazards se realiza en la etapa ID, cuando son generadas las señales de control de la
+instrucción actual, la cual debemos detener en caso de que haya hazard. Los valores que se deben revisar para estos
+casos son:
+     <ul class="itemize1">
+     <li class="itemize">Si ID/EX.LoadA == 1 y ID/EX.RegIn == Dout (se va a leer de memoria), y la instrucción actual
+     tiene AluA == A, corresponde hacer stalling para evitar inconsistencias con el registro A.
+     </li>
+     <li class="itemize">Si ID/EX.LoadB == 1 y ID/EX.RegIn == Dout (se va a leer de memoria), y la instrucción actual
+     tiene AluB == B, corresponde hacer stalling para evitar inconsistencias con el registro B.</li></ul>
+<!--l. 378--><p class="indent" >   Para detectar estos hazards, se agrega una unidad de detección de hazards en la etapa ID. Una vez detectado un
+caso, esta unidad realiza tres acciones:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-12035x1">Setea en cero todas las señales de control almacenadas en el registro ID/EX, para no propagar la
+     instrucción actual.
+     </li>
+     <li 
+  class="enumerate" id="x1-12037x2">Envía una señal de no escritura al registro IF/ID, para que mantenga la instrucción actual almacenada
+     y no sea sobreescrita por la siguiente.
+     </li>
+     <li 
+  class="enumerate" id="x1-12039x3">Envía una señal de no avanzar al PC, para que se mantenga apuntando a la instrucción siguiente, y
+     no avance.</li></ol>
+<!--l. 386--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1204024"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 388--><p class="noindent" ><img 
+src="png/pipelineStall.png" alt="PIC" class="graphics" width="800" height="360" ><!--tex4ht:graphics  
+name="apunte1324x.png" src="figs4/pipelineStall.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;24: </span><span  
+class="content">Soporte de hardware para stalling.</span></div><!--tex4ht:label?: x1-1204024 -->
+                                                                                                  
+                                                                                                  
+<!--l. 390--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 392--><p class="indent" >   Un mecanismo alternativo para manejar stalling se implementa por software: la idea es que el compilador
+cuando genere el código assembly a partir del código de alto nivel, detecte los casos posibles de hazard que requieran
+stalling e inserte entre las dos instrucciones una instrucción que no hace nada, la que se conoce como <span 
+class="cmtt-10x-x-109">NOP </span>(figura
+<a 
+href="#x1-1204125">25<!--tex4ht:ref: fig:ejstallingNOP --></a>). Con este mecanismo se logra el mismo resultado que en el caso anterior, es decir se retrasa la CPU en un ciclo
+para lograr la consistencia en los datos. La ventaja es que no requiere modificar la CPU, ya que el trabajo lo realiza
+el compilador.
+<!--l. 394--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1204125"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 396--><p class="noindent" ><img 
+src="png/ejstallingNOP.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1325x.png" src="figs4/ejstallingNOP.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;25: </span><span  
+class="content">Inserción de un NOP para solucionar data hazard de lectura.</span></div><!--tex4ht:label?: x1-1204125 -->
+                                                                                                  
+                                                                                                  
+<!--l. 399--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+   <h5 class="subsubsectionHead"><span class="titlemark">3.3.2.   </span> <a 
+ id="x1-130003.3.2"></a>Hazards de Control</h5>
+<!--l. 404--><p class="noindent" >Un segundo tipo de hazard que ocurre en un procesador con pipeline corresponde a los hazards de control. Este tipo
+de hazard ocurre cuando hay una instrucción de salto: el problema con estas instrucciones es que dependiendo de si
+hay o no salto cambiará cual es la siguiente instrucción, pero con el diseño actual del procesador esto se sabe recién
+en la etapa MEM de la instrucción de salto, y por tanto a esas alturas ya entraron las siguientes instrucciones al
+pipeline (figura <a 
+href="#x1-1300126">26<!--tex4ht:ref: fig:ejbranch --></a>).
+<!--l. 406--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1300126"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 408--><p class="noindent" ><img 
+src="png/ejbranch.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1326x.png" src="figs4/ejbranch.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;26: </span><span  
+class="content">Hazard de control producido por una instrucción de salto: si el salto se efectúa la segunda
+instrucción no se debe ejecutar.</span></div><!--tex4ht:label?: x1-1300126 -->
+                                                                                                  
+                                                                                                  
+<!--l. 411--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 413--><p class="indent" >   Para solucionar este tipo de hazards existen distintos mecanismos. Lo más simple es realizar stalling del pipeline
+los ciclos que sean necesarios para que la siguiente instrucción no entre hasta que se sepa si hay o no salto, y por
+tanto se sepa que instrucción corresponde. En el caso de este pipeline, esto involucra detener la CPU por 3 ciclos, es
+decir perder 3 ciclos por cada salto (figura <a 
+href="#x1-1300227">27<!--tex4ht:ref: fig:ejbranchstall --></a>).
+<!--l. 415--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1300227"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 417--><p class="noindent" ><img 
+src="png/ejbranchstall.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1327x.png" src="figs4/ejbranchstall.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;27: </span><span  
+class="content">Stalling de 3 ciclos para prevenir control hazard</span></div><!--tex4ht:label?: x1-1300227 -->
+                                                                                                  
+                                                                                                  
+<!--l. 420--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 422--><p class="indent" >   Es posible mejorar el manejo de los saltos, ocupando un mecanismo de <span 
+class="cmbx-10x-x-109">predicción de salto</span>. La idea de este
+mecanismo es que uno puede predecir si el salto va a ocurrir o no, y en caso de que la predicción sea correcta, no se
+van a perder ciclos de la CPU. La predicción más simple consiste en predecir que nunca va a ocurrir salto, es decir,
+que el flujo de las instrucciones siempre seguirá de manera secuencial. Cuando esta predicción sea correcta, no se
+perderán ciclos de la CPU (figura <a 
+href="#x1-1300328">28<!--tex4ht:ref: fig:ejbranchprediction --></a>).
+<!--l. 424--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1300328"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 426--><p class="noindent" ><img 
+src="png/ejbranchprediction.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1328x.png" src="figs4/ejbranchprediction.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;28: </span><span  
+class="content">Manejo de hazard de control ocupando predicción de salto.</span></div><!--tex4ht:label?: x1-1300328 -->
+                                                                                                  
+                                                                                                  
+<!--l. 429--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 431--><p class="indent" >   En caso de que la predicción sea incorrecta y efectivamente ocurra el salto, las siguientes tres instrucciones que
+ya entraron al pipeline no deben ser ejecutadas. Para lograr esto se agrega una unidad de hazard de control en la
+etapa IF (figura <a 
+href="#x1-1300429">29<!--tex4ht:ref: fig:pipelineBranch --></a>), la cual cuando detecta que hay salto envía una señal de <span 
+class="cmbx-10x-x-109">flush </span>que avisa a las
+siguientes etapas del pipeline que no deben ejecutar las señales de control que se habían enviado (figura
+<a 
+href="#x1-1300530">30<!--tex4ht:ref: fig:ejbranchflush --></a>).
+<!--l. 433--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1300429"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 435--><p class="noindent" ><img 
+src="png/pipelineBranch.png" alt="PIC" class="graphics" width="800" height="360" ><!--tex4ht:graphics  
+name="apunte1329x.png" src="figs4/pipelineBranch.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;29: </span><span  
+class="content">Soporte de hardware para control hazards.</span></div><!--tex4ht:label?: x1-1300429 -->
+                                                                                                  
+                                                                                                  
+<!--l. 438--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+<!--l. 441--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1300530"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 443--><p class="noindent" ><img 
+src="png/ejbranchflush.png" alt="PIC" class="graphics" width="600" ><!--tex4ht:graphics  
+name="apunte1330x.png" src="figs4/ejbranchflush.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;30: </span><span  
+class="content">La unidad de control de hazard detecta que ocurrió un salto y envía una señal de flush para no
+ejecutar las siguientes etapas.</span></div><!--tex4ht:label?: x1-1300530 -->
+                                                                                                  
+                                                                                                  
+<!--l. 446--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 448--><p class="indent" >   Es posible mejorar aún más el manejo de estos hazards, ocupando sistemas de <span 
+class="cmbx-10x-x-109">predicción dinámica </span>en los
+cuales se predice a medida que se ejecuta el programa si un salto va a ocurrir o no, en base a información estadística
+obtenida de cada instrucción. Este tipo de predicción requiere hardware especializado, pero con esto es posible
+mejorar aún más el desempeño del procesador en estos casos.
+   <h5 class="subsubsectionHead"><span class="titlemark">3.3.3.   </span> <a 
+ id="x1-140003.3.3"></a>Hazards Estructurales</h5>
+<!--l. 452--><p class="noindent" >Los hazards estructurales ocurren cuando dos etapas del pipeline necesitan acceder a la misma unidad funcional. Un
+ejemplo ocurre en un computador Von Neumann, donde la memoria única de instrucciones y datos sería
+accedida tanto en la etapa IF como en la etapa MEM. Existen distintas formas de solucionar este tipo de
+hazards:
+     <ul class="itemize1">
+     <li class="itemize">Agregar unidades funcionales extras que permitan atender las dos etapas del ciclo sin contención. En el
+     caso de las memorias, tener una caché split de primer nivel transforma la arquitectura del computador
+     en Harvard y se soluciona el problema.
+     </li>
+     <li class="itemize">Agregar «burbujas»
+     mediante stalling que hagan que una de las instrucciones que quería ocupar la unidad funcional en un cierto
+     ciclo espere hasta el siguiente.</li></ul>
+                                                                                                  
+                                                                                                  
+<!--l. 460--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-150003.3.3"></a>Ejemplo</h5>
+<!--l. 462--><p class="noindent" >El siguiente ejemplo de código muestra la secuencia efectiva del pipeline de un programa en un computador con
+pipeline, que tiene forwarding (flechas azules en el diagrama), stalling por software (instrucciones
+NOP), predicción de salto asumiendo salto no realizado y flushing en caso de predicción errónea (flecha
+roja).
+   <!--l. 467-->
+   <div class="lstlisting" id="listing-1"><span class="label"><a 
+ id="x1-15001r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">DATA</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15002r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">n</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">2</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15003r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15004r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CODE</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15005r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">n</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15006r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15007r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">1</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15008r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">JNE</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15009r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,5</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15010r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-15011r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">,3</span>
+   
+   </div>
+<!--l. 482--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+                                                                                                  
+                                                                                                  
+<!--l. 484--><p class="noindent" ><img 
+src="png/ejercicio.png" alt="PIC" class="graphics" width="720" ><!--tex4ht:graphics  
+name="apunte1331x.png" src="figs4/ejercicio.eps"  
+-->
+                                                                                                  
+                                                                                                  
+<!--l. 485--><p class="indent" >   </div><hr class="endfigure">
+                                                                                                  
+                                                                                                  
+   <h3 class="sectionHead"><span class="titlemark">4.   </span> <a 
+ id="x1-160004"></a>Apéndice: Set de instrucciones de Computador Básico con Pipeline</h3>
+<div class="center" 
+>
+<!--l. 490--><p class="noindent" >
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1"><col 
+id="TBL-1-2"></colgroup><colgroup id="TBL-1-3g"><col 
+id="TBL-1-3"><col 
+id="TBL-1-4"></colgroup><colgroup id="TBL-1-5g"><col 
+id="TBL-1-5"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"  
+class="td11">Instrucción</td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-2"  
+class="td11">Operandos</td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-3"  
+class="td11">Operación       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-4"  
+class="td11">Condiciones</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-5"  
+class="td11">Ejemplo de uso</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"  
+class="td11">MOV        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-2"  
+class="td11">A,B         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-3"  
+class="td11">A=B              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-3"  
+class="td11">B=A              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-2"  
+class="td11">A,Lit       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-3"  
+class="td11">A=Lit            </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-4-5"  
+class="td11">  MOV A,15   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-2"  
+class="td11">B,Lit       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-3"  
+class="td11">B=Lit             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-5-5"  
+class="td11">  MOV B,15   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-2"  
+class="td11">A,(Dir)    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-3"  
+class="td11">A=Mem[Dir]    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-6-5"  
+class="td11">MOV A,(var1)</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-2"  
+class="td11">B,(Dir)     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-3"  
+class="td11">B=Mem[Dir]    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-7-5"  
+class="td11"> MOV B,(var2) </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-2"  
+class="td11">(Dir),A    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-3"  
+class="td11">Mem[Dir]=A    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-8-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-8-5"  
+class="td11">MOV (var1),A</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-2"  
+class="td11">(Dir),B     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-3"  
+class="td11">Mem[Dir]=B    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-9-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-9-5"  
+class="td11"> MOV (var2),B </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-2"  
+class="td11">A,(B)       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-3"  
+class="td11">A=Mem[B]      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-10-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-10-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-2"  
+class="td11">B,(B)       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-3"  
+class="td11">B=Mem[B]      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-11-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-11-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-2"  
+class="td11">(B),A       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-3"  
+class="td11">Mem[B]=A      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-12-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-12-5"  
+class="td11">      -          </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-1"  
+class="td11">ADD         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-2"  
+class="td11">A,B         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-3"  
+class="td11">A=A+B          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-13-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-13-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-3"  
+class="td11">B=A+B          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-14-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-14-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-15-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-15-2"  
+class="td11">A,Lit       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-15-3"  
+class="td11">A=A+Lit        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-15-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-15-5"  
+class="td11">  ADD A,5    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-16-1"  
+class="td11">SUB          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-16-2"  
+class="td11">A,B         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-16-3"  
+class="td11">A=A-B           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-16-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-16-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-17-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-17-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-17-3"  
+class="td11">B=A-B           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-17-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-17-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-18-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-18-2"  
+class="td11">A,Lit       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-18-3"  
+class="td11">A=A-Lit         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-18-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-18-5"  
+class="td11">  SUB A, 2    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-19-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-19-1"  
+class="td11">AND         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-19-2"  
+class="td11">A,B         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-19-3"  
+class="td11">A=A and B     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-19-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-19-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-20-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-20-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-20-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-20-3"  
+class="td11">B=A and B     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-20-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-20-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-21-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-21-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-21-2"  
+class="td11">A,Lit       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-21-3"  
+class="td11">A=A and Lit   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-21-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-21-5"  
+class="td11">  AND A,15   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-22-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-22-1"  
+class="td11">OR           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-22-2"  
+class="td11">A,B         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-22-3"  
+class="td11">A=A or B       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-22-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-22-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-23-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-23-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-23-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-23-3"  
+class="td11">B=A or B       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-23-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-23-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-24-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-24-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-24-2"  
+class="td11">A,Lit       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-24-3"  
+class="td11">A=A or Lit     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-24-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-24-5"  
+class="td11">   OR A,5     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-25-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-25-1"  
+class="td11">NOT         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-25-2"  
+class="td11">A,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-25-3"  
+class="td11">A=notA          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-25-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-25-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-26-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-26-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-26-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-26-3"  
+class="td11">B=notA          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-26-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-26-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-27-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-27-1"  
+class="td11">XOR         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-27-2"  
+class="td11">A,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-27-3"  
+class="td11">A=A xor B      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-27-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-27-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-28-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-28-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-28-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-28-3"  
+class="td11">B=A xor B      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-28-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-28-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-29-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-29-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-29-2"  
+class="td11">A,Lit       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-29-3"  
+class="td11">A=A xor Lit    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-29-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-29-5"  
+class="td11">  XOR A,15   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-30-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-30-1"  
+class="td11">SHL          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-30-2"  
+class="td11">A,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-30-3"  
+class="td11">A=shift left A  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-30-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-30-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-31-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-31-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-31-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-31-3"  
+class="td11">B=shift left A  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-31-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-31-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-32-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-32-1"  
+class="td11">SHR         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-32-2"  
+class="td11">A,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-32-3"  
+class="td11">A=shift right A</td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-32-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-32-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-33-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-33-1"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-33-2"  
+class="td11">B,A         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-33-3"  
+class="td11">B=shift right A</td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-33-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-33-5"  
+class="td11">      -          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-34-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-34-1"  
+class="td11">INC          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-34-2"  
+class="td11">B            </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-34-3"  
+class="td11">B=B+1          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-34-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-34-5"  
+class="td11">      -          </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-35-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-35-1"  
+class="td11">JMP         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-35-2"  
+class="td11">Dir          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-35-3"  
+class="td11">PC = Dir        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-35-4"  
+class="td11">          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-35-5"  
+class="td11">   JMP end    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-36-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-36-1"  
+class="td11">JEQ          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-36-2"  
+class="td11">Dir          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-36-3"  
+class="td11">PC = Dir        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-36-4"  
+class="td11">Z=1          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-36-5"  
+class="td11">  JEQ label   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-37-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-37-1"  
+class="td11">JNE          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-37-2"  
+class="td11">Dir          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-37-3"  
+class="td11">PC = Dir        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-37-4"  
+class="td11">Z=0          </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-37-5"  
+class="td11">  JNE label    </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-38-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-38-1"  
+class="td11">          </td></tr></table></div></div>
+                                                                                                  
+                                                                                                  
+<!--l. 540--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">5.   </span> <a 
+ id="x1-170005"></a>Ejercicios</h3>
+<!--l. 541--><p class="noindent" >Para el siguiente código del computador básico con pipeline, determine el número de ciclos que se demora
+detallando los estados del pipeline para cada instrucción. Considere que el pipeline tiene forwarding implementado
+entre todas sus etapas, el manejo de stalling se realiza por software y se tiene predicción de salto asumiendo que no
+ocurre salto. En su diagrama de pipeline detalle cuando ocurre forwarding de datos y flushing de
+instrucciones.
+   <!--l. 546-->
+   <div class="lstlisting" id="listing-2"><span class="label"><a 
+ id="x1-17001r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">DATA</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17002r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17003r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17004r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CODE</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17005r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">,2</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17006r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mult</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,2</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17007r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">//</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">+</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">B</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17008r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17009r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,1</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17010r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">),</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-17011r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">JNE</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">mult</span>
+   
+   </div>
+<!--l. 562--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">6.   </span> <a 
+ id="x1-180006"></a>Referencias e información adicional</h3>
+     <ul class="itemize1">
+     <li class="itemize">Hennessy, J.; Patterson, D.: Computer Organization and Design: The Hardware/Software Interface, 4
+     Ed., Morgan-Kaufmann, 2008. Chapter 4: The Processor.
+     </li>
+     <li class="itemize">Huang,  H.  :  CS232:  Computer  Architecture  II,  University  of  Illinois  at  Urbana-Champaign,
+     http://howardhuang.us/teaching/</li></ul>
+    
+</body></html> 
+
+                                                                                                  
+
+

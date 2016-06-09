@@ -1,0 +1,2367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html xml:lang="es" > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="apunte01.tex"> 
+<meta name="date" content="2014-04-05 21:00:00"> 
+<link rel="stylesheet" type="text/css" href="apunte01.css"> 
+</head><body 
+>
+<div class="center" 
+>
+<!--l. 13--><p class="noindent" >
+<!--l. 14--><p class="noindent" ><span 
+class="cmbx-10">IIC2343 Arquitectura de Computadores</span><br />
+<span 
+class="cmbx-12x-x-120">Representación de números</span><br />
+<span 
+class="cmbsy-6">©</span><span 
+class="cmbx-6">Alejandro Echeverría, Hans-Albert L</span><span 
+class="cmbx-6">öbel</span><br />
+</div>
+   <h3 class="sectionHead"><span class="titlemark">1.   </span> <a 
+ id="x1-10001"></a>Motivación</h3>
+<!--l. 22--><p class="noindent" >Todo tipo de información puede ser representada mediante números. Una palabra, por ejemplo, puede ser
+representada mediante números reemplazando cada letra por un número específico (como el código ASCII). Una
+imagen puede representarse como un conjunto de posiciones (números) y el valor de color de la imagen en esa
+posición (también números). En definitiva, podemos reducir el problema de representar información al problema de
+representar números, por lo que es fundamental conocer las representaciones numéricas existentes y como se
+utilizan.
+<!--l. 24--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2.   </span> <a 
+ id="x1-20002"></a>Representaciones numéricas</h3>
+<!--l. 26--><p class="noindent" >La representación numérica más simple corresponde a usar un símbolo por cada incremento en uno de un número.
+Por ejemplo, si ocupamos el símbolo «*»
+para representar el número cuatro, dibujamos cuatro símbolos: «****»
+. El problema de esta representación es que no escala: para representar el número un millón, necesitamos dibujar un
+millón de veces el símbolo «*»
+lo que sería un costo tanto en espacio (por ejemplo papel si estuviésemos escribiendo el número en un cuaderno) y
+de tiempo (escribir un millón de veces el símbolo tomará al menos un millón de segundos, aproximadamente 11 días
+sin parar).
+<!--l. 28--><p class="indent" >   Para solucionar los problemas que presenta esta representación, se inventaron representaciones más avanzadas,
+que permiten de alguna forma representar números grandes con pocos símbolos. Una de estas representaciones
+fueron los números romanos, que ocupaban símbolos específicos para acumulaciones de números: V para cinco, X
+para diez, L para cincuenta, etc. Esta representación, a pesar de ser una mejora sobre la anterior, tiene serias
+limitaciones prácticas, ya que no contempla un símbolo para el cero ni permite hacer operaciones
+algebraicas.
+<!--l. 30--><p class="indent" >   Otra representación ideada fueron los números indoarábigos, que es la que ocupamos hoy en día, basada en diez
+símbolos: 0, 1, 2, 3, 4, 5, 6, 7, 8 y 9. Esta representación se caracteriza por pertenecer a un grupo de
+representaciones denominadas «representaciones posicionales»
+.
+                                                                                                  
+                                                                                                  
+<!--l. 32--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.1.   </span> <a 
+ id="x1-30002.1"></a>Representaciones posicionales</h4>
+<!--l. 34--><p class="noindent" >Las representaciones posicionales, como la indoarábiga, se basan en dos elementos para determinar el
+valor de un número: la posición de los símbolos en la secuencia de estos y la cantidad de símbolos
+posible, lo que se denomina la base. En el caso de los números indoarábigos la base es diez (i.e. hay
+diez símbolos posibles), y por esto esta representación numérica también se denomina «representación
+decimal»
+.
+<!--l. 36--><p class="indent" >   Para entender como afecta la posición en el valor numérico, es necesario realizar un ejemplo. Como estamos tan
+acostumbrados a asociar un número a su representación en el sistema decimal, para este ejemplo, vamos a
+reemplazar los símbolos asociados al número uno y dos por «?»
+y «&amp;»
+de manera de poder abstraernos del número y fijarnos en la representación.
+<!--l. 38--><p class="indent" >   Supongamos se tiene la secuencia de numérica «??&amp;»
+. La expresión para poder interpretar este número en el sistema decimal es la siguiente:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-3001r1"></a>
+   <center class="math-display" >
+<img 
+src="apunte011x.png" alt="       dos         uno          cero
+? &#x00D7; diez   +? &#x00D7; diez   + &amp; &#x00D7; diez
+" class="math-display" ></center></td><td class="equation-label">(1)</td></tr></table>
+<!--l. 42--><p class="nopar" >
+<!--l. 44--><p class="indent" >   Al evaluar esta expresión obtendremos el valor de la secuencia numérica, pero debemos primero elegir la
+representación en la que queremos hacer el cálculo. Si utilizamos la representación decimal, y reemplazamos los
+símbolos «?»
+y «&amp;»
+por sus valores 1 y 2 obtenemos:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-3002r2"></a>
+   <center class="math-display" >
+<img 
+src="apunte012x.png" alt="1 &#x00D7; 102 + 1 &#x00D7; 101 + 2&#x00D7; 100 = 112
+" class="math-display" ></center></td><td class="equation-label">(2)</td></tr></table>
+<!--l. 48--><p class="nopar" >
+                                                                                                  
+                                                                                                  
+<!--l. 50--><p class="indent" >   A partir de esto podemos obtener la regla general para obtener el valor de una secuencia de símbolos en
+representación decimal:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-3003r3"></a>
+   <center class="math-display" >
+<img 
+src="apunte013x.png" alt="n&#x2211;-1       k
+    sk &#x00D7; 10
+k=0
+" class="math-display" ></center></td><td class="equation-label">(3)</td></tr></table>
+<!--l. 54--><p class="nopar" >
+<!--l. 56--><p class="indent" >   donde <span 
+class="cmmi-10x-x-109">s</span><sub><span 
+class="cmmi-8">k</span></sub> corresponde al símbolo en la posición <span 
+class="cmmi-10x-x-109">k</span>, <span 
+class="cmmi-10x-x-109">n </span>corresponde al número de símbolos en la secuencia y <span 
+class="cmmi-10x-x-109">k </span>toma
+valores desde 0 hasta <span 
+class="cmmi-10x-x-109">n </span><span 
+class="cmsy-10x-x-109">- </span>1, es decir, las posiciones parten desde 0, tomando como inicio el símbolo de más a la
+derecha.
+<!--l. 58--><p class="indent" >   De la expresión anterior se puede inferir que podemos crear representaciones posicionales con otras bases, para lo
+cual bastaría reemplazar el número diez por la base deseada. De esta manera, la expresión general para obtener el
+valor numérico de una determinada representación posicional es:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-3004r4"></a>
+   <center class="math-display" >
+<img 
+src="apunte014x.png" alt="n&#x2211;-1
+   sk &#x00D7; bk
+k=0
+" class="math-display" ></center></td><td class="equation-label">(4)</td></tr></table>
+<!--l. 62--><p class="nopar" >
+<!--l. 64--><p class="indent" >   donde <span 
+class="cmmi-10x-x-109">b </span>es la base de la representación elegida, la cual podría ser cualquier valor numérico. De hecho, el uso de
+la base diez que consideramos habitual se debe solamente a que los seres humanos tenemos diez dedos, y por tanto
+atribuimos a ese número una cierta característica especial. Si tuviéramos ocho dedos, seguramente ocuparíamos una
+sistema posicional con base ocho. En definitiva, no existe un sistema que de por si sea mejor que otro, todo depende
+de las circunstancias y de su uso.
+<!--l. 66--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.2.   </span> <a 
+ id="x1-40002.2"></a>Representaciones binaria, octal y hexadecimal</h4>
+                                                                                                  
+                                                                                                  
+<!--l. 68--><p class="noindent" >Existen tres representaciones habitualmente usadas en el contexto de la computación: binaria, octal y hexadecimal,
+siendo la primera la de mayor importancia. Tal como sus nombres lo señalan, la representación binaria tiene base
+dos, la octal base ocho y la hexadecimal base dieciséis. Vamos a comenzar analizando la base octal, para luego pasar
+a las otras dos.
+<!--l. 70--><p class="indent" >   Dado que un número octal tiene base ocho, necesitamos ocho símbolos distintos para su representación. Por
+comodidad utilizaremos los primeros ocho números indoarábigos: 0, 1, 2, 3, 4, 5, 6 y 7. Es importante destacar que
+aunque podríamos ocupar cualquier otro grupo de ocho símbolos, sólo ocuparemos estos por conveniencia, dado que
+estamos acostumbrados a trabajar matemáticamente con éstos.
+<!--l. 72--><p class="indent" >   Tomemos como ejemplo de número octal el 112. El primer elemento importante a destacar es que esta secuencia
+de símbolos no representa al número «ciento doce»
+que habitualmente asociaríamos a esos símbolos si estuviesen en representación decimal. Es decir, la secuencia de
+símbolos es la misma, pero la representación distinta. Para evitar confusiones, para todas las bases no decimales se
+usa especificar la base junto a la secuencia de símbolos. Entonces, en nuestro caso, el número sería (112)<sub><span 
+class="cmr-8">8</span></sub>, es decir la
+secuencia 112 en representación octal.
+<!--l. 74--><p class="indent" >   Si utilizamos la expresión (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) podemos obtener el valor numérico de esta secuencia octal. Es importante resaltar
+que, al ocupar esta expresión, debemos decidir en que representación queremos el resultado. Lo habitual es que éste
+quede en representación decimal, pero podría quedar también en otra si lo quisiéramos. Más adelante veremos
+ejemplos de este tipo, pero por ahora haremos el cálculo de manera de obtener el valor en representación
+decimal:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-4001r5"></a>
+   <center class="math-display" >
+<img 
+src="apunte015x.png" alt="1 &#x00D7; 82 + 1 &#x00D7; 81 + 2&#x00D7; 80 = 74
+" class="math-display" ></center></td><td class="equation-label">(5)</td></tr></table>
+<!--l. 78--><p class="nopar" >
+<!--l. 80--><p class="indent" >   Es decir, la secuencia 112 en octal, representa el número decimal 74.
+<!--l. 82--><p class="indent" >   Revisemos ahora la representación binaria, la cual tiene como base el número dos, y por tanto requiere sólo dos
+símbolos. Ocuparemos, nuevamente y por comodidad, los dos primeros números indoarábigos, 0 y 1. Tomemos como
+ejemplo el número (1011)<sub><span 
+class="cmr-8">2</span></sub>. Nuevamente es importante recordar que esta secuencia no tiene ninguna relación con el
+número «mil once»
+en representación decimal, solamente tiene la misma secuencia de símbolos. Podemos nuevamente aplicar la
+expresión (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) para obtener el valor numérico en representación decimal:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-4002r6"></a>
+   <center class="math-display" >
+<img 
+src="apunte016x.png" alt="1 &#x00D7; 23 + 0 &#x00D7; 22 + 1&#x00D7; 21 + 1&#x00D7; 10 = 11
+" class="math-display" ></center></td><td class="equation-label">(6)</td></tr></table>
+<!--l. 86--><p class="nopar" >
+<!--l. 88--><p class="indent" >   La ventaja de esta representación es que nos basta con dos símbolos para representar todos los posibles números.
+La desventaja es que necesitamos más posiciones para representar números. Esta desventaja la hace poco práctica
+para ser usada por humanos, pero la ventaja de tener sólo dos estados la hace ideal para realizar cálculos
+automáticos, por ejemplo en un computador.
+<!--l. 90--><p class="indent" >   Podemos también definir una representación cuya base sea mayor que diez. Una representación importante que
+cumple con esto es la representación hexadecimal, la cual tiene como base el dieciséis. Más adelante veremos que la
+utilidad de esta representación está en su relación con la representación binaria, y lo fácil que es convertir de una
+a otra. Para esta representación necesitamos dieciséis símbolos, por lo que a diferencia de las otras
+representaciones estudiadas no nos basta con los números indoarábigos, necesitamos seis símbolos más. Para
+no tener que inventar nuevos símbolos específicos de esta representación, habitualmente se ocupan
+los diez símbolos indoarábigos para representar los diez primeros dígitos y las primeras seis letras
+del abecedario (A=diez, B=once, C=doce, D=trece, E=catorce, F=quince) para representar los seis
+restantes.
+<!--l. 92--><p class="indent" >   Por ejemplo, la secuencia (<span 
+class="cmmi-10x-x-109">A</span>1<span 
+class="cmmi-10x-x-109">F</span>)<sub><span 
+class="cmr-8">16</span></sub> puede ser interpretada como un número hexadecimal. Para obtener el valor
+numérico en representación decimal, nuevamente ocupamos la expresión (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>):
+   <table 
+class="equation"><tr><td><a 
+ id="x1-4003r7"></a>
+   <center class="math-display" >
+<img 
+src="apunte017x.png" alt="A &#x00D7; 162 + 1&#x00D7; 161 + F &#x00D7; 160 =?
+" class="math-display" ></center></td><td class="equation-label">(7)</td></tr></table>
+<!--l. 96--><p class="nopar" >
+<!--l. 98--><p class="indent" >   En este caso tenemos un problema al evaluar directamente la expresión: aparecen símbolos (A y F) que no son
+válidos en la representación decimal. Para solucionar esto, podemos convertir estos símbolos directamente
+a representación decimal: A=10 y F=15, y con estos valores reescribir la expresión para obtener el
+resultado:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-4004r8"></a>
+   <center class="math-display" >
+<img 
+src="apunte018x.png" alt="10&#x00D7; 162 + 1&#x00D7; 161 + 15 &#x00D7; 160 = 2560 + 16 + 15 = 2591
+" class="math-display" ></center></td><td class="equation-label">(8)</td></tr></table>
+<!--l. 102--><p class="nopar" >
+<!--l. 104--><p class="indent" >   Este ejemplo demuestra una regla importante: si ocupamos la expresión (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) para convertir un número de una
+representación A a otra representación B, en el caso de que la base de A sea mayor que B (por ejemplo dieciséis es
+mayor que diez) necesariamente necesitamos un paso previo antes de realizar el cálculo: convertir
+todos los símbolos no válidos de la representación A a la representación B (en el ejemplo <span 
+class="cmmi-10x-x-109">A </span>= 10 y
+<span 
+class="cmmi-10x-x-109">F </span>= 15).
+<!--l. 106--><p class="indent" >   A modo de ejemplo de la regla anterior, veamos el caso de convertir un número decimal a representación binaria,
+por ejemplo el número 123. Si aplicamos directamente la ecuación (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) tenemos:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-4005r9"></a>
+   <center class="math-display" >
+<img 
+src="apunte019x.png" alt="1&#x00D7; 102 + 2&#x00D7;  101 + 3 &#x00D7; 100 = 1 &#x00D7; 100 + 2&#x00D7; 10 + 3&#x00D7; 1
+" class="math-display" ></center></td><td class="equation-label">(9)</td></tr></table>
+<!--l. 111--><p class="nopar" >
+<!--l. 113--><p class="indent" >   El primer problema que se nos presenta es el explicado en la regla anterior: los símbolos 2 y 3 no existen en la
+representación binaria, por lo cual debemos en primer lugar reemplazarlos por su representación: 2 = (10)<sub><span 
+class="cmr-8">2</span></sub> y
+3 = (11)<sub><span 
+class="cmr-8">2</span></sub> :
+   <table 
+class="equation"><tr><td><a 
+ id="x1-4006r10"></a>
+   <center class="math-display" >
+<img 
+src="apunte0110x.png" alt="(1)2 &#x00D7; 100 + (10)2 &#x00D7; 10+ (11)2 &#x00D7; 1
+" class="math-display" ></center></td><td class="equation-label">(10)</td></tr></table>
+<!--l. 117--><p class="nopar" >
+<!--l. 119--><p class="indent" >   Ahora tenemos un segundo problema: los números 100 y 10 están representados en decimal, por tanto debemos
+también reemplazarlos por su valor en esta representación: 100 = (1100100)<sub><span 
+class="cmr-8">2</span></sub> y 10 = (1010)<sub><span 
+class="cmr-8">2</span></sub>.
+   <table 
+class="equation"><tr><td><a 
+ id="x1-4007r11"></a>
+                                                                                                  
+                                                                                                  
+   <center class="math-display" >
+<img 
+src="apunte0111x.png" alt="(1)2 &#x00D7; (1100100 )2 + (10)2 &#x00D7; (1010)2 + (11)2 &#x00D7; (1)2 = (1100100)2 + (10100)2 + (11 )2 = (1111011)2
+" class="math-display" ></center></td><td class="equation-label">(11)</td></tr></table>
+<!--l. 123--><p class="nopar" >
+<!--l. 125--><p class="indent" >   Este ejemplo nos muestra una clara desventaja de ocupar la expresión (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) para transformar desde
+representación decimal a una de menor base: necesitamos saber a priori la representación de la base y todas las
+potencias de la base (en este caso 100 y 10) en la representación no decimal para realizar el cálculo. Más
+adelante estudiaremos otros mecanismos que permiten realizar esta conversión sin necesidad de este
+conocimiento.<br 
+class="newline" />
+<!--l. 127--><p class="indent" >   <span 
+class="cmbx-10x-x-109">Nota:  </span>En general, cuando todos los números que se están usando sean de la misma representación, se puede
+obviar la notación (<span 
+class="cmmi-10x-x-109">num</span>)<sub><span 
+class="cmmi-8">base</span></sub>. Para el caso de números binarios y hexadecimales, existen otras notaciones habituales
+usadas cuando se quiere diferenciar la representación:
+     <ul class="itemize1">
+     <li class="itemize">Un número binario (<span 
+class="cmmi-10x-x-109">num</span>)<sub><span 
+class="cmr-8">2</span></sub> se suele escribir también como <span 
+class="cmmi-10x-x-109">numb</span>, por ejemplo (1011)<sub><span 
+class="cmr-8">2</span></sub> se puede escribir
+     como 1011<span 
+class="cmmi-10x-x-109">b</span>
+     </li>
+     <li class="itemize">Un número hexadecimal (<span 
+class="cmmi-10x-x-109">num</span>)<sub><span 
+class="cmr-8">16</span></sub> se suele escribir también como <span 
+class="cmmi-10x-x-109">numh</span>, por ejemplo (<span 
+class="cmmi-10x-x-109">A</span>1)<sub><span 
+class="cmr-8">16</span></sub> se puede
+     escribir como <span 
+class="cmmi-10x-x-109">A</span>1<span 
+class="cmmi-10x-x-109">h</span>
+     </li>
+     <li class="itemize">Un número hexadecimal (<span 
+class="cmmi-10x-x-109">num</span>)<sub><span 
+class="cmr-8">16</span></sub> se suele escribir también como 0<span 
+class="cmmi-10x-x-109">xnum</span>, por ejemplo (<span 
+class="cmmi-10x-x-109">A</span>1)<sub><span 
+class="cmr-8">16</span></sub> se puede
+     escribir como 0<span 
+class="cmmi-10x-x-109">xA</span>1</li></ul>
+<!--l. 134--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.3.   </span> <a 
+ id="x1-50002.3"></a>Aritmética en distintas representaciones</h4>
+<!--l. 136--><p class="noindent" >La gran ventaja de las representaciones posicionales es que los procedimientos aritméticos como suma y
+multiplicación son equivalentes para toda representación. Estudiaremos primero la aritmética de la representación
+decimal, a la cual estamos habituados y a partir de ésta generalizaremos las reglas de la suma que son válidas para
+cualquiera de estas representaciones.
+<!--l. 138--><p class="indent" >   Como ejemplo realizaremos paso a paso la suma entre los números 112 y 93. El algoritmo tradicional para
+realizar la suma es el siguiente:
+<!--l. 140--><p class="indent" >
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-5002x1">Escribir uno de los números debajo del otro, alineados por la derecha:<br 
+class="newline" />
+                                                                                                  
+                                                                                                  
+     <div class="center" 
+>
+<!--l. 142--><p class="noindent" >
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-1-1-1"  
+class="td11">132</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-1-2-1"  
+class="td11"> 93</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-1-3-1"  
+class="td11">   </td>
+</tr></table>
+</div></div>
+     </li>
+     <li 
+  class="enumerate" id="x1-5004x2">Sumar los dos dígitos de más a la derecha. Si la suma es menor que diez (5 en este caso), continuar con el
+     siguiente dígito hacia la izquierda:<br 
+class="newline" />
+     <div class="center" 
+>
+<!--l. 152--><p class="noindent" >
+<div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-2-1-1"  
+class="td11">132</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-2-2-1"  
+class="td11"> 93</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-2-3-1"  
+class="td11">   5</td>
+</tr></table>
+</div></div>
+     </li>
+     <li 
+  class="enumerate" id="x1-5006x3">Sumar los siguientes dos dígitos. Si la suma es menor que diez, continuar con el siguiente dígito hacia la
+     izquierda. Si la suma es mayor o igual que diez (12 en este caso), restarle 10 a la suma y colocar como
+     resultado la resta (2 en este caso). Convertir los 10 en 1 y agregarlo como sumando a los siguientes dígitos
+     (este valor se denomina <span 
+class="cmbx-10x-x-109">acarreo </span>o <span 
+class="cmbx-10x-x-109">carry </span>en inglés) :<br 
+class="newline" />
+     <div class="center" 
+>
+<!--l. 162--><p class="noindent" >
+<div class="tabular"> <table id="TBL-3" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-3-1g"><col 
+id="TBL-3-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-3-1-1"  
+class="td11"><span 
+class="cmr-10">1</span>&#x00A0;   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-3-2-1"  
+class="td11"> 132</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-3-3-1"  
+class="td11">   93</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-3-4-1"  
+class="td11">   25</td>
+</tr></table></div></div>
+     </li>
+     <li 
+  class="enumerate" id="x1-5008x4">Sumar los siguientes dos dígitos. En caso de haber acarreo sumarlo también. Revisar los mismos casos que
+     antes :<br 
+class="newline" />
+     <div class="center" 
+>
+<!--l. 173--><p class="noindent" >
+<div class="tabular"> <table id="TBL-4" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-4-1g"><col 
+id="TBL-4-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-1-1"  
+class="td11"><span 
+class="cmr-10">1</span>&#x00A0;   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-2-1"  
+class="td11"> 132</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-3-1"  
+class="td11">   93</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-4-4-1"  
+class="td11">  225</td>
+</tr></table></div></div>
+     </li></ol>
+<!--l. 185--><p class="indent" >   El algoritmo general para la suma en representación decimal de dos números <span 
+class="cmmi-10x-x-109">num</span>1 y <span 
+class="cmmi-10x-x-109">num</span>2 sería:
+<!--l. 187--><p class="indent" >
+                                                                                                  
+                                                                                                  
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-5010x1">Comenzar desde la derecha en la posición 0 de ambos números.
+     </li>
+     <li 
+  class="enumerate" id="x1-5012x2">Mientras no lleguemos al fin de ambos números por la izquierda ni queden acarreos sin sumar:
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-5014x1">Sumar los dígitos de la posición actual más algún posible acarreo previo.
+          </li>
+          <li 
+  class="enumerate" id="x1-5016x2">Si la suma es menor que 10, colocar en la posición actual del resultado el valor de la suma.
+          </li>
+          <li 
+  class="enumerate" id="x1-5018x3">Si la suma es mayor o igual que 10, restarle 10 a la suma, colocar lo que resulta de la resta en la
+          posición actual del resultado y agregar un acarreo para la siguiente posición.
+          </li></ol>
+     </li></ol>
+<!--l. 198--><p class="indent" >   En el algoritmo anterior usamos solamente dos veces el número 10: al comparar que la suma de los dígitos sea
+mayor que 10 y luego en caso de que se cumpla esto, al restarle 10 al valor obtenido. En base a esto podemos
+generalizar este algoritmo para sumar cualquier par de números en representación posicional de base <span 
+class="cmmi-10x-x-109">b</span>
+reemplazando el número 10 por la variable <span 
+class="cmmi-10x-x-109">b</span>:
+<!--l. 200--><p class="indent" >
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-5020x1">Comenzar desde la derecha en la posición 0 de ambos números.
+     </li>
+     <li 
+  class="enumerate" id="x1-5022x2">Mientras no lleguemos al fin de ambos números por la izquierda ni queden acarreos sin sumar:
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-5024x1">Sumar los dígitos de la posición actual más algún posible acarreo previo.
+          </li>
+          <li 
+  class="enumerate" id="x1-5026x2">Si la suma es menor que <span 
+class="cmmi-10x-x-109">b</span>, colocar en la posición actual del resultado el valor de la suma.
+          </li>
+          <li 
+  class="enumerate" id="x1-5028x3">Si la suma es mayor o igual que <span 
+class="cmmi-10x-x-109">b</span>, restarle <span 
+class="cmmi-10x-x-109">b </span>a la suma, colocar lo que resulta de la resta en la
+          posición actual del resultado y agregar un acarreo para la siguiente posición.
+          </li></ol>
+     </li></ol>
+<!--l. 211--><p class="indent" >   Usemos este algoritmo con un ejemplo de dos números binarios (110)<sub><span 
+class="cmr-8">2</span></sub> y (11)<sub><span 
+class="cmr-8">2</span></sub>, en el cual la base
+<span 
+class="cmmi-10x-x-109">b </span>= 2:
+<!--l. 213--><p class="indent" >
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-5030x1">Comenzar desde la derecha en la posición 0 de ambos números:<br 
+class="newline" />
+     <div class="center" 
+>
+<!--l. 215--><p class="noindent" >
+<div class="tabular"> <table id="TBL-5" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-5-1g"><col 
+id="TBL-5-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-5-1-1"  
+class="td11">110</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-5-2-1"  
+class="td11"> 11</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-5-3-1"  
+class="td11">   </td>
+</tr></table>
+</div></div>
+                                                                                                  
+                                                                                                  
+     </li>
+     <li 
+  class="enumerate" id="x1-5032x2">Mientras no lleguemos al fin de ambos números por la izquierda ni queden acarreos sin sumar
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-5034x1">Sumar los dígitos de la posición actual más algún posible acarreo previo. Si la suma <span 
+class="cmbx-10x-x-109">(en</span>
+          <span 
+class="cmbx-10x-x-109">este caso 1) </span>es menor que 2, colocar en la posición actual del resultado el valor de la
+          suma.
+          <div class="center" 
+>
+<!--l. 226--><p class="noindent" >
+<div class="tabular"> <table id="TBL-6" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-6-1g"><col 
+id="TBL-6-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-6-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-6-1-1"  
+class="td11">110</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-6-2-1"  
+class="td11"> 11</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-6-3-1"  
+class="td11">  <span 
+class="cmbx-10x-x-109">1</span></td></tr></table>
+</div></div>
+          </li>
+          <li 
+  class="enumerate" id="x1-5036x2">Sumar los dígitos de la posición actual más algún posible acarreo previo. Si la suma <span 
+class="cmbx-10x-x-109">(en este</span>
+          <span 
+class="cmbx-10x-x-109">caso 2) </span>es mayor o igual que 2, restarle 2 a la suma, colocar lo que resulta de la resta en
+          la posición actual del resultado <span 
+class="cmbx-10x-x-109">(en este caso 0) </span>y agregar un acarreo para la siguiente
+          posición.
+          <div class="center" 
+>
+<!--l. 236--><p class="noindent" >
+<div class="tabular"> <table id="TBL-7" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-7-1g"><col 
+id="TBL-7-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-7-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-7-1-1"  
+class="td11"><span 
+class="cmbx-10">1</span>&#x00A0;   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-7-2-1"  
+class="td11"> 110</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-7-3-1"  
+class="td11">   11</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-7-4-1"  
+class="td11">   <span 
+class="cmbx-10x-x-109">0</span>1</td></tr></table>
+</div></div>
+          </li>
+          <li 
+  class="enumerate" id="x1-5038x3">Sumar los dígitos de la posición actual más algún posible acarreo previo. Si la suma <span 
+class="cmbx-10x-x-109">(en este</span>
+          <span 
+class="cmbx-10x-x-109">caso 2) </span>es mayor o igual que 2, restarle 2 a la suma, colocar lo que resulta de la resta en
+          la posición actual del resultado <span 
+class="cmbx-10x-x-109">(en este caso 0) </span>y agregar un acarreo para la siguiente
+          posición.
+          <div class="center" 
+>
+<!--l. 246--><p class="noindent" >
+<div class="tabular"> <table id="TBL-8" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-8-1g"><col 
+id="TBL-8-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-8-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-8-1-1"  
+class="td11"><span 
+class="cmbx-10">1</span><span 
+class="cmr-10">1</span>&#x00A0;   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-8-2-1"  
+class="td11"> 110</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-8-3-1"  
+class="td11">    11</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-8-4-1"  
+class="td11">  <span 
+class="cmbx-10x-x-109">0</span>01</td></tr></table>
+</div></div>
+          </li>
+          <li 
+  class="enumerate" id="x1-5040x4">Sumar los dígitos de la posición actual más algún posible acarreo previo. Si la suma <span 
+class="cmbx-10x-x-109">(en</span>
+          <span 
+class="cmbx-10x-x-109">este caso 1) </span>es menor que 2, colocar en la posición actual del resultado el valor de la
+          suma.
+          <div class="center" 
+>
+<!--l. 257--><p class="noindent" >
+<div class="tabular"> <table id="TBL-9" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-9-1g"><col 
+id="TBL-9-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-9-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-9-1-1"  
+class="td11"><span 
+class="cmr-10">11</span>&#x00A0;   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-9-2-1"  
+class="td11"> 110</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-9-3-1"  
+class="td11">   11</td>
+</tr><tr 
+class="hline"><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-9-4-1"  
+class="td11"> <span 
+class="cmbx-10x-x-109">1</span>001</td></tr></table>
+</div></div>
+          </li></ol>
+     </li></ol>
+                                                                                                  
+                                                                                                  
+<!--l. 269--><p class="indent" >   <span 
+class="cmbx-10x-x-109">Ejercicio: </span>Multiplique los números binarios (101)<sub><span 
+class="cmr-8">2</span></sub> y (10)<sub><span 
+class="cmr-8">2</span></sub>. Para hacerlo, primero analice el algoritmo de
+multiplicación de números decimales y luego aplíquelo a la multiplicación de números binarios.
+<!--l. 271--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.4.   </span> <a 
+ id="x1-60002.4"></a>Algoritmos de conversión entre representaciones</h4>
+<!--l. 272--><p class="noindent" >Como se analizó previamente la ecuación (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) representa un método general de conversión entre bases. Esta
+ecuación funciona bien para transformar un número en representación no decimal a la decimal (en la
+cual podemos realizar operaciones aritméticas rápidamente), sin embargo, como también se vio, para
+el caso inverso no era tan útil, y por tanto es necesario explorar otros algoritmos. Adicionalmente,
+para el caso de los números binarios existen otros algoritmos o heurísticas que pueden resultar más
+simples.
+<!--l. 274--><p class="indent" >   En esta sección se revisarán primero algoritmos de conversión binario-decimal y decimal-binario, y luego
+algoritmos de conversión entre representaciones hexadecimal, octal y binaria.
+<!--l. 276--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.4.1.   </span> <a 
+ id="x1-70002.4.1"></a>Algoritmos de conversión binario-decimal</h5>
+<!--l. 278--><p class="noindent" >La ecuación (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) representa un método útil para convertir entre números binarios y decimales, sin embargo, requiere
+que seamos capaces de recordar rápidamente las potencias del número dos, lo cual puede ser fácil para potencias
+bajas, pero para potencias altas puede volverse complejo y por tanto puede ser necesario tener que calcular estas
+potencias previo a la conversión. A continuación se presentan dos algoritmos que permiten convertir un número
+binario a decimal sin conocer las potencias de dos.
+<!--l. 280--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-80002.4.1"></a>Algoritmo de acarreo inverso</h5>
+<!--l. 282--><p class="noindent" >La idea de este algoritmo es comenzar desde la izquierda e ir invirtiendo el proceso de acarreo, es decir por cada vez
+que vemos un número 1 lo devolvemos a la derecha como un número 2. Veamos el algoritmo a través de un ejemplo:
+vamos a convertir el número (101101)<sub><span 
+class="cmr-8">2</span></sub> a representación decimal.
+<!--l. 284--><p class="indent" >
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-8002x1">Tomamos el primer 1, <span 
+class="cmbx-10x-x-109">1</span>01101, lo convertimos en 2 y lo sumamos al dígito de la derecha: 0<span 
+class="cmbx-10x-x-109">2</span>1101
+     </li>
+     <li 
+  class="enumerate" id="x1-8004x2">Repetimos el paso para el siguiente dígito. Esta vez tenemos un 2 lo que equivale a dos 1 y por tanto
+     debemos sumar dos veces 2 = 4 al siguiente dígito de la derecha: 00<span 
+class="cmbx-10x-x-109">5</span>101
+     </li>
+     <li 
+  class="enumerate" id="x1-8006x3">Repetimos el paso para el siguiente dígito. Esta vez tenemos un 5 lo que equivale a cinco 1 y por tanto
+     debemos sumar cinco veces 2 = 10 al siguiente dígito de la derecha: 000<span 
+class="cmbx-10x-x-109">11</span>01
+     </li>
+     <li 
+  class="enumerate" id="x1-8008x4">Repetimos y ahora sumamos 22 al siguiente dígito de la derecha: 0000<span 
+class="cmbx-10x-x-109">22</span>1
+     </li>
+     <li 
+  class="enumerate" id="x1-8010x5">Repetimos y ahora sumamos 44 al siguiente dígito de la derecha: 00000<span 
+class="cmbx-10x-x-109">45</span>. Llegamos al fin del número,
+     y por tanto tenemos que el resultado de la conversión es 45.</li></ol>
+                                                                                                  
+                                                                                                  
+<!--l. 292--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-90002.4.1"></a>Algoritmo de multiplicar e incrementar</h5>
+<!--l. 294--><p class="noindent" >Este algoritmo es equivalente al anterior, pero presenta reglas más simples y no requiere pensar el proceso de
+acarreo inverso. Las reglas de este algoritmo son:
+     <ul class="itemize1">
+     <li class="itemize">Tomar el 1 de más a la izquierda del número binario, e ir avanzando de izquierda a derecha. Comenzar
+     con el resultado en 1.
+     </li>
+     <li class="itemize">Por cada número 0 que se encuentra, multiplicar el resultado actual por 2.
+     </li>
+     <li class="itemize">Por cada número 1 que se encuentra, multiplicar el resultado actual por 2 y sumar 1.</li></ul>
+<!--l. 301--><p class="indent" >   Veamos el algoritmo a través de un ejemplo: vamos a convertir el número (101101)<sub><span 
+class="cmr-8">2</span></sub> a representación
+decimal.
+<!--l. 303--><p class="indent" >
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-9002x1">Tomamos el 1 de más a la izquierda, <span 
+class="cmbx-10x-x-109">1</span>01101. Comenzamos con el resultado = 1.
+     </li>
+     <li 
+  class="enumerate" id="x1-9004x2">Tomamos el 0 que sigue, 1<span 
+class="cmbx-10x-x-109">0</span>1101: multiplicamos por 2 el resultado: resultado = 2
+     </li>
+     <li 
+  class="enumerate" id="x1-9006x3">Tomamos el 1 que sigue, 10<span 
+class="cmbx-10x-x-109">1</span>101: multiplicamos por 2 el resultado y sumamos 1: resultado = 5
+     </li>
+     <li 
+  class="enumerate" id="x1-9008x4">Tomamos el 1 que sigue, 101<span 
+class="cmbx-10x-x-109">1</span>01: multiplicamos por 2 el resultado y sumamos 1: resultado = 11
+     </li>
+     <li 
+  class="enumerate" id="x1-9010x5">Tomamos el 0 que sigue, 1011<span 
+class="cmbx-10x-x-109">0</span>1: multiplicamos por 2 el resultado: resultado = 22
+     </li>
+     <li 
+  class="enumerate" id="x1-9012x6">Tomamos el 1 que sigue, 10110<span 
+class="cmbx-10x-x-109">1</span>: multiplicamos por 2 el resultado y sumamos 1: resultado = 45</li></ol>
+<!--l. 313--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.4.2.   </span> <a 
+ id="x1-100002.4.2"></a>Algoritmos de conversión decimal-binario</h5>
+<!--l. 315--><p class="noindent" >Como mencionamos anteriormente, la ecuación (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) no es un método práctico para realizar esta conversión. A
+continuación presentaremos dos algoritmos para realizar la conversión:
+<!--l. 317--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-110002.4.2"></a>Algoritmo de acarreos sucesivos</h5>
+<!--l. 319--><p class="noindent" >La idea de este algoritmo es comenzar con todos los números acumulados a la derecha (se puede pensar como si se
+tuvieran fichas acumuladas como una torre) e ir acarreando grupos de a dos hacia la izquierda, convirtiéndolos en 1
+a medida que se acarrean.
+<!--l. 321--><p class="indent" >   Veamos el algoritmo a través de un ejemplo: vamos a convertir el número 45 a representación
+binaria.
+<!--l. 323--><p class="indent" >
+                                                                                                  
+                                                                                                  
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x1-11002x1">Comenzamos con 45 «fichas»
+     a la derecha.
+     </li>
+     <li 
+  class="enumerate" id="x1-11004x2">Acarreamos todos los pares de fichas que haya a la izquierda, en este caso 22 y por cada par, sumamos un 1 a
+     la izquierda. En la primera posición nos sobra una ficha, lo que representa un número 1. En este momento
+     llevamos el número 22<span 
+class="cmmi-10x-x-109">&#x00A0;</span>   <span 
+class="cmbx-10x-x-109">1</span>
+     </li>
+     <li 
+  class="enumerate" id="x1-11006x3">Acarreamos todos los pares de fichas que haya en la próxima posición, en este caso 11 y por cada par,
+     sumamos un 1 a la izquierda. Esta vez no nos sobra una ficha, lo que representa un número 0. En este
+     momento llevamos el número 11<span 
+class="cmmi-10x-x-109">&#x00A0;</span>   <span 
+class="cmbx-10x-x-109">0</span>1
+     </li>
+     <li 
+  class="enumerate" id="x1-11008x4">Acarreamos todos los pares de fichas que haya en la próxima posición, en este caso 5 y por cada par, sumamos
+     un 1 a la izquierda. Esta vez sobra una ficha, lo que representa un número 1. En este momento llevamos el
+     número 5<span 
+class="cmmi-10x-x-109">&#x00A0;</span>   <span 
+class="cmbx-10x-x-109">1</span>01
+     </li>
+     <li 
+  class="enumerate" id="x1-11010x5">Acarreamos todos los pares de fichas que haya en la próxima posición, en este caso 2 y por cada par, sumamos
+     un 1 a la izquierda. Esta vez sobra una ficha, lo que representa un número 1. En este momento llevamos el
+     número 2<span 
+class="cmmi-10x-x-109">&#x00A0;</span>   <span 
+class="cmbx-10x-x-109">1</span>101
+     </li>
+     <li 
+  class="enumerate" id="x1-11012x6">Acarreamos todos los pares de fichas que haya en la próxima posición, en este caso 1 y por cada par, sumamos
+     un 1 a la izquierda. Esta vez no nos sobra una ficha, lo que representa un número 0. En este momento
+     llevamos el número 1<span 
+class="cmmi-10x-x-109">&#x00A0;</span>   <span 
+class="cmbx-10x-x-109">0</span>1101.
+     </li>
+     <li 
+  class="enumerate" id="x1-11014x7">Como el número de más a la izquierda es un 1 no tenemos nada más que acarrear y el resultado es
+     101101
+     <!--l. 332--><p class="noindent" >
+     <h5 class="likesubsubsectionHead"><a 
+ id="x1-120007"></a>Algoritmo de divisiones sucesivas</h5>
+     <!--l. 333--><p class="noindent" >Este algoritmo es equivalente al anterior, pero permite mecanizar de mejor forma la conversión, sin tener que
+     pensar en el acarreo. Consiste en los siguientes pasos:
+          <ul class="itemize1">
+          <li class="itemize">Dividir el número actual por 2: si la división es exacta (es decir, no hay resto), agregar un 0 a la
+          izquierda del resultado. Actualizar el número actual como el resultado de la división.
+          </li>
+          <li class="itemize">Dividir el número actual por 2: si la división no es exacta (es decir, hay resto), agregar un 1 a la
+          izquierda del resultado. Actualizar el número actual como el resultado de la división.
+          </li>
+          <li class="itemize">Detenerse si es que el número actual es 0.</li></ul>
+                                                                                                  
+                                                                                                  
+     <!--l. 341--><p class="noindent" >Veamos el algoritmo a través de un ejemplo: vamos a convertir el número 45 a representación
+     binaria.
+     <!--l. 343--><p class="noindent" >
+          <ol  class="enumerate2" >
+          <li 
+  class="enumerate" id="x1-12002x1">Dividimos el número actual 45 en dos = 22, resto = 1. Como hay resto, agregamos un 1 a la
+          izquierda del resultado=<span 
+class="cmbx-10x-x-109">1</span>.
+          </li>
+          <li 
+  class="enumerate" id="x1-12004x2">Dividimos el número actual 22 en dos = 11, resto = 0. Como no hay resto, agregamos un 0 a la
+          izquierda del resultado=<span 
+class="cmbx-10x-x-109">0</span>1.
+          </li>
+          <li 
+  class="enumerate" id="x1-12006x3">Dividimos el número actual 11 en dos = 5, resto = 1. Como hay resto, agregamos un 1 a la
+          izquierda del resultado=<span 
+class="cmbx-10x-x-109">1</span>01.
+          </li>
+          <li 
+  class="enumerate" id="x1-12008x4">Dividimos el número actual 5 en dos = 2, resto = 1. Como hay resto, agregamos un 1 a la izquierda
+          del resultado=<span 
+class="cmbx-10x-x-109">1</span>101.
+          </li>
+          <li 
+  class="enumerate" id="x1-12010x5">Dividimos el número actual 2 en dos = 1, resto = 0. Como no hay resto, agregamos un 0 a la
+          izquierda del resultado=<span 
+class="cmbx-10x-x-109">0</span>1101.
+          </li>
+          <li 
+  class="enumerate" id="x1-12012x6">Dividimos el número actual 1 en dos = 0, resto = 1. Como hay resto, agregamos un 1 a la izquierda
+          del resultado=<span 
+class="cmbx-10x-x-109">1</span>01101.
+          </li>
+          <li 
+  class="enumerate" id="x1-12014x7">Nos detenemos porque el resultado actual es 0.</li></ol>
+     </li></ol>
+<!--l. 356--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.4.3.   </span> <a 
+ id="x1-130002.4.3"></a>Algoritmos de conversión entre representaciones hexadecimal, octal y binaria</h5>
+<!--l. 358--><p class="noindent" >La conversión entre representaciones binaria-octal y binaria-hexadecimal es mucho más simple que la conversión
+entre binarios y decimales. Esto se debe a la relación de sus bases: ocho y dieciséis son potencias de dos. De esta
+forma, para convertir un número binario a octal, basta ir agrupando de a <span 
+class="cmbx-10x-x-109">tres </span>(8 = 2<sup><span 
+class="cmbx-10x-x-109">3</span></sup>) dígitos binarios e ir
+reemplazando su valor por el número octal correspondiente. A modo de ejemplo, realicemos la conversión del
+número (10110)<sub><span 
+class="cmr-8">2</span></sub> a octal:
+<div class="center" 
+>
+<!--l. 360--><p class="noindent" >
+<div class="tabular"> <table id="TBL-10" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-10-1g"><col 
+id="TBL-10-1"></colgroup><colgroup id="TBL-10-2g"><col 
+id="TBL-10-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-10-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-1"  
+class="td11">binario:</td><td  style="white-space:nowrap; text-align:right;" id="TBL-10-1-2"  
+class="td11">010 110</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-1"  
+class="td11">octal:    </td><td  style="white-space:nowrap; text-align:right;" id="TBL-10-2-2"  
+class="td11">2&#x00A0;    6  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-1"  
+class="td11">       </td></tr></table>
+</div></div>
+<!--l. 367--><p class="indent" >   Se observa además que el método funciona en ambas direcciones: para convertir el número octal (26)<sub><span 
+class="cmr-8">8</span></sub> en binario
+basta tomar cada uno de sus dígitos, representarlo como número binario y luego ubicarlos sucesivamente:
+(2)<sub><span 
+class="cmr-8">8</span></sub> = (010)<sub><span 
+class="cmr-8">2</span></sub> y (6)<sub><span 
+class="cmr-8">8</span></sub> = (110)<sub><span 
+class="cmr-8">2</span></sub> por lo tanto (26)<sub><span 
+class="cmr-8">8</span></sub> = (10110)<sub><span 
+class="cmr-8">2</span></sub>
+                                                                                                  
+                                                                                                  
+<!--l. 369--><p class="indent" >   De manera equivalente, la conversión binaria-hexadecimal consiste en ir agrupando de a <span 
+class="cmbx-10x-x-109">cuatro </span>(16 = 2<sup><span 
+class="cmbx-10x-x-109">4</span></sup>)
+dígitos binarios e ir reemplazando su valor por el número hexadecimal correspondiente. A modo de ejemplo,
+realicemos la conversión del número (10110)<sub><span 
+class="cmr-8">2</span></sub> a hexadecimal:
+<div class="center" 
+>
+<!--l. 371--><p class="noindent" >
+<div class="tabular"> <table id="TBL-11" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-11-1g"><col 
+id="TBL-11-1"></colgroup><colgroup id="TBL-11-2g"><col 
+id="TBL-11-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-11-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-1"  
+class="td11">binario:      </td><td  style="white-space:nowrap; text-align:right;" id="TBL-11-1-2"  
+class="td11">0001 0110</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-1"  
+class="td11">hexadecimal:</td><td  style="white-space:nowrap; text-align:right;" id="TBL-11-2-2"  
+class="td11"> 1&#x00A0;    6  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-1"  
+class="td11">           </td></tr></table>
+</div></div>
+<!--l. 379--><p class="indent" >   Al igual que con los octales, la conversión es bidireccional: para convertir el número hexadecimal (16)<sub><span 
+class="cmr-8">16</span></sub> en
+binario basta tomar cada uno de sus dígitos, representarlo como número binario y luego ubicarlos sucesivamente:
+(1)<sub><span 
+class="cmr-8">16</span></sub> = (0001)<sub><span 
+class="cmr-8">2</span></sub> y (6)<sub><span 
+class="cmr-8">16</span></sub> = (0110)<sub><span 
+class="cmr-8">2</span></sub> por lo tanto (16)<sub><span 
+class="cmr-8">16</span></sub> = (10110)<sub><span 
+class="cmr-8">2</span></sub>.
+<!--l. 381--><p class="indent" >   Debido a esta fácil conversión entre representaciones, es habitual que se ocupen tanto la representación octal
+como la hexadecimal para referirse a números binarios, ya que requieren menos símbolos.
+<!--l. 383--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.5.   </span> <a 
+ id="x1-140002.5"></a>Representación de números negativos</h4>
+<!--l. 385--><p class="noindent" >Hasta ahora hemos visto representaciones sólo de números enteros y positivos. La primera pregunta que surge es
+¿cómo representamos números negativos? Nuestra experiencia nos dice que la respuesta es simple: agregamos un
+«-»
+a la izquierda del número, por ejemplo <span 
+class="cmsy-10x-x-109">-</span>12 sería un número decimal negativo; (<span 
+class="cmsy-10x-x-109">-</span>1100)<sub><span 
+class="cmr-8">2</span></sub> sería un número binario
+negativo.
+<!--l. 387--><p class="indent" >   El problema de esto es que necesitamos agregar un nuevo símbolo a nuestro sistema numérico para poder
+representar números negativos. En el caso de los números binarios, en vez de tener sólo dos símbolos, necesitaríamos
+tener uno adicional sólo para indicar que un número es negativo. Nos gustaría buscar un mecanismo que
+aproveche los símbolos que ya tenemos en nuestra representación, y así evitar tener que agregar un símbolo
+nuevo.
+<!--l. 389--><p class="indent" >   A continuación se revisarán distintos métodos para representar números negativos binarios ocupando sólo los
+símbolos 0 y 1.
+<!--l. 391--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-150002.5"></a>Dígito de signo</h5>
+<!--l. 392--><p class="noindent" >Un primer método que se puede ocupar es agregar un dígito extra a la izquierda del número que en caso de ser 0
+indica que el número es positivo, y en caso de ser 1, que el número es negativo. Por ejemplo si tenemos el número
+10011 y queremos representar el número <span 
+class="cmsy-10x-x-109">-</span>10011, reemplazamos el «-»
+por un 1, obteniendo: <span 
+class="cmbx-10x-x-109">1</span>10011.<br 
+class="newline" />
+<!--l. 394--><p class="indent" >   <span 
+class="cmbx-10x-x-109">Importante: </span>al ocupar este tipo de representaciones ya no basta sólo con ver la secuencia de símbolos para
+saber su valor, debemos saber además que <span 
+class="cmbx-10x-x-109">tipo </span>de información se está guardando, por ejemplo en este caso un
+número entero, tal que el primer dígito indica el signo.<br 
+class="newline" />
+<!--l. 396--><p class="indent" >   El problema de esta representación es que no nos sirve para realizar operaciones aritméticas. Para que una
+representación de un número negativo sirva debe cumplir la ecuación: <span 
+class="cmmi-10x-x-109">A </span>+ (<span 
+class="cmmi-10x-x-109">negativo</span>(<span 
+class="cmmi-10x-x-109">A</span>)) = 0 es decir, debe ser un
+inverso aditivo válido.
+                                                                                                  
+                                                                                                  
+<!--l. 398--><p class="indent" >   En nuestro caso, si al número positivo <span 
+class="cmbx-10x-x-109">0</span>10011 le sumamos el número negativo <span 
+class="cmbx-10x-x-109">1</span>10011 obtenemos 1000110.
+Debemos entonces buscar otras representaciones para poder realizar operaciones aritméticas con números
+negativos.
+<!--l. 400--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-160002.5"></a>Complemento a 1</h5>
+<!--l. 402--><p class="noindent" >Una posible mejora corresponde la representación denominada «complemento a 1»
+. Esta consiste en agregar un dígito de signo, al igual que en el caso anterior, y luego, para obtener el negativo de un
+número, reemplazar todos los 0s por 1s y los 1s por 0s. Siguiendo nuestro ejemplo con el número 10011, primero se
+le agrega un cero a la izquierda: <span 
+class="cmbx-10x-x-109">0</span>10011, lo que se interpreta como «agregar el bit de signo al número
+positivo»
+. Luego se hace la inversión para todos los dígitos <span 
+class="cmbx-10x-x-109">1</span>01100, lo que nos deja un número «negativo»
+dado que su bit de signo es 1.
+<!--l. 404--><p class="indent" >   Ahora si realizamos la suma entre <span 
+class="cmbx-10x-x-109">0</span>10011 y <span 
+class="cmbx-10x-x-109">1</span>01100 obtenemos <span 
+class="cmbx-10x-x-109">1</span>11111. Si hacemos lo mismo con el
+número 101 por ejemplo, obtendremos que el número negativo sería <span 
+class="cmbx-10x-x-109">1</span>010 y si los sumamos, obtenemos
+<span 
+class="cmbx-10x-x-109">1</span>111.
+<!--l. 406--><p class="indent" >   Podemos observar que aparece un patrón común al ocupar complemento a 1: la suma entre un número y su
+inverso aditivo resultará en una secuencia de números uno. Esto nos indica que estamos por buen camino, y nos
+falta sólo un detalle para llegar a una representación más adecuada.
+<!--l. 408--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-170002.5"></a>Complemento a 2</h5>
+<!--l. 410--><p class="noindent" >La representación que soluciona el problema del complemento a 1 se denomina «complemento a 2»
+. Consiste en ejecutar los mismos pasos que en complemento a 1, y adicionalmente sumarle 1 al número obtenido.
+Veamos paso a paso con un ejemplo, el número 10011:
+     <ul class="itemize1">
+     <li class="itemize">El primer paso consiste en agregar el cero a la izquierda: <span 
+class="cmbx-10x-x-109">0</span>10011
+     </li>
+     <li class="itemize">Luego se realiza el reemplazo de 0s y 1s: <span 
+class="cmbx-10x-x-109">1</span>01100
+     </li>
+     <li class="itemize">Por último, le sumamos un 1 al número: <span 
+class="cmbx-10x-x-109">1</span>01101</li></ul>
+<!--l. 418--><p class="indent" >   Ahora probaremos si efectivamente esta representación nos entrega un inverso aditivo válido. Si sumamos
+<span 
+class="cmbx-10x-x-109">0</span>10011 con <span 
+class="cmbx-10x-x-109">1</span>01101 obtenemos: <span 
+class="cmbx-10x-x-109">1</span>000000, lo que podemos interpretar como «0»
+, ya que el 1 de más a la izquierda lo podemos interpretar como el signo, y sabemos que 0 = <span 
+class="cmsy-10x-x-109">-</span>0 por lo tanto se
+cumple que la representación en complemento a 2 si funciona como inverso aditivo.
+<!--l. 420--><p class="indent" >   De ahora en adelante, cuando hablemos de un número binario negativo, asumiremos que está representado en
+complemento a 2, a menos que se diga lo contrario.
+                                                                                                  
+                                                                                                  
+<!--l. 424--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">3.   </span> <a 
+ id="x1-180003"></a>Representación de números reales</h3>
+<!--l. 426--><p class="noindent" >Los números enteros representan sólo un porcentaje menor de todos los posibles números que se pueden representar,
+por lo que es necesario estudiar como representar números fraccionales y reales en un computador. Sin embargo, la
+representación de números fraccionales presenta una serie de complicaciones y limitaciones que debemos entender
+para poder ocuparla correctamente y evitar errores.
+<!--l. 428--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.1.   </span> <a 
+ id="x1-190003.1"></a>Fracciones decimales y binarias</h4>
+<!--l. 430--><p class="noindent" >Un número entero en representación decimal puede ser representado en su forma posicional como la suma de
+sus dígitos ponderado por potencias de la base 10. Por ejemplo el número 112 puede representarse
+como:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-19001r12"></a>
+   <center class="math-display" >
+<img 
+src="apunte0112x.png" alt="      2        1        0
+1 &#x00D7; 10 + 1 &#x00D7; 10 +  2&#x00D7; 10  = 112
+" class="math-display" ></center></td><td class="equation-label">(12)</td></tr></table>
+<!--l. 434--><p class="nopar" >
+<!--l. 436--><p class="indent" >   De manera similar, un número en representación binaria puede ser también representado en su forma posicional
+como la suma de sus dígitos ponderado por potencias de la base, en este caso 2. Por ejemplo el número (1100)<sub><span 
+class="cmr-8">2</span></sub>
+puede representarse como:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-19002r13"></a>
+   <center class="math-display" >
+<img 
+src="apunte0113x.png" alt="1 &#x00D7; 23 + 1 &#x00D7; 22 + 0 &#x00D7; 21 + 0 &#x00D7; 20 = 8+ 4 + 0+ 0 = 12
+" class="math-display" ></center></td><td class="equation-label">(13)</td></tr></table>
+<!--l. 440--><p class="nopar" >
+                                                                                                  
+                                                                                                  
+<!--l. 442--><p class="indent" >   La representación posicional puede ser extendida para números fraccionarios, ocupando potencias negativas de
+la base al ponderar. Por ejemplo el número en representación decimal 112<span 
+class="cmmi-10x-x-109">,</span>234 puede representarse
+como:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-19003r14"></a>
+   <center class="math-display" >
+<img 
+src="apunte0114x.png" alt="1&#x00D7; 102 + 1&#x00D7; 101 + 2&#x00D7; 100 + 2&#x00D7; 10 -1 + 3 &#x00D7; 10-2 + 4&#x00D7; 10-3 = 100 + 10+ 2 + 0,2 + 0,03+ 0,004 = 112,234
+" class="math-display" ></center></td><td class="equation-label">(14)</td></tr></table>
+<!--l. 446--><p class="nopar" >
+<!--l. 448--><p class="indent" >   De manera equivalente, podemos extender la representación posicional para números fraccionarios en
+representación binaria. Por ejemplo el número (1100<span 
+class="cmmi-10x-x-109">,</span>011)<sub><span 
+class="cmr-8">2</span></sub> puede representarse como:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-19004r15"></a>
+   <center class="math-display" >
+<img 
+src="apunte0115x.png" alt="1&#x00D7; 23 + 1 &#x00D7; 22 + 0 &#x00D7; 21 + 0 &#x00D7; 20 + 0 &#x00D7; 2-1 + 1&#x00D7; 2-2 + 1&#x00D7; 2- 3 = 8 + 4+ 0 + 0+ 0+ 0,25+ 0,125 = 12,375
+" class="math-display" ></center></td><td class="equation-label">(15)</td></tr></table>
+<!--l. 452--><p class="nopar" >
+<!--l. 454--><p class="indent" >   Al igual que en los números enteros, la ecuación (<a 
+href="#x1-3004r4">4<!--tex4ht:ref: eq:rep --></a>) puede ser interpretada como un algoritmo de conversión
+binario-decimal. Nos gustaría encontrar también un algoritmo de conversión decimal-binario para números
+fraccionales, de manera de por ejemplo obtener la representación del número 0<span 
+class="cmmi-10x-x-109">,</span>1 en binario. Un algoritmo simple es
+el siguiente:
+     <ul class="itemize1">
+     <li class="itemize">Reescribir el número decimal en su forma fraccional: 0<span 
+class="cmmi-10x-x-109">,</span>1 = <img 
+src="apunte0116x.png" alt="110"  class="frac" align="middle">
+     </li>
+     <li class="itemize">Transformar el numerador y denominador a binario: <img 
+src="apunte0117x.png" alt="110"  class="frac" align="middle"> = <img 
+src="apunte0118x.png" alt="((1011)20)2-"  class="frac" align="middle">
+     </li>
+     <li class="itemize">Realizar la división: 1 : 1010 =?</li></ul>
+                                                                                                  
+                                                                                                  
+<!--l. 461--><p class="indent" >   Para poder completar este algoritmo, debemos primero revisar como se realiza la división de números
+binarios.
+<!--l. 463--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-200003.1"></a>División decimal y binaria</h4>
+<!--l. 465--><p class="noindent" >Tal como en el caso de la multiplicación y la suma, la división de números binarios ocupa exactamente el mismo
+procedimiento que su contraparte decimal. Revisaremos primero un ejemplo de una división decimal:
+60 : 25:
+     <ul class="itemize1">
+     <li class="itemize">El primer paso corresponde a ver cuántas veces cabe completamente el divisor (número de la derecha) en el
+     dividendo (número de la izquierda). En este caso cabe 2 veces, ya que 2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>25 = 50, por lo cual lo escribimos
+     como primer dígito del resultado el número 2 y debajo del dividendo el valor efectivo de la multiplicación entre
+     el resultado y el divisor, en este caso 50:
+     <div class="center" 
+>
+<!--l. 469--><p class="noindent" >
+<div class="tabular"> <table id="TBL-12" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-12-1g"><col 
+id="TBL-12-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-12-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-1"  
+class="td11">60 : 25 = 2</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-1"  
+class="td11">50</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-1"  
+class="td11">          </td>
+</tr></table>
+</div></div>
+     </li>
+     <li class="itemize">El siguiente paso consiste en restarle al dividendo el resultado de la multiplicación resultado-divisor. En este
+     caso 60 <span 
+class="cmsy-10x-x-109">- </span>50 = 10:
+     <div class="center" 
+>
+<!--l. 477--><p class="noindent" >
+<div class="tabular"> <table id="TBL-13" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-13-1g"><col 
+id="TBL-13-1"><col 
+id="TBL-13-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-13-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-13-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-1-2"  
+class="td11">60 : 25 = 2</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-13-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-2-2"  
+class="td11">50</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-13-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-3-2"  
+class="td11">10           </td>
+</tr></table>
+</div></div>
+     </li>
+     <li class="itemize">Ahora se repite el primer paso, pero esta vez ocupando como dividendo el resultado de la resta (10). En caso
+     de que el dividendo sea menor que el divisor, agregamos 0s a la derecha del dividendo hasta que este sea
+     mayor o igual que el divisor. Por cada 0 que se agrega en el dividendo, se compensa avanzando en un dígito
+     fraccional del resultado a la derecha. En este caso basta agregar un 0 y como tal quedamos posicionados en el
+     primer dígito fraccional del resultado
+     <div class="center" 
+>
+<!--l. 486--><p class="noindent" >
+<div class="tabular"> <table id="TBL-14" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-14-1g"><col 
+id="TBL-14-1"><col 
+id="TBL-14-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-14-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-14-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-1-2"  
+class="td11">60 : 25 = 2<span 
+class="cmmi-10x-x-109">.</span></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-14-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-2-2"  
+class="td11">50</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-14-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-3-2"  
+class="td11">10<span 
+class="cmbx-10x-x-109">0</span>         </td>
+</tr></table>
+</div></div>
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize">Finalmente dividimos ahora si el dividendo actual por el divisor, en este caso nos da como resultado 4. Como
+     el divisor cabe exactamente en el dividendo, nos detenemos y el resultado final es 2<span 
+class="cmmi-10x-x-109">,</span>4.
+     <div class="center" 
+>
+<!--l. 495--><p class="noindent" >
+<div class="tabular"> <table id="TBL-15" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-15-1g"><col 
+id="TBL-15-1"><col 
+id="TBL-15-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-15-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-1-2"  
+class="td11">60 : 25 = 2<span 
+class="cmmi-10x-x-109">,</span>4</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-2-2"  
+class="td11">50             </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-3-2"  
+class="td11">100</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-4-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-4-2"  
+class="td11">100            </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-5-"><td  style="white-space:nowrap; text-align:right;" id="TBL-15-5-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-5-2"  
+class="td11">0               </td>
+</tr></table></div></div>
+     </li></ul>
+<!--l. 507--><p class="indent" >   La división binaria es equivalente. La única diferencia es que las operaciones aritméticas intermedias deben ser
+realizadas ocupando aritmética binaria. Veremos el proceso con un ejemplo: 3 : 4 = (11)<sub><span 
+class="cmr-8">2</span></sub> : (100)<sub><span 
+class="cmr-8">2</span></sub>
+     <ul class="itemize1">
+     <li class="itemize">El primer paso corresponde a ver cuántas veces cabe completamente el divisor en el dividendo. En este caso no
+     cabe, y por tanto debemos aplicar la técnica de agregar 0s al dividendo y desplazarnos en los dígitos
+     fraccionales
+     <div class="center" 
+>
+<!--l. 511--><p class="noindent" >
+<div class="tabular"> <table id="TBL-16" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-16-1g"><col 
+id="TBL-16-1"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-16-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-16-1-1"  
+class="td11">11<span 
+class="cmbx-10x-x-109">0</span> : 100 = 0<span 
+class="cmmi-10x-x-109">.</span></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-16-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-16-2-1"  
+class="td11"></td>
+</tr></table>
+</div></div>
+     </li>
+     <li class="itemize">Al agregar un 0 el divisor (4) cabe una vez en el dividendo (6), por tanto agregamos un 1 al resultado,
+     multiplicamos el resultado por el divisor y se lo restamos al dividendo, obteniendo en este caso como resto
+     (10)<sub><span 
+class="cmr-8">2</span></sub> = 2.
+     <div class="center" 
+>
+<!--l. 518--><p class="noindent" >
+<div class="tabular"> <table id="TBL-17" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-17-1g"><col 
+id="TBL-17-1"><col 
+id="TBL-17-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-17-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-17-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-17-1-2"  
+class="td11">110 : 100 = 0<span 
+class="cmmi-10x-x-109">,</span>1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-17-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-17-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-17-2-2"  
+class="td11">100               </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-17-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-17-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-17-3-2"  
+class="td11">010               </td>
+</tr></table></div></div>
+     </li>
+     <li class="itemize">Repetimos el paso de agregar un 0 en el resto, que es ahora nuestro nuevo dividendo, quedando este
+     con el valor (100)<sub><span 
+class="cmr-8">2</span></sub> = 4. Vemos que el divisor cabe exactamente 1 vez en el dividendo, y por
+     tanto agregamos un 1 al resultado, y obtenemos resto 0 lo que nos indica que terminamos la
+     división.
+     <div class="center" 
+>
+<!--l. 528--><p class="noindent" >
+                                                                                                  
+                                                                                                  
+<div class="tabular"> <table id="TBL-18" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-18-1g"><col 
+id="TBL-18-1"><col 
+id="TBL-18-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-18-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-18-1-2"  
+class="td11">110 : 100 = 0<span 
+class="cmmi-10x-x-109">,</span>11</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-18-2-2"  
+class="td11">100                </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-18-3-2"  
+class="td11">0100</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-4-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-18-4-2"  
+class="td11">0100               </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-5-"><td  style="white-space:nowrap; text-align:right;" id="TBL-18-5-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-18-5-2"  
+class="td11">0                   </td>
+</tr></table></div></div>
+     </li></ul>
+<!--l. 543--><p class="indent" >   Podemos comprobar que el resultado es correcto convirtiéndolo a decimal:
+   <table 
+class="equation"><tr><td><a 
+ id="x1-20001r16"></a>
+   <center class="math-display" >
+<img 
+src="apunte0119x.png" alt="                                                 3
+0&#x00D7; 20 + 1&#x00D7; 2- 1 + 1&#x00D7; 2-2 = 0+ 0,5+ 0,25 = 0,75 =  --
+                                                 4
+" class="math-display" ></center></td><td class="equation-label">(16)</td></tr></table>
+<!--l. 547--><p class="nopar" >
+<!--l. 549--><p class="indent" >   Ahora que sabemos como dividir en binario, podemos completar el último paso de nuestro algoritmo de
+conversión, que era dividir (1)<sub><span 
+class="cmr-8">2</span></sub> : (1010)<sub><span 
+class="cmr-8">2</span></sub>:
+     <ul class="itemize1">
+     <li class="itemize">Primero agregamos ceros hasta que el divisor quepa. Una vez conseguido esto multiplicamos por 1 el divisor y
+     se lo restamos al dividendo.
+     <div class="center" 
+>
+<!--l. 553--><p class="noindent" >
+<div class="tabular"> <table id="TBL-19" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-19-1g"><col 
+id="TBL-19-1"><col 
+id="TBL-19-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-19-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-19-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-19-1-2"  
+class="td11">1<span 
+class="cmbx-10x-x-109">0000</span> : 1010 = 0<span 
+class="cmmi-10x-x-109">,</span>0001</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-19-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-19-2-2"  
+class="td11">01010                      </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-19-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-19-3-2"  
+class="td11">00110                      </td>
+</tr></table></div></div>
+     </li>
+     <li class="itemize">Repetimos el proceso con el nuevo divisor, agregando un 1 al resultado, restando la multiplicación
+     resultado-divisor en el dividendo, y actualizando el dividendo como el resto.
+     <div class="center" 
+>
+<!--l. 562--><p class="noindent" >
+<div class="tabular"> <table id="TBL-20" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-20-1g"><col 
+id="TBL-20-1"><col 
+id="TBL-20-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-20-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-20-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-20-1-2"  
+class="td11">10000 : 1010 = 0<span 
+class="cmmi-10x-x-109">,</span>00011</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-20-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-20-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-20-2-2"  
+class="td11">01010                      </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-20-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-20-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-20-3-2"  
+class="td11">00110<span 
+class="cmbx-10x-x-109">0</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-20-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-20-4-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-20-4-2"  
+class="td11">001010                     </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-20-5-"><td  style="white-space:nowrap; text-align:right;" id="TBL-20-5-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-20-5-2"  
+class="td11">000010                     </td>
+</tr></table></div></div>
+     </li>
+     <li class="itemize">Agregamos los 0s necesarios nuevamente para continuar el proceso
+                                                                                                  
+                                                                                                  
+     <div class="center" 
+>
+<!--l. 574--><p class="noindent" >
+<div class="tabular"> <table id="TBL-21" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-21-1g"><col 
+id="TBL-21-1"><col 
+id="TBL-21-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-21-1-"><td  style="white-space:nowrap; text-align:right;" id="TBL-21-1-1"  
+class="td11"></td><td  style="white-space:nowrap; text-align:left;" id="TBL-21-1-2"  
+class="td11">10000 : 1010 = 0<span 
+class="cmmi-10x-x-109">,</span>00011001</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-2-"><td  style="white-space:nowrap; text-align:right;" id="TBL-21-2-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-21-2-2"  
+class="td11">01010                           </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-3-"><td  style="white-space:nowrap; text-align:right;" id="TBL-21-3-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-21-3-2"  
+class="td11">00110<span 
+class="cmbx-10x-x-109">0</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-4-"><td  style="white-space:nowrap; text-align:right;" id="TBL-21-4-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-21-4-2"  
+class="td11">001010                         </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-5-"><td  style="white-space:nowrap; text-align:right;" id="TBL-21-5-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-21-5-2"  
+class="td11">000010<span 
+class="cmbx-10x-x-109">000</span>                  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-6-"><td  style="white-space:nowrap; text-align:right;" id="TBL-21-6-1"  
+class="td11">-</td><td  style="white-space:nowrap; text-align:left;" id="TBL-21-6-2"  
+class="td11">000001010                     </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-7-"><td  style="white-space:nowrap; text-align:right;" id="TBL-21-7-1"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-21-7-2"  
+class="td11">000000110                     </td>
+</tr></table></div></div>
+     </li></ul>
+<!--l. 590--><p class="indent" >   Podemos notar que a esta altura estamos repitiendo divisiones que ya hicimos exactamente igual, y por tanto
+sabemos que nunca terminaremos esta división. De hecho si continuamos dividiendo observaremos que el
+resultado es de la forma 0<span 
+class="cmmi-10x-x-109">,</span>00011001100110011<span 
+class="cmmi-10x-x-109">... </span>lo que corresponde a un número infinito semi-periódico:
+0<span 
+class="cmmi-10x-x-109">,</span>0<span class="overline">0011</span>.
+<!--l. 592--><p class="indent" >   Este resultado es completamente contraintuitivo e inesperado, porque básicamente nos dice que <span 
+class="cmbx-10x-x-109">el</span>
+<span 
+class="cmbx-10x-x-109">número </span>0<span 
+class="cmmi-10x-x-109">,</span>1 <span 
+class="cmbx-10x-x-109">tiene una representación infinita en binario</span>. Podemos ir incluso más allá: esto
+demuestra que dado un número fraccional cualquiera, el hecho de que su representación sea finita o infinita
+depende exclusivamente de la base utilizada en la representación. Por ejemplo la fracción <img 
+src="apunte0120x.png" alt="1
+3"  class="frac" align="middle"> que en base
+decimal tiene la representación infinita periódica 0<span 
+class="cmmi-10x-x-109">.</span><span class="overline">3</span>, en base ternaria (3) tendrá la representación finita
+0<span 
+class="cmmi-10x-x-109">,</span>1.
+<!--l. 594--><p class="indent" >   La relevancia de esto es que dado que los computadores tienen un espacio finito para almacenar información, si
+ocupamos números binarios para representar números que en base decimal son finitos (como el 0<span 
+class="cmmi-10x-x-109">,</span>1), pero son
+infinitos en base binaria, obligatoriamente podemos almacenar sólo una aproximación de éste, lo que afectará en los
+resultados de operaciones que realicemos con este tipo de números.
+<!--l. 596--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.2.   </span> <a 
+ id="x1-210003.2"></a>Representaciones en un computador</h4>
+<!--l. 598--><p class="noindent" >Debido a que los computadores tienen espacio de almacenamiento limitado, los números que se almacenen
+en estos se guardan en porciones limitadas también. En general un número se almacenará mediante
+una cantidad fija de dígitos binarios (conocidos como <span 
+class="cmbx-10x-x-109">bits </span>de su nombre en inglés <span 
+class="cmbx-10x-x-109">bi</span>nary digi<span 
+class="cmbx-10x-x-109">ts</span>).
+Esto aplica tanto para números enteros como fraccionales, pero como se vio en la sección anterior es
+de particular importancia para los números fraccionales, que en muchos casos tendrá representación
+infinita, y como tal, al tener una cantidad fija de bits se deberán almacenar aproximaciones de los
+números.
+<!--l. 600--><p class="indent" >   La forma específica en que se guardan los números fraccionales en los bits del almacenamiento de un computador
+ha variado en el tiempo, pero son dos las principales representaciones usadas: punto fijo y punto flotante. La
+mayoría de los computadores actuales ocupa la segunda, pero ambas tienen posibles ventajas y desventajas que se
+deben considerar.
+<!--l. 602--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.1.   </span> <a 
+ id="x1-220003.2.1"></a>Representación de punto fijo (fixed point)</h5>
+<!--l. 604--><p class="noindent" >La representación de punto fijo consiste en que dado un espacio de <span 
+class="cmmi-10x-x-109">n </span>bits para almacenar un número, se reservan <span 
+class="cmmi-10x-x-109">t</span>
+bits para almacenar la parte entera del número y <span 
+class="cmmi-10x-x-109">f </span>bits para almacenar la parte fraccional, donde <span 
+class="cmmi-10x-x-109">n </span>= <span 
+class="cmmi-10x-x-109">t </span>+ <span 
+class="cmmi-10x-x-109">f </span>+ 1 (el
+bit extra se utiliza para almacenar el signo). De esta forma el punto (o coma) de la representación fraccional queda
+«fijo»
+en la t-ésima posición de la secuencia de bits.
+                                                                                                  
+                                                                                                  
+<!--l. 606--><p class="indent" >   Como ejemplo supongamos el número binario fraccional 10<span 
+class="cmmi-10x-x-109">,</span>111. Si tenemos <span 
+class="cmmi-10x-x-109">n </span>= 8 bits para almacenar todo el
+número, <span 
+class="cmmi-10x-x-109">t </span>= 4 bits para almacenar la parte entera y <span 
+class="cmmi-10x-x-109">f </span>= 4 bits para almacenar la parte fraccional, la representación
+almacenada del número sería:
+<div class="center" 
+>
+<!--l. 608--><p class="noindent" >
+<div class="tabular"> <table id="TBL-22" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-22-1g"><col 
+id="TBL-22-1"><col 
+id="TBL-22-2"><col 
+id="TBL-22-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-22-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-22-1-1"  
+class="td11"> 0  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-22-1-2"  
+class="td11">010</td><td  style="white-space:nowrap; text-align:center;" id="TBL-22-1-3"  
+class="td11">1110</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-22-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-22-2-1"  
+class="td11">signo</td><td  style="white-space:nowrap; text-align:center;" id="TBL-22-2-2"  
+class="td11"> t  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-22-2-3"  
+class="td11">  f   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-22-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-22-3-1"  
+class="td11">    </td></tr></table>
+</div></div>
+<!--l. 616--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.2.   </span> <a 
+ id="x1-230003.2.2"></a>Representación de punto flotante (floating point)</h5>
+<!--l. 618--><p class="noindent" >El problema que tiene la representación de punto fijo es que limita el <span 
+class="cmbx-10x-x-109">rango </span>posible de números. Para el ejemplo
+anterior (<span 
+class="cmmi-10x-x-109">n </span>= 8, <span 
+class="cmmi-10x-x-109">t </span>= 3 y <span 
+class="cmmi-10x-x-109">f </span>= 4) el máximo número positivo que podemos representar es el 111<span 
+class="cmmi-10x-x-109">,</span>1111 y el mínimo es
+000<span 
+class="cmmi-10x-x-109">,</span>0001. Si pudiésemos mover o «flotar»
+el punto (o coma) libremente entre los 7 bits podríamos representar el número 1111111 y también el 0<span 
+class="cmmi-10x-x-109">,</span>000001, lo
+que nos daría un mayor rango, para así permitir trabajar tanto con números muy grandes como con
+números muy chicos. La representación usada para lograr esto se denomina representación de «punto
+flotante»
+.
+<!--l. 620--><p class="indent" >   Para lograr que el punto «flote»
+se debe codificar de alguna forma para cada número la posición actual del punto. Una representación decimal que
+permite esto es la representación de notación científica, la cual codifica un número como una multiplicación entre un
+<span 
+class="cmbx-10x-x-109">significante </span>con una base (10) elevada a un <span 
+class="cmbx-10x-x-109">exponente</span>. En esta representación, el significante representa el valor
+del número y, dado que multiplicar por una potencia de 10 en representación decimal es equivalente a mover el
+punto, el valor del exponente está indicando la posición del punto.
+<!--l. 622--><p class="indent" >   Por ejemplo, el número 1023<span 
+class="cmmi-10x-x-109">,</span>456 se puede codificar en notación científica como: 1<span 
+class="cmmi-10x-x-109">,</span>023456 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">3</span></sup>. En este caso el
+significante sería 1<span 
+class="cmmi-10x-x-109">,</span>023456, la base 10 y el exponente 3, que se puede interpretar como «mover el punto 3 posiciones a
+la derecha»
+. El número también podría codificarse como 10<span 
+class="cmmi-10x-x-109">,</span>23456 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup> o 102345<span 
+class="cmmi-10x-x-109">,</span>6 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">2</span></sup>, pero en general se prefiere la que se
+usó inicialmente, con sólo un dígito a la izquierda de la coma del significante. Cuando un número en notación
+científica cumple con esta condición, se denomina <span 
+class="cmbx-10x-x-109">normalizado</span>.
+<!--l. 624--><p class="indent" >   La representación de punto flotante usada en el computador aplica la misma codificación de la notación
+científica, pero ahora con números binarios. De esta forma, ahora el significante y el exponente son representados
+como números binarios. Para mantener el hecho de que el exponente codifique la posición del punto, se utiliza como
+base el número 2 en vez de la base 10, ya que en representación binaria multiplicar por una potencia de 2 es
+equivalente a mover el punto.
+<!--l. 626--><p class="indent" >   De esta forma, por ejemplo, el número 10<span 
+class="cmmi-10x-x-109">,</span>111, lo podemos representar como (1<span 
+class="cmmi-10x-x-109">,</span>0111)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(01)</span><sub><span 
+class="cmr-6">2</span></sub></sup>. El exponente
+(01)<sub><span 
+class="cmr-8">2</span></sub> = 1 al igual que en notación científica, lo interpretamos como «mover el punto 1 posición a la
+derecha»
+.
+<!--l. 628--><p class="indent" >   Si queremos almacenar este número en <span 
+class="cmmi-10x-x-109">n </span>= 8 bits y definimos nuestra representación de manera de tener <span 
+class="cmmi-10x-x-109">s </span>= 3
+bits de significante (normalizado), 1 bit de signo para el significante, <span 
+class="cmmi-10x-x-109">e </span>= 3 bits de exponente y 1 bit de signo para el
+exponente, podríamos almacenar el número de la siguiente forma:
+                                                                                                  
+                                                                                                  
+<div class="center" 
+>
+<!--l. 630--><p class="noindent" >
+<div class="tabular"> <table id="TBL-23" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-23-1g"><col 
+id="TBL-23-1"><col 
+id="TBL-23-2"><col 
+id="TBL-23-3"><col 
+id="TBL-23-4"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-23-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-23-1-1"  
+class="td11">  0   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-23-1-2"  
+class="td11">101</td><td  style="white-space:nowrap; text-align:center;" id="TBL-23-1-3"  
+class="td11">  0    </td><td  style="white-space:nowrap; text-align:center;" id="TBL-23-1-4"  
+class="td11">001</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-23-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-23-2-1"  
+class="td11">signo s</td><td  style="white-space:nowrap; text-align:center;" id="TBL-23-2-2"  
+class="td11"> s  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-23-2-3"  
+class="td11">signo e</td><td  style="white-space:nowrap; text-align:center;" id="TBL-23-2-4"  
+class="td11"> e  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-23-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-23-3-1"  
+class="td11">      </td></tr></table>
+</div></div>
+<!--l. 638--><p class="indent" >   Esto nos muestra de inmediato una clara desventaja de esta representación respecto a la de punto fijo: existe
+una pérdida de <span 
+class="cmbx-10x-x-109">precisión </span>es decir, de la cantidad de bits disponibles para almacenar un determinado valor. La
+precisión de un número de punto flotante está dada por la cantidad de bits de su significante, en este caso 3. La
+precisión de un número de punto fijo en cambio está dada por la cantidad de bits totales usadas por el número, en
+nuestro caso 7.
+<!--l. 640--><p class="indent" >   La ventaja es que aumentamos el <span 
+class="cmbx-10x-x-109">rango</span>: el máximo valor positivo representable en este caso es
+(1<span 
+class="cmmi-10x-x-109">,</span>11)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(111)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = 11100000 y el mínimo es (0<span 
+class="cmmi-10x-x-109">,</span>01)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">(111)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = 0<span 
+class="cmmi-10x-x-109">,</span>00000001. Este es un trade-off inevitable para una
+cantidad limitada de bits: para aumentar el rango, debemos reducir la precisión y viceversa. La representación de
+punto flotante se prefiere porque la pérdida de precisión se puede compensar, en parte, aumentando la cantidad de
+bits.
+<!--l. 642--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-240003.2.2"></a>El estándar IEEE754</h5>
+<!--l. 644--><p class="noindent" >La representación de punto flotante antes descrita es una de muchas que se podría utilizar. Los parámetros
+relevantes para una representación son: el número total de bits, el número de bits asignados al significante, la
+normalización o no del significante y el número de bits asignados al exponente. En 1985 se definió el estándar
+IEEE754 que especifica como representan los computadores un número de punto flotante. El estándar define varias
+representaciones siendo dos las principales: «<span 
+class="cmbx-10x-x-109">single </span>precision floating point»
+y «<span 
+class="cmbx-10x-x-109">double </span>precision floating point»
+.
+<!--l. 646--><p class="indent" >   La representación «single»
+(conocida en los lenguajes de programación Java y C# como <span 
+class="cmbx-10x-x-109">float</span>) define un tamaño de 32 bits para los números,
+de los cuales se ocupa 1 bit para el signo del significante, 23 bits para el valor del significante y 8 bits para el
+exponente:
+<div class="center" 
+>
+<!--l. 648--><p class="noindent" >
+<div class="tabular"> <table id="TBL-24" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-24-1g"><col 
+id="TBL-24-1"><col 
+id="TBL-24-2"><col 
+id="TBL-24-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-24-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-24-1-1"  
+class="td11">     1 bit        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-24-1-2"  
+class="td11">  8 bits   </td><td  style="white-space:nowrap; text-align:center;" id="TBL-24-1-3"  
+class="td11">  23 bits   </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-24-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-24-2-1"  
+class="td11">signo significante</td><td  style="white-space:nowrap; text-align:center;" id="TBL-24-2-2"  
+class="td11">exponente</td><td  style="white-space:nowrap; text-align:center;" id="TBL-24-2-3"  
+class="td11">significante</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-24-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-24-3-1"  
+class="td11">              </td></tr></table>
+</div></div>
+<!--l. 657--><p class="indent" >   Esta representación tiene ciertas características especiales:
+     <ul class="itemize1">
+     <li class="itemize">El significante se almacena normalizado, pero sin el 1 que va a la izquierda de la coma. Por ejemplo el
+     significante 1<span 
+class="cmmi-10x-x-109">,</span>101, se almacena como 10100000000000000000000, es decir se asume que todo significante
+     comienza en 1. La ventaja de tener este dígito implícito es que aunque se almacenan 23 bits, la precisión
+     del número es de 24 bits.
+     </li>
+     <li class="itemize">El exponente se almacena desfasado en 127, es decir en vez de almacenar un bit de signo aparte,
+     o representar el número en complemento a 2, se desfasa el número de manera de tener sólo valores
+     positivos. La ventaja de esto está en hacer más simple la aritmética.
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize">Dado que al significante se le agrega un 1 implícito a la izquierda del punto, es imposible representar
+     directamente el número cero. Para representarlo, se reservó el exponente 00000000 y se definió que
+     la  representación  del  número  0  es  la  secuencia  con  ese  exponente  y  con  0s  en  el  significante.
+     Dada  esta  definición  existen  dos  posibles  0s:  +0  =  00000000000000000000000000000000  y  <span 
+class="cmsy-10x-x-109">-</span>0  =
+     1000000000000000000000000000000
+     </li>
+     <li class="itemize">El exponente 11111111 también se reservó, para poder representar ciertos números especiales:
+          <ul class="itemize2">
+          <li class="itemize">+Infinito : 01111111100000000000000000000000
+          </li>
+          <li class="itemize">-Infinito : 11111111100000000000000000000000
+          </li>
+          <li class="itemize">NaN: not a number : 011111111<span 
+class="cmmi-10x-x-109">xxxxxxxxxxxxxxxxxxxxxxx </span>donde alguno de los <span 
+class="cmmi-10x-x-109">x </span>debe cumplir
+          con ser distinto de 0.</li></ul>
+     </li></ul>
+<!--l. 670--><p class="indent" >   La representación «double»
+define un tamaño de 64 bits para los números, de los cuales se ocupa 1 bit para el signo del significante, 52 bits para
+el valor del significante y 11 bits para el exponente:
+<div class="center" 
+>
+<!--l. 672--><p class="noindent" >
+<div class="tabular"> <table id="TBL-25" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-25-1g"><col 
+id="TBL-25-1"><col 
+id="TBL-25-2"><col 
+id="TBL-25-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-25-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-25-1-1"  
+class="td11">     1 bit        </td><td  style="white-space:nowrap; text-align:center;" id="TBL-25-1-2"  
+class="td11"> 11 bits  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-25-1-3"  
+class="td11">  52 bits   </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-25-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-25-2-1"  
+class="td11">signo significante</td><td  style="white-space:nowrap; text-align:center;" id="TBL-25-2-2"  
+class="td11">exponente</td><td  style="white-space:nowrap; text-align:center;" id="TBL-25-2-3"  
+class="td11">significante</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-25-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-25-3-1"  
+class="td11">              </td></tr></table>
+</div></div>
+<!--l. 680--><p class="indent" >   Las características especiales de la representación «single»
+también aplican a esta, diferenciándose en que: la precisión total, contando el bit implícito es de 53 bits; el
+exponente está desfasado en 1023.
+<!--l. 683--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-250003.2.2"></a>Aritmética de punto flotante</h5>
+<!--l. 685--><p class="noindent" >A diferencia de los números enteros y de la representación de punto fijo, un número representado como punto
+flotante requiere un manejo aritmético distinto. Veremos que es esta aritmética especial, en particular el caso de la
+suma y resta, una de las causas principales de los problemas de esta representación.
+<!--l. 687--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-260003.2.2"></a>Multiplicación y división</h5>
+<!--l. 689--><p class="noindent" >Vamos a comenzar con la multiplicación y división que en punto flotante son operaciones más simples. Revisemos
+primero estas operaciones en notación científica, veremos que son transferibles los algoritmos a punto
+flotante.
+<!--l. 691--><p class="indent" >   Tomemos como ejemplo los números 1<span 
+class="cmmi-10x-x-109">,</span>2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup> y 2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">1</span></sup>. El algoritmo de multiplicación es el
+siguiente:
+                                                                                                  
+                                                                                                  
+     <ul class="itemize1">
+     <li class="itemize">El significante del resultado se obtiene como la multiplicación de los significantes de los multiplicandos:
+     1<span 
+class="cmmi-10x-x-109">,</span>2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2 = 2<span 
+class="cmmi-10x-x-109">,</span>4.
+     </li>
+     <li class="itemize">El  exponente  del  resultado  se  obtiene  como  la  suma  de  los  exponentes  de  los  multiplicandos:
+     2 + (<span 
+class="cmsy-10x-x-109">-</span>1) = 1.
+     </li>
+     <li class="itemize">Resultado final: 2<span 
+class="cmmi-10x-x-109">,</span>4 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">1</span></sup></li></ul>
+<!--l. 699--><p class="indent" >   La explicación del algoritmo es simple:
+     <ul class="itemize1">
+     <li class="itemize">Si realizamos la multiplicación directamente obtenemos: 1<span 
+class="cmmi-10x-x-109">,</span>2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<span 
+class="cmsy-10x-x-109">-</span>1.
+     </li>
+     <li class="itemize">Luego, si agrupamos los significantes y las potencias obtenemos: 1<span 
+class="cmmi-10x-x-109">,</span>2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">1</span></sup>
+     </li>
+     <li class="itemize">El primer paso entonces era multiplicar los significantes: 2<span 
+class="cmmi-10x-x-109">,</span>4 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">1</span></sup>
+     </li>
+     <li class="itemize">Ahora multiplicamos las potencias, y sabemos que la regla para multiplicar potencias con base igual
+     es sumar los exponentes: 2<span 
+class="cmmi-10x-x-109">,</span>4 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">1</span></sup></li></ul>
+<!--l. 707--><p class="indent" >   El algoritmo para los números de punto flotante es equivalente. Supongamos nuestra representación previa
+(<span 
+class="cmmi-10x-x-109">n </span>= 8, <span 
+class="cmmi-10x-x-109">s </span>= 3, <span 
+class="cmmi-10x-x-109">e </span>= 3) y los números (1<span 
+class="cmmi-10x-x-109">,</span>1)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = (0<span 
+class="cmbx-10x-x-109">110</span>1<span 
+class="cmbx-10x-x-109">001</span>)<sub><span 
+class="cmmi-8">float</span></sub> y (1<span 
+class="cmmi-10x-x-109">,</span>0)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = (0<span 
+class="cmbx-10x-x-109">100</span>0<span 
+class="cmbx-10x-x-109">001</span>)<sub><span 
+class="cmmi-8">float</span></sub>:
+     <ul class="itemize1">
+     <li class="itemize">El significante del resultado se obtiene como la multiplicación de los significantes de los multiplicandos:
+     (1<span 
+class="cmmi-10x-x-109">,</span>1)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>(1)<sub><span 
+class="cmr-8">2</span></sub> = (1<span 
+class="cmmi-10x-x-109">,</span>1)<sub><span 
+class="cmr-8">2</span></sub>.
+     </li>
+     <li class="itemize">El  exponente  del  resultado  se  obtiene  como  la  suma  de  los  exponentes  de  los  multiplicandos:
+     (1)<sub><span 
+class="cmr-8">2</span></sub> + (<span 
+class="cmsy-10x-x-109">-</span>1)<sub><span 
+class="cmr-8">2</span></sub> = 0.
+     </li>
+     <li class="itemize">Resultado final: (1<span 
+class="cmmi-10x-x-109">,</span>1)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">0</span></sup> = (0<span 
+class="cmbx-10x-x-109">110</span>0<span 
+class="cmbx-10x-x-109">000</span>)<sub><span 
+class="cmmi-8">float</span></sub></li></ul>
+<!--l. 716--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-270003.2.2"></a>Suma y resta</h5>
+<!--l. 718--><p class="noindent" >Para sumar dos fracciones binarias representadas como punto fijo, basta ir sumando bit a bit de derecha a izquierda,
+acarreando cuando corresponda, lo que corresponde al mismo algoritmo que la suma de enteros. En el caso de punto
+flotante es distinto, ya que para poder sumar dos números deben tener el mismo exponente, lo que implica que en
+caso de que esto no se cumpla, debemos modificar los números para que si tengan el mismo exponente y puedan ser
+sumados o restados.
+<!--l. 720--><p class="indent" >   Veamos un ejemplo, primero con notación científica que involucra los mismos elementos aritméticos que el punto
+flotante: Tenemos dos números para sumar: 1<span 
+class="cmmi-10x-x-109">,</span>23 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup> y 5<span 
+class="cmmi-10x-x-109">,</span>12 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">1</span></sup>. Los pasos para completar la suma son los
+siguientes:
+                                                                                                  
+                                                                                                  
+     <ul class="itemize1">
+     <li class="itemize">Equilibrar los exponentes: debemos ajustar el menor de los números para que quede con el mismo
+     exponente que el primero. Si restamos los exponentes tenemos una diferencia de 3, que es el número
+     de veces que hay que mover la coma a la izquierda en el significante del menor número, resultando en:
+     0<span 
+class="cmmi-10x-x-109">,</span>00512 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup>&#8221;
+     </li>
+     <li class="itemize">Una vez equilibrados los exponentes, se procede a sumar directamente los significantes: 1<span 
+class="cmmi-10x-x-109">,</span>23512 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">2</span></sup></li></ul>
+<!--l. 727--><p class="indent" >   El algoritmo para los números de punto flotante es equivalente. Supongamos nuestra representación previa
+(<span 
+class="cmmi-10x-x-109">n </span>= 8, <span 
+class="cmmi-10x-x-109">s </span>= 3, <span 
+class="cmmi-10x-x-109">e </span>= 3) y los números (1<span 
+class="cmmi-10x-x-109">,</span>1)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = (0<span 
+class="cmbx-10x-x-109">110</span>1<span 
+class="cmbx-10x-x-109">001</span>)<sub><span 
+class="cmmi-8">float</span></sub> y (1<span 
+class="cmmi-10x-x-109">,</span>0)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = (0<span 
+class="cmbx-10x-x-109">100</span>0<span 
+class="cmbx-10x-x-109">001</span>)<sub><span 
+class="cmmi-8">float</span></sub>:
+     <ul class="itemize1">
+     <li class="itemize">Equilibrar los exponentes: debemos ajustar el menor de los números para que quede con el mismo
+     exponente que el primero. Si restamos los exponentes tenemos una diferencia de 2, que es el número
+     de veces que hay que mover la coma a la izquierda en el significante del menor número, resultando en:
+     (0<span 
+class="cmmi-10x-x-109">,</span>011)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup>&#8221;
+     </li>
+     <li class="itemize">Una vez equilibrados los exponentes, se procede a sumar directamente los significantes: (1<span 
+class="cmmi-10x-x-109">,</span>011)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7;</span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup></li></ul>
+<!--l. 734--><p class="indent" >   Tenemos un problema: el significante tiene precisión = 4 bits, y nuestro formato soporta hasta 3 bits.
+Inevitablemente tendremos que perder <span 
+class="cmbx-10x-x-109">exactitud</span>, por ejemplo podríamos truncar el último bit y obtener el número
+(1<span 
+class="cmmi-10x-x-109">,</span>01)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = (0<span 
+class="cmbx-10x-x-109">101</span>0<span 
+class="cmbx-10x-x-109">001</span>)<sub><span 
+class="cmmi-8">float</span></sub>. Este es uno de los problemas principales de la suma en punto flotante: a
+diferencia de la multiplicación (y la división), con la suma (y la resta) es muy fácil que perdamos exactitud al
+realizar una operación, por lo que es importante tener esto en cuenta al momento de realizar operaciones aritméticas
+con números de punto flotante.
+<!--l. 736--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-280003.2.2"></a>Redondeo</h5>
+<!--l. 738--><p class="noindent" >En el ejemplo anterior, cuando obtuvimos como resultado el número (1<span 
+class="cmmi-10x-x-109">,</span>011)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = 1<span 
+class="cmmi-10x-x-109">,</span>375 notamos que dada la
+precisión de la representación era imposible almacenar toda la información, ya que debíamos eliminar un bit. Sin
+embargo, hay distintas formas en que podemos redondear el número de 4 a 3 bits, siendo algunas opciones mejores
+que otras.
+<!--l. 740--><p class="indent" >   El método más simple es el <span 
+class="cmbx-10x-x-109">redondeo hacia cero </span>que básicamente corresponde a truncar los bits que no caben
+en la representación. En el ejemplo anterior, aplicar este método resulta en (1<span 
+class="cmmi-10x-x-109">,</span>01)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = 1<span 
+class="cmmi-10x-x-109">,</span>25. El
+problema es que esta es la peor forma de redondeo, ya que introduce el mayor error y un sesgo hacia el
+cero.
+<!--l. 742--><p class="indent" >   Un mejor método se denomina <span 
+class="cmbx-10x-x-109">redondeo de la mitad a cero </span>que es básicamente el método que
+tradicionalmente ocupamos para redondear números decimales. Por ejemplo, si el número decimal 3<span 
+class="cmmi-10x-x-109">,</span>95 se debe
+representar en dos dígitos, se redondea a 4<span 
+class="cmmi-10x-x-109">,</span>0 dado que el 5 está a mitad de camino del valor de la base (10). En el
+caso de los números binarios, se aplica el mismo criterio: si el dígito está a mitad de camino o más de la base, se
+aumenta en 1 el dígito siguiente. En nuestro ejemplo, como el último dígito es 1 que es la mitad de la base (2),
+debemos aumentar en 1 el siguiente dígito, lo que resulta finalmente en el número: (1<span 
+class="cmmi-10x-x-109">,</span>10)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2<sup><span 
+class="cmr-8">(1)</span><sub><span 
+class="cmr-6">2</span></sub></sup> = 1<span 
+class="cmmi-10x-x-109">,</span>5. En este caso
+particular el error es el mismo que con el método anterior, pero en términos generales conviene realizar este
+redondeo, ya que se evita el sesgo de truncar hacia a cero siempre, lo que a la larga compensa en parte los
+errores.
+                                                                                                  
+                                                                                                  
+<!--l. 744--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.3.   </span> <a 
+ id="x1-290003.2.3"></a>Alternativas a la representación de punto flotante</h5>
+<!--l. 746--><p class="noindent" >Debido a los problemas de exactitud que pueden ocurrir con la representación de punto flotante, en muchas
+circunstancias se deben ocupar otro tipo de representaciones que permitan manejar de mejor forma números
+fraccionales.
+<!--l. 748--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-300003.2.3"></a>Enteros</h5>
+<!--l. 750--><p class="noindent" >Una posible alternativa para manejar números fraccionales es tratarlos como enteros en otra unidad. La frase que
+resume esto es: «hacer cálculos monetarios directamente en centavos y no en dólares»
+, es decir, si es posible, convertir los valores numéricos en la unidad más pequeña, de manera de siempre trabajar
+con enteros.
+<!--l. 752--><p class="indent" >   Esta alternativa tiene la ventaja de ser simple y no requerir tipos especiales, pero tiene el problema de que los
+números enteros no entregan tanto rango como los números de punto flotante: se puede pensar que un número
+entero es un número de punto fijo con el punto más allá del bit menos significativo. Dado esto los números enteros
+presentan las mismas limitaciones que los números de punto fijo y por tanto sólo conviene usarlos si no hay mejor
+alternativa.
+<!--l. 755--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-310003.2.3"></a>Punto flotante con base decimal</h5>
+<!--l. 757--><p class="noindent" >Una alternativa mejor que los números enteros es usar representación de punto flotante, pero con base 10 en vez
+de base 2. Esta representación tiene la ventaja de que se eliminan los casos poco intuitivos en que
+una representación decimal finita (como el 0<span 
+class="cmmi-10x-x-109">,</span>1) tiene representacion infinita en binario. Al trabajar
+directamente en base 10, podemos representar 0<span 
+class="cmmi-10x-x-109">,</span>1 simplemente como: (1<span 
+class="cmmi-10x-x-109">,</span>0)<sub><span 
+class="cmr-8">2</span></sub> <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">(</span><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">1)</span><sub><span 
+class="cmr-6">2</span></sub></sup>, es decir el
+significante y exponente se almacenan en binario, pero al calcular el número completo se ocupa base
+decimal.
+<!--l. 759--><p class="indent" >   El estándar IEEE754 en su versión del 2008 especificó tres representaciones de punto flotante decimales:
+decimal32 (32 bits), decimal64 (64 bits), decimal128 (128 bits), las cuales son implementadas en muchos de los
+computadores modernos. En particular, el lenguaje C# provee el tipo de datos <span 
+class="cmtt-10x-x-109">decimal </span>el cual corresponde a la
+especificación decimal128.
+<!--l. 761--><p class="indent" >   La principal desventaja de esta representación es que hace mucho más lentos los cálculos, y es por eso que no es
+la representación principalmente usada. En esta representación multiplicar el significante por una potencia de la
+base <span 
+class="cmbx-10x-x-109">no </span>se traduce en sólo mover el punto, lo que complica la aritmética. Además, como el resto de los números
+manejados en el computador si tienen base 2, es necesario estar realizando conversiones para operar entre estos
+números y los de punto flotante decimal. De todas maneras, si estas representaciones están disponibles
+<span 
+class="cmbx-10x-x-109">siempre es recomendable utilizar este tipo de datos en aplicaciones que trabajen con</span>
+<span 
+class="cmbx-10x-x-109">números usados por seres humanos (como aplicaciones financieras) </span>para evitar problemas de
+exactitud.
+<!--l. 763--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-320003.2.3"></a>Punto flotante con base decimal y precisión arbitraria</h5>
+<!--l. 765--><p class="noindent" >La representación de punto flotante decimal, aunque elimina los errores de representación de fracciones decimales
+como el 0<span 
+class="cmmi-10x-x-109">,</span>1 no elimina la limitación de espacio presente en todas las representaciones. Una mejor representación es
+la denominada de punto flotante decimal con precisión arbitraria, que va dinámicamente aumentando el espacio
+disponible para aumentar el significante, es decir, tiene precisión sólo limitada por el tamaño total de
+                                                                                                  
+                                                                                                  
+almacenamiento disponible en el computador. Aunque no existe soporte de hardware directo para este tipo de
+representaciones, algunos lenguajes de programación proveen clases que permiten trabajar con estos tipos. Por
+ejemplo en Java está la clase <span 
+class="cmtt-10x-x-109">BigDecimal </span>que permite trabajar con puntos flotantes decimales de precisión
+arbitraria.
+<!--l. 767--><p class="indent" >   La desventaja, al igual, que en el caso anterior, está en que las operaciones son más lentas. En este
+caso además de las conversiones decimal-binaria, se requiere ir aumentando dinámicamente el tamaño
+del significante lo que agrega un overhead adicional. Este tipo de representaciones conviene usarlo
+sólo en casos en que se requieran precisiones altísimas, como puede ser en cálculos científicos muy
+sofisticados.
+<!--l. 769--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.   </span> <a 
+ id="x1-330004"></a>Ejercicios</h3>
+     <ul class="itemize1">
+     <li class="itemize">Escriba un programa en Java que convierta un String de 1s y 0s, que representa un número binario, a
+     un String que represente: un número decimal, un número hexadecimal.
+     </li>
+     <li class="itemize">Describa el algoritmo para la división de números de notación científica y aplíquelo para restar números
+     de punto flotante.
+     </li>
+     <li class="itemize">Describa el algoritmo para la resta de números de notación científica y aplíquelo para restar números
+     de punto flotante.</li></ul>
+<!--l. 777--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">5.   </span> <a 
+ id="x1-340005"></a>Referencias</h3>
+     <ul class="itemize1">
+     <li class="itemize">Morris  Mano,  M.;  Computer  System  Architecture,  3  Ed.,  Prentice  Hall,  1992.  Capítulo  3:
+     Representación de datos.
+     </li>
+     <li class="itemize">The Floating Point Guide, http://floating-point-gui.de/
+     </li>
+     <li class="itemize">Goldberg, D.; What Every Computer Scientist Should Know About Floating-Point Arithmetic, 1991,
+     http://docs.sun.com/source/806-3568/ncg_goldberg.html
+     </li>
+     <li class="itemize">Hyde, R. The Art of Assembly Language, 2003. Chapter 14: Floating Point Arithmetic<br 
+class="newline" />http://webster.cs.ucr.edu/AoA/DOS/pdf/ch14.pdf</li></ul>
+                                                                                                  
+                                                                                                  
+<!--l. 791--><p class="noindent" >
+   <h3 class="likesectionHead"><a 
+ id="x1-350005"></a>Apéndice: algoritmo de comparación de números de punto flotante</h3>
+   <!--l. 793-->
+   <div class="lstlisting" id="listing-1"><span class="label"><a 
+ id="x1-35001r1"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">public</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">static</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">boolean</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">nearlyEqual</span><span 
+class="cmtt-10">(</span><span 
+class="cmtt-10">float</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">a</span><span 
+class="cmtt-10">,</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">float</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">b</span><span 
+class="cmtt-10">,</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">float</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">epsilon</span><span 
+class="cmtt-10">)</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35002r2"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">{</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35003r3"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">final</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">float</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">absA</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">=</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">Math</span><span 
+class="cmtt-10">.</span><span 
+class="cmtt-10">abs</span><span 
+class="cmtt-10">(</span><span 
+class="cmtt-10">a</span><span 
+class="cmtt-10">);</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35004r4"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">final</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">float</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">absB</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">=</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">Math</span><span 
+class="cmtt-10">.</span><span 
+class="cmtt-10">abs</span><span 
+class="cmtt-10">(</span><span 
+class="cmtt-10">b</span><span 
+class="cmtt-10">);</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35005r5"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">final</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">float</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">diff</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">=</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">Math</span><span 
+class="cmtt-10">.</span><span 
+class="cmtt-10">abs</span><span 
+class="cmtt-10">(</span><span 
+class="cmtt-10">a</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">-</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">b</span><span 
+class="cmtt-10">);</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35006r6"></a></span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35007r7"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">if</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">(</span><span 
+class="cmtt-10">a</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">*</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">b</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">==</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">0)</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">{</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">//</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">a</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">or</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">b</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">or</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">both</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">are</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">zero</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35008r8"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">//</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">relative</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">error</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">is</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">not</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">meaningful</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">here</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35009r9"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">return</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">diff</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x003C;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">(</span><span 
+class="cmtt-10">epsilon</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">*</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">epsilon</span><span 
+class="cmtt-10">);</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35010r10"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">}</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">else</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">{</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">//</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">use</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">relative</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">error</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35011r11"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">return</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">diff</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">/</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">(</span><span 
+class="cmtt-10">absA</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">+</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">absB</span><span 
+class="cmtt-10">)</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x003C;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">epsilon</span><span 
+class="cmtt-10">;</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35012r12"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">}</span><span 
+class="cmtt-10">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-35013r13"></a></span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">&#x00A0;</span><span 
+class="cmtt-10">}</span>
+   
+   </div>
+    
+</body></html> 
+
+                                                                                                  
+
+

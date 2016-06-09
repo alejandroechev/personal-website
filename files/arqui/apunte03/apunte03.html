@@ -1,0 +1,1283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html xml:lang="es" > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="apunte03.tex"> 
+<meta name="date" content="2014-04-05 21:10:00"> 
+<link rel="stylesheet" type="text/css" href="apunte03.css"> 
+</head><body 
+>
+<div class="center" 
+>
+<!--l. 13--><p class="noindent" >
+<!--l. 14--><p class="noindent" ><span 
+class="cmbx-10">IIC2343 Arquitectura de Computadores</span><br />
+<span 
+class="cmbx-12x-x-120">Almacenamiento de datos</span><br />
+<span 
+class="cmbsy-6">©</span><span 
+class="cmbx-6">Alejandro Echeverría, Hans-Albert L</span><span 
+class="cmbx-6">öbel</span><br />
+</div>
+   <h3 class="sectionHead"><span class="titlemark">1.   </span> <a 
+ id="x1-10001"></a>Motivación</h3>
+<!--l. 23--><p class="noindent" >Una de las funciones básicas de un computador, además de realizar operaciones, es poder almacenar información.
+Existen distintas tecnologías para almacenar información que el computador puede ocupar, las cuales presentan
+distintas características que las hacen útiles para distintas funciones en el computador.
+<!--l. 25--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2.   </span> <a 
+ id="x1-20002"></a>Variables y Arreglos</h3>
+<!--l. 27--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.1.   </span> <a 
+ id="x1-30002.1"></a>Variables</h4>
+<!--l. 29--><p class="noindent" >La unidad básica de almacenamiento de un programa se conoce como <span 
+class="cmbx-10x-x-109">variable</span>. Una variable corresponde a un
+contenedor que puede almacenar un valor que puede variar en el transcurso del programa (por eso su nombre). Las
+variables tienen tres características que las determinan: un <span 
+class="cmbx-10x-x-109">tipo de dato </span>que indica que información
+está almacenando; un <span 
+class="cmbx-10x-x-109">valor </span>que representa la información almacenada en un momento dado; y un
+<span 
+class="cmbx-10x-x-109">identificador </span>que se ocupa para reconocer a una determinada variable y diferenciarla de otras. Para poder
+representar variables de manera física en una máquina, por lo tanto, es necesario proveer estas tres
+características.
+<!--l. 31--><p class="indent" >   Como se ha visto anteriormente, el computador almacenará toda su información como números binarios (i.e.
+secuencias de bits). De esta forma, todas las variables se almacenarán finalmente como una secuencia de bits. La
+interpretación que se le dé a esa secuencia de bits, sin embargo, variará, dependiendo del tipo de dato. De esta
+forma el valor de una variable es función tanto de la secuencia de bits como del tipo de dato. <span 
+class="cmbx-10x-x-109">Sin</span>
+<span 
+class="cmbx-10x-x-109">conocer el tipo de dato es imposible interpretar el valor de una determinada secuencia de</span>
+<span 
+class="cmbx-10x-x-109">bits.</span>
+<!--l. 33--><p class="indent" >   Los tipos de datos van a estar determinados por tres características principales: la <span 
+class="cmbx-10x-x-109">cantidad de bits </span>ocupados,
+la <span 
+class="cmbx-10x-x-109">codificación </span>de la secuencia de bits y la <span 
+class="cmbx-10x-x-109">interpretación </span>que se le dé a una codificación particular. La cantidad
+de bits determinará el rango de valores disponibles de un determinado tipo, es decir los valores máximo y mínimo
+que se pueden almacenar en un determinado tipo. La codificación determinará que está almacenando (la sintaxis del
+tipo) y la interpretación indicará que representa esa codificación particular para este tipo (la semántica del
+                                                                                                  
+                                                                                                  
+tipo).
+<!--l. 35--><p class="indent" >   Para entender mejor los diferentes elementos involucrados en un tipo de dato, analizaremos los tipos de datos
+básicos del lenguaje Java:
+     <ul class="itemize1">
+     <li class="itemize">Tipo <span 
+class="cmtt-10x-x-109">int</span>
+          <ul class="itemize2">
+          <li class="itemize">Codificación: Número en base 2 con signo, ocupando representación de complemento a 2.
+          </li>
+          <li class="itemize">Interpretación: Número entero positivo o negativo.
+          </li>
+          <li class="itemize">Cantidad  de  bits:  32  bits  (4  bytes),  lo  que  permite  un  rango  de  valores  entre  los  números
+          -2147483648 y 2147483647.</li></ul>
+     </li>
+     <li class="itemize">Tipo <span 
+class="cmtt-10x-x-109">char</span>
+          <ul class="itemize2">
+          <li class="itemize">Codificación: Número en base 2 sin signo.
+          </li>
+          <li class="itemize">Interpretación: Carácter o letra obtenida del estándar Unicode.
+          </li>
+          <li class="itemize">Cantidad de bits: 16 bits (2 bytes), lo que permite un rango de valores entre los caracteres
+          asociados a los números 0 y 65535.</li></ul>
+     </li>
+     <li class="itemize">Tipo <span 
+class="cmtt-10x-x-109">byte</span>
+          <ul class="itemize2">
+          <li class="itemize">Codificación: Número en base 2 con signo, ocupando representación de complemento a 2.
+          </li>
+          <li class="itemize">Interpretación: Número entero positivo o negativo.
+          </li>
+          <li class="itemize">Cantidad de bits: 8 bits (1 byte), lo que permite un rango de valores entre los números -128 y
+          127.</li></ul>
+     </li>
+     <li class="itemize">Tipo <span 
+class="cmtt-10x-x-109">boolean</span>
+          <ul class="itemize2">
+          <li class="itemize">Codificación: Número en base 2 sin signo.
+          </li>
+          <li class="itemize">Interpretación: Valor lógico o de verdad, pudiendo solo ser verdadero (1) o falso (0).
+          </li>
+          <li class="itemize">Cantidad de bits: 8 bits (1 byte), lo que permite potencialmente un rango de valores entre los
+          números 0 y 255, aunque solo se permite ocupar los valores 0 y 1, asociados a los valores <span 
+class="cmtt-10x-x-109">false</span>
+          y <span 
+class="cmtt-10x-x-109">true</span>, respectivamente.</li></ul>
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize">Tipo <span 
+class="cmtt-10x-x-109">float</span>
+          <ul class="itemize2">
+          <li class="itemize">Codificación: Single-precision floating-point, según lo especificado por el estándar IEEE754.
+          </li>
+          <li class="itemize">Interpretación: Número fraccional positivo o negativo, además de algunos símbolos especiales
+          (+Infinito, -Infinito, NaN).
+          </li>
+          <li class="itemize">Cantidad de bits: 32 bits (4 bytes), lo que permite un rango aproximado de valores entre los
+          números <span 
+class="cmsy-10x-x-109">±</span>1<span 
+class="cmmi-10x-x-109">,</span>5 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">45</span></sup> y <span 
+class="cmsy-10x-x-109">±</span>3<span 
+class="cmmi-10x-x-109">,</span>4 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">38</span></sup>.</li></ul>
+     </li>
+     <li class="itemize">Tipo <span 
+class="cmtt-10x-x-109">double</span>
+          <ul class="itemize2">
+          <li class="itemize">Codificación: Double-precision floating-point, según lo especificado por el estándar IEEE754.
+          </li>
+          <li class="itemize">Interpretación: Número fraccional positivo o negativo, además de algunos símbolos especiales
+          (+Infinito, -Infinito, NaN).
+          </li>
+          <li class="itemize">Cantidad de bits: 64 bits (8 bytes), lo que permite un rango aproximado de valores entre los
+          números <span 
+class="cmsy-10x-x-109">±</span>5 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmsy-8">-</span><span 
+class="cmr-8">324</span></sup> y <span 
+class="cmsy-10x-x-109">±</span>1<span 
+class="cmmi-10x-x-109">,</span>7 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>10<sup><span 
+class="cmr-8">308</span></sup>.</li></ul>
+     </li></ul>
+<!--l. 76--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.2.   </span> <a 
+ id="x1-40002.2"></a>Arreglos</h4>
+<!--l. 78--><p class="noindent" >Una segunda forma de almacenamiento que es relevante en un programa son los <span 
+class="cmbx-10x-x-109">arreglos</span>. Un arreglo se define
+como un conjunto de datos agrupados por un identificador único, y que permite acceder de manera indexada a un
+cierto dato para leer o modificar su valor. Los arreglos tienen cuatro características que los determinan: un <span 
+class="cmbx-10x-x-109">tipo de</span>
+<span 
+class="cmbx-10x-x-109">dato </span>que indica que información está almacenando en todos los datos; un <span 
+class="cmbx-10x-x-109">conjunto de valores </span>distintos que
+representa la información almacenada en un momento dado; un <span 
+class="cmbx-10x-x-109">identificador </span>que se ocupa para reconocer el
+arreglo y poder indexarlo para acceder a un valor; y un <span 
+class="cmbx-10x-x-109">largo </span>que indica cuántos valores se tienen
+almacenados.
+<!--l. 80--><p class="indent" >   Para poder representar arreglos de manera física en una máquina, por lo tanto, es necesario proveer estas tres
+características, lo que implica que además de los detalles descritos en la sección previa, para almacenar arreglos se
+requiere la capacidad de almacenar múltiples datos de manera ordenada.
+<!--l. 82--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">3.   </span> <a 
+ id="x1-50003"></a>Tecnologías de almacenamiento de números binarios</h3>
+<!--l. 84--><p class="noindent" >Una de las principales ventajas de usar números binarios es que su almacenamiento se puede realizar usando dos
+símbolos o estados por cada dígito o <span 
+class="cmbx-10x-x-109">bit</span>. Debido a esto existen diversas tecnologías que permiten almacenar
+números binarios, las cuales presentan distintas características.
+                                                                                                  
+                                                                                                  
+<!--l. 86--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.1.   </span> <a 
+ id="x1-60003.1"></a>Características</h4>
+<!--l. 88--><p class="noindent" >Los distintos tipos de almacenamiento se diferencian por una serie de características. A continuación se listan las
+más relevantes.
+<!--l. 90--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-70003.1"></a>Tecnología</h4>
+<!--l. 91--><p class="noindent" >La primera característica diferenciadora es la tecnología que se ocupa para almacenar la información. Aunque
+en la actualidad existe una multitud de formas de guardar número binarios, son tres las tecnologías
+predominantes:
+     <ul class="itemize1">
+     <li class="itemize">Magnética: usada en los discos duros, se basa en modificar el estado magnético de una parte de una
+     superficie para representar un 1. Las zonas no modificadas representan un 0. Para poder escribir y leer
+     en esta superficie se utilizan cabezales especiales que son capaces de moverse en la posición donde se
+     almacena la información y modificar el estado magnético para escribir o interpretar el estado para leer.
+     </li>
+     <li class="itemize">óptica: usada en los CD, DVD y discos Blu-ray, se basa en modificar la capacidad de reflectancia óptica
+     de una sector superficie, de manera que cuando se ilumine ocurra o no reflexión lo que se interpreta
+     como un 1 o 0 lógico. Para leer se utilizan láseres de precisión que apuntan a una zona específica
+     y contienen sensores que interpretan la reflectancia de la zona. Para escribir, se utilizan láseres más
+     poderosos que son capaces de modificar las propiedades de reflectancia.
+     </li>
+     <li class="itemize">Eléctrica: usada en las memorias flash, y otros tipos de memoria, se basa en almacenar la información usando
+     componentes eléctricos, como transistores o condensadores que pueden ser leídos o escritos con señales
+     eléctricas. Respecto a las anteriores presenta la ventaja de no requerir partes móviles para acceder a la
+     información, ya que lo que se «mueve»
+     es la corriente eléctrica.</li></ul>
+<!--l. 98--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-80003.1"></a>Mutabilidad</h4>
+<!--l. 99--><p class="noindent" >Otra característica relevante es la «mutabilidad»
+o «posibilidad de cambiar»
+. En dispositivos como los discos duros o memorias flash es posible tanto leer información como modificar
+información, es decir permiten <span 
+class="cmbx-10x-x-109">escritura y lectura</span>. En dispositivos como los CD y DVD no regrabables, sólo se
+puede obtener la información y no modificar, es decir son de <span 
+class="cmbx-10x-x-109">sólo lectura</span>.
+<!--l. 101--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-90003.1"></a>Capacidad y Costo</h4>
+<!--l. 102--><p class="noindent" >La capacidad y el costo están directamente relacionados a la tecnología usada, y en general se cumple la regla de
+que a mayor capacidad, mayor costo. La razón <img 
+src="apunte031x.png" alt="capcaocistdoad"  class="frac" align="middle"> es un índice relevante que indica para una tecnología cuánto
+cuesta almacenar una cierta cantidad de información lo que será un factor importante para determinar que tipo de
+almacenamiento ocupar en las distintas partes del computador.
+                                                                                                  
+                                                                                                  
+<!--l. 104--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-100003.1"></a>Volatilidad</h4>
+<!--l. 105--><p class="noindent" >Los dispositivos habitualmente usados para almacenar nuestra información tienen la característica de ser <span 
+class="cmbx-10x-x-109">no</span>
+<span 
+class="cmbx-10x-x-109">volátiles</span>, es decir, si no estamos entregándoles alimentación eléctrica (i.e. no están enchufados, ni tiene baterías),
+son capaces de mantener la información guardada. Es evidente que esto es de suma relevancia, ya que en caso
+contrario podría ocurrir, por ejemplo, que al apagar el computador perderíamos toda nuestra información del disco
+duro, lo que no tendría mucho sentido práctico.
+<!--l. 107--><p class="indent" >   Existen, sin embargo, dispositivos de almacenamiento que no tienen esta capacidad, es decir, son <span 
+class="cmbx-10x-x-109">volátiles </span>y si
+pierden alimentación eléctrica, pierden la información. La volatilidad no presenta ninguna ventaja comparativa, pero
+ocurre que las tecnologías más rápidas de almacenamiento suelen tener esta característica, por lo que a pesar de
+contar con esta desventaja, son usadas.
+<!--l. 109--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x1-110003.1"></a>Rendimiento</h4>
+<!--l. 110--><p class="noindent" >Una última característica relevante tiene relación con el rendimiento del dispositivo. Hay dos elementos principales
+para evaluar el rendimiento: la <span 
+class="cmbx-10x-x-109">latencia </span>que se refiere al tiempo en que se demora el acceso a una particular pieza
+de información almacenada, la cual se mide en segundos o nanosegundos, y el <span 
+class="cmbx-10x-x-109">throughput </span>que representa la
+cantidad de información que se puede sacar del dispositivo en un cierto tiempo, lo que se mide en
+<img 
+src="apunte032x.png" alt="  bytes
+segundos"  class="frac" align="middle">.
+<!--l. 112--><p class="indent" >   Como regla general los dispositivos de almacenamiento eléctrico tendrán menor latencia y mayor throughput, ya
+que no requieren estar moviendo partes mecánicas (como si ocurre en el almacenamiento magnético y
+óptico).
+<!--l. 114--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.   </span> <a 
+ id="x1-120004"></a>Circuitos de almacenamiento</h3>
+<!--l. 116--><p class="noindent" >Al considerar que dispositivo de almacenamiento usar como medio principal en un computador la principal
+característica a tomar en cuenta es el rendimiento. Los computadores realizan operaciones a altas velocidades y por
+tanto queremos que los dispositivos de almacenamiento ocupados para estas operaciones sean también
+rápidos.
+<!--l. 118--><p class="indent" >   Como se señaló previamente, los dispositivos de almacenamiento eléctrico son los que presentan un mejor
+rendimiento, por lo que estos serán los elegidos para el almacenamiento principal del computador. A continuación se
+explicará como se pueden construir estos dispositivos de almacenamiento ocupando las mismas herramientas de
+diseño de circuitos basados en compuertas.
+<!--l. 120--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.1.   </span> <a 
+ id="x1-130004.1"></a>Flip-flops</h4>
+<!--l. 122--><p class="noindent" >El componente básico para almacenar información usando circuitos eléctricos se denomina flip-flop. A diferencia de
+los circuitos lógicos vistos previamente la salida de un flip-flop depende no sólo de las compuertas que lo componen,
+sino de su estado previo, lo que se denomina como circuito secuencial.
+<!--l. 124--><p class="indent" >   Existen distintos tipos de flip-flops, que presentan sutiles variaciones en su diseño. El diseño más
+utilizado en la actualidad corresponde al flip-flop D con señal de control, que se observa en la figura
+<a 
+href="#x1-130011">1<!--tex4ht:ref: fig:flipflopD --></a>.
+<!--l. 126--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-130011"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 128--><p class="noindent" ><img 
+src="png/flipflopD.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte033x.png" src="figs/flipflopD.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;1: </span><span  
+class="content">Flip-flop D con control.</span></div><!--tex4ht:label?: x1-130011 -->
+                                                                                                  
+                                                                                                  
+<!--l. 131--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 133--><p class="indent" >   El funcionamiento de este circuito es el siguiente: Si en la entrada de datos D llega un determinado valor y
+además la señal de control C está activada, el valor de salida Q del flip-flop se actualiza con el valor
+de D. Si en cambio, la señal del control C está desactivada, el valor de Q <span 
+class="cmbx-10x-x-109">es el mismo que tenía</span>
+<span 
+class="cmbx-10x-x-109">previamente</span>.
+<!--l. 135--><p class="indent" >   La tabla de valores del flip-flop D se observa a continuación:
+<div class="center" 
+>
+<!--l. 137--><p class="noindent" >
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1"><col 
+id="TBL-1-2"></colgroup><colgroup id="TBL-1-3g"><col 
+id="TBL-1-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-1"  
+class="td11">C</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-2"  
+class="td11">D</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-3"  
+class="td11">Q</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-2"  
+class="td11">x</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-3"  
+class="td11">Q</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-2"  
+class="td11">0</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-3"  
+class="td11">0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-4-1"  
+class="td11"> 1 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-4-2"  
+class="td11">1</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-4-3"  
+class="td11">1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-5-1"  
+class="td11">  </td></tr></table></div></div>
+<!--l. 147--><p class="indent" >   Lo relevante de este circuito es que <span 
+class="cmbx-10x-x-109">tiene la capacidad de almacenar 1 bit</span>, dado que mientras la señal de
+control sea cero, se mantiene el valor guardado. Además, el circuito <span 
+class="cmbx-10x-x-109">permite modificar el valor almacenado </span>al
+activar la señal de control, y enviar un valor por la señal de datos.
+<!--l. 149--><p class="indent" >   De aquí en adelante interpretaremos un flip-flop con su abstracción de alto nivel: una caja que es capaz de
+almacenar 1 bit de información, y modificar su valor.
+   <h4 class="subsectionHead"><span class="titlemark">4.2.   </span> <a 
+ id="x1-140004.2"></a>Registros</h4>
+<!--l. 154--><p class="noindent" >Un flip-flop D representa una unidad de almacenamiento de un bit. Si combinamos varias unidades
+de almacenamiento de 1 bit, podemos obtener unidades capaces de almacenar más información, las
+que se denominan <span 
+class="cmbx-10x-x-109">registros</span>. En la figura <a 
+href="#x1-140012">2<!--tex4ht:ref: fig:registroFlipFlop --></a> se observa un registro de 4 bits formado por 4 flip-flops
+D.
+<!--l. 156--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-140012"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 158--><p class="noindent" ><img 
+src="png/registroFlipFlop.png" alt="PIC" class="graphics" width="560" ><!--tex4ht:graphics  
+name="apunte034x.png" src="figs/registroFlipFlop.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;2: </span><span  
+class="content">Registro de 4 bits formado por 4 flip-flops D.</span></div><!--tex4ht:label?: x1-140012 -->
+                                                                                                  
+                                                                                                  
+<!--l. 161--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 163--><p class="indent" >   El registro más simple, como el que se observa en la figura, sólo permite cargar un valor cuando la señal de
+control se activa. Podemos agregar más funcionalidades al registro, por ejemplo, un bit secundario de
+selección de carga <span 
+class="cmmi-10x-x-109">L</span>, y un bit que permita resetear el valor actual a 0, <span 
+class="cmmi-10x-x-109">R</span>, lo que se observa en la figura
+<a 
+href="#x1-140023">3<!--tex4ht:ref: fig:registro4bits --></a>.
+<!--l. 165--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-140023"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 167--><p class="noindent" ><img 
+src="png/registro4bits.png" alt="PIC" class="graphics" width="480" height="360" ><!--tex4ht:graphics  
+name="apunte035x.png" src="figs/registro4bits.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;3: </span><span  
+class="content">Registro de 4 bits con bit de carga y reset.</span></div><!--tex4ht:label?: x1-140023 -->
+                                                                                                  
+                                                                                                  
+<!--l. 170--><p class="indent" >   </div><hr class="endfigure">
+   <h5 class="subsubsectionHead"><span class="titlemark">4.2.1.   </span> <a 
+ id="x1-150004.2.1"></a>Contadores</h5>
+<!--l. 175--><p class="noindent" >A partir de flip-flops y registros podemos construir circuitos de almacenamiento más complejos, como por ejemplo
+un contador. Un <span 
+class="cmbx-10x-x-109">contador incremental </span>es un circuito que almacena un cierto número y luego de recibir una señal
+de incremento aumenta en 1 el valor actual. Un <span 
+class="cmbx-10x-x-109">contador decremental </span>será equivalente pero en vez de aumentar
+en 1 disminuirá el valor en 1. Podemos combinar ambas opciones en un contador incremental/decremental o
+up/down.
+<!--l. 177--><p class="indent" >   Al igual que con el registro, podemos agregar más funcionalidades al contador, como bit de carga y reset,
+obteniendo el componente que se observa en la figura <a 
+href="#x1-150014">4<!--tex4ht:ref: fig:contador4bits --></a>.
+<!--l. 179--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-150014"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 181--><p class="noindent" ><img 
+src="png/contador4bits.png" alt="PIC" class="graphics" width="480" height="360" ><!--tex4ht:graphics  
+name="apunte036x.png" src="figs/contador4bits.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;4: </span><span  
+class="content">Contador incremental de 4 bits con carga y bit de reset.</span></div><!--tex4ht:label?: x1-150014 -->
+                                                                                                  
+                                                                                                  
+<!--l. 184--><p class="indent" >   </div><hr class="endfigure">
+   <h4 class="subsectionHead"><span class="titlemark">4.3.   </span> <a 
+ id="x1-160004.3"></a>Memorias</h4>
+<!--l. 188--><p class="noindent" >Los registros nos permiten almacenar cada uno una palabra o unidad de información. Nos gustaría poder escalar y
+tener un componente que almacene más información. Una opción simple es tener múltiples registros, pero para
+poder usarlos de esta manera tenemos que poder acceder a cada uno de ellos, poder cargarlos y leer información, lo
+que hace complejo hacer el escalamiento.
+<!--l. 190--><p class="indent" >   El componente que queremos debe permitir almacenar varias palabras, a las cuales podamos acceder y también
+modificar fácilmente. El componente que cumple con esta función se denomina una <span 
+class="cmbx-10x-x-109">memoria</span>, la cual almacena una
+cierta cantidad de palabras de un determinado tamaño y permite acceder a estas asociando a cada palabra un
+número o identificador representado por un número binario.
+<!--l. 192--><p class="indent" >   El identificador numérico usado para acceder a una palabra se denomina <span 
+class="cmbx-10x-x-109">dirección de memoria </span>y por
+consiguiente el proceso de acceder a una de las palabras se conoce como <span 
+class="cmbx-10x-x-109">direccionamiento</span>. Dado esto, la
+memoria puede ser pensada como una tabla de pares de valores: para cada dirección se asocia una
+palabra.
+<div class="center" 
+>
+<!--l. 194--><p class="noindent" >
+<div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1"><col 
+id="TBL-2-2"></colgroup><colgroup id="TBL-2-3g"><col 
+id="TBL-2-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-1"  
+class="td11">Dirección en decimal</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-1-3"  
+class="td11"> Palabra </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-2"  
+class="td11"> 000 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-2-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub>
+<span 
+class="cmr-8">0</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-1"  
+class="td11">         1             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-2"  
+class="td11">       001           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-3-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">1</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-4-1"  
+class="td11">         2             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-4-2"  
+class="td11">       010           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-4-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">2</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-5-1"  
+class="td11">         3             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-5-2"  
+class="td11">       011           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-5-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">3</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-6-1"  
+class="td11">         4             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-6-2"  
+class="td11">       100           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-6-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">4</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-7-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-7-1"  
+class="td11">         5             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-7-2"  
+class="td11">       101           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-7-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">5</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-8-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-8-1"  
+class="td11">         6             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-8-2"  
+class="td11">       110           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-8-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">6</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-9-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-9-1"  
+class="td11">         7             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-9-2"  
+class="td11">       111           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-2-9-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">7</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-10-"><td  style="white-space:nowrap; text-align:center;" id="TBL-2-10-1"  
+class="td11">                  </td></tr></table></div></div>
+<!--l. 210--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">4.3.1.   </span> <a 
+ id="x1-170004.3.1"></a>Tipos de memoria</h5>
+<!--l. 212--><p class="noindent" >Revisaremos dos tipos de memorias relevantes: la <span 
+class="cmbx-10x-x-109">random access memory </span>o <span 
+class="cmbx-10x-x-109">RAM </span>y la <span 
+class="cmbx-10x-x-109">read only memory </span>o
+<span 
+class="cmbx-10x-x-109">ROM</span>.
+<!--l. 214--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-180004.3.1"></a>Memorias de escritura-lectura: RAM</h5>
+<!--l. 216--><p class="noindent" >La RAM es una extensión de los registros. Al igual que estos, ocupa como unidad de almacenamiento
+de un bit un flip-flop, sin embargo a este se le agregan componentes para permitir cumplir con las
+funciones anteriormente descritas, formando lo que se denomina una <span 
+class="cmbx-10x-x-109">celda de memoria </span>o <span 
+class="cmbx-10x-x-109">memory</span>
+<span 
+class="cmbx-10x-x-109">cell</span>.
+<!--l. 218--><p class="indent" >   El diagrama de una RAM se observa en la figura <a 
+href="#x1-180015">5<!--tex4ht:ref: fig:ram --></a>. La RAM tiene tres buses de entrada: un bus de
+direccionamiento de <span 
+class="cmmi-10x-x-109">k </span>bits, que indica que palabra se quiere seleccionar (entrada <span 
+class="cmti-10x-x-109">Address</span>); un bus de datos de <span 
+class="cmmi-10x-x-109">n</span>
+bits, que tiene el dato que se guardará en la posición seleccionada (entrada <span 
+class="cmti-10x-x-109">Data In</span>); y un bus de control de 1
+bit que indica si la memoria está en modo lectura (0) o escritura (1) (entrada <span 
+class="cmti-10x-x-109">Write Enable </span>o <span 
+class="cmti-10x-x-109">WE</span>).
+Adicionalmente cuenta con un bus de salida de datos de <span 
+class="cmmi-10x-x-109">n </span>bits, que tiene el dato indicado por la dirección
+recibida (salida <span 
+class="cmti-10x-x-109">Data Out</span>). El número <span 
+class="cmmi-10x-x-109">n </span>será el tamaño de la palabra, el número <span 
+class="cmmi-10x-x-109">k </span>indica la cantidad de
+                                                                                                  
+                                                                                                  
+bits disponibles para direccionar, y por tanto 2<sup><span 
+class="cmmi-8">k</span></sup> será la cantidad de palabras distintas que se pueden
+almacenar.
+<!--l. 220--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-180015"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 222--><p class="noindent" ><img 
+src="png/ram.png" alt="PIC" class="graphics" width="360" ><!--tex4ht:graphics  
+name="apunte037x.png" src="figs/ram.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;5: </span><span  
+class="content">RAM de 2<sup><span 
+class="cmmi-8">k</span></sup> palabras de <span 
+class="cmmi-10x-x-109">n </span>bits.</span></div><!--tex4ht:label?: x1-180015 -->
+                                                                                                  
+                                                                                                  
+<!--l. 225--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 227--><p class="indent" >   La RAM tiene dos modos de funcionamiento: escribir o leer. Veamos ambos modos a través de un
+ejemplo: supongamos que tenemos una RAM de 2 bits de direccionamiento, es decir 2<sup><span 
+class="cmr-8">2</span></sup> = 4 palabras, y
+que cada palabra es de 8 bits = 1 byte. El diagrama de esta memoria se puede observar en la figura
+<a 
+href="#x1-180026">6<!--tex4ht:ref: fig:ram4x8 --></a>.
+<!--l. 229--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-180026"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 231--><p class="noindent" ><img 
+src="png/ram4x8.png" alt="PIC" class="graphics" width="360" ><!--tex4ht:graphics  
+name="apunte038x.png" src="figs/ram4x8.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;6: </span><span  
+class="content">RAM de 2<sup><span 
+class="cmr-8">2</span></sup> palabras de 8 bits.</span></div><!--tex4ht:label?: x1-180026 -->
+                                                                                                  
+                                                                                                  
+<!--l. 234--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 236--><p class="indent" >   Supongamos que la información inicial que tenemos en la RAM es la siguiente:
+<div class="center" 
+>
+<!--l. 238--><p class="noindent" >
+<div class="tabular"> <table id="TBL-3" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-3-1g"><col 
+id="TBL-3-1"><col 
+id="TBL-3-2"></colgroup><colgroup id="TBL-3-3g"><col 
+id="TBL-3-3"><col 
+id="TBL-3-4"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-1-1"  
+class="td11">Dirección en decimal</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-1-3"  
+class="td11">Palabra en binario</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-2-1"  
+class="td11"> 0 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-2-2"  
+class="td11"> 00 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-2-3"  
+class="td11"> 00011010</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-3-1"  
+class="td11">         1             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-3-2"  
+class="td11">       01            </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-3-3"  
+class="td11">    01000010      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-4-1"  
+class="td11">         2             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-4-2"  
+class="td11">       10            </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-4-3"  
+class="td11">    00000000      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-5-1"  
+class="td11">         3             </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-5-2"  
+class="td11">       11            </td><td  style="white-space:nowrap; text-align:center;" id="TBL-3-5-3"  
+class="td11">    00111111      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-3-6-1"  
+class="td11">                  </td></tr></table></div></div>
+<!--l. 249--><p class="indent" >   Para leer la dirección 1 debemos colocar el valor 01 en la entrada <span 
+class="cmti-10x-x-109">Address</span>, el valor 0 en la entrada <span 
+class="cmti-10x-x-109">WE</span>, y
+obtendremos el valor 01000010 en la salida <span 
+class="cmti-10x-x-109">Data Out</span>. Al igual que en los registros, en este modo lo que está en la
+entrada <span 
+class="cmti-10x-x-109">Data In </span>no va a entrar.
+<!--l. 251--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-180037"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 253--><p class="noindent" ><img 
+src="png/ram4x8Read.png" alt="PIC" class="graphics" width="360" ><!--tex4ht:graphics  
+name="apunte039x.png" src="figs/ram4x8Read.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;7: </span><span  
+class="content">RAM en modo lectura.</span></div><!--tex4ht:label?: x1-180037 -->
+                                                                                                  
+                                                                                                  
+<!--l. 256--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 258--><p class="indent" >   Para escribir en la dirección 2 debemos colocar el valor 10 en la entrada <span 
+class="cmti-10x-x-109">Address</span>, el valor 1 en la entrada <span 
+class="cmti-10x-x-109">WE</span>, y
+el dato que queremos guardar en la entrada <span 
+class="cmti-10x-x-109">Data In</span>, por ejemplo 11110000.
+<!--l. 260--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-180048"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 262--><p class="noindent" ><img 
+src="png/ram4x8Write.png" alt="PIC" class="graphics" width="360" ><!--tex4ht:graphics  
+name="apunte0310x.png" src="figs/ram4x8Write.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;8: </span><span  
+class="content">RAM en modo escritura.</span></div><!--tex4ht:label?: x1-180048 -->
+                                                                                                  
+                                                                                                  
+<!--l. 265--><p class="indent" >   </div><hr class="endfigure">
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-190004.3.1"></a>Memorias de sólo lectura: ROM</h5>
+<!--l. 269--><p class="noindent" >Un segundo tipo de memoria relevante son las memorias de sólo lectura o ROM. El concepto de memoria de «solo
+lectura»
+suena confuso, ya que si no se puede escribir información inicialmente, no tiene mayor sentido como memoria.
+Hablar de «solo lectura»
+en la práctica se interpreta como que «se puede escribir sólo una vez»
+o también en algunos casos que «se puede escribir más de una vez, pero a una velocidad y costo mucho mayor que
+leer»
+.
+<!--l. 271--><p class="indent" >   Dada esta definición, la utilidad de una memoria de este tipo es para almacenar datos que no variarán en el
+tiempo o que variarán poco. El hecho de que una memoria sea de «sólo lectura»
+tiene que ver con la tecnología usada. A diferencia de la RAM, no se utilizan flip-flops para almacenar bits, sino que
+otros mecanismos. En la ROM original y más simple el proceso de escritura consiste en soldar o dejar abiertas
+conexiones entre cables, lo que se interpreta como un 1 o 0.
+<!--l. 273--><p class="indent" >   El diagrama de la ROM se observa en la figura 17. La ROM es más simple que la RAM: tiene sólo un bus de
+entrada, el bus de direccionamiento de <span 
+class="cmmi-10x-x-109">k </span>bits, que indica que palabra se quiere seleccionar (entrada <span 
+class="cmti-10x-x-109">Address</span>) y un
+bus de salida de datos de <span 
+class="cmmi-10x-x-109">n </span>bits, que tiene el dato indicado por la dirección recibida (salida <span 
+class="cmti-10x-x-109">Data Out</span>). Al
+igual que en la RAM el número <span 
+class="cmmi-10x-x-109">n </span>será el tamaño de la palabra, el número <span 
+class="cmmi-10x-x-109">k </span>indica la cantidad de
+bits disponibles para direccionar, y por tanto 2<sup><span 
+class="cmmi-8">k</span></sup> será la cantidad de palabras distintas que se pueden
+almacenar.
+<!--l. 275--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-190019"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 277--><p class="noindent" ><img 
+src="png/rom.png" alt="PIC" class="graphics" width="360" ><!--tex4ht:graphics  
+name="apunte0311x.png" src="figs/rom.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;9: </span><span  
+class="content">ROM de 2<sup><span 
+class="cmmi-8">k</span></sup> palabras de <span 
+class="cmmi-10x-x-109">n </span>bits.</span></div><!--tex4ht:label?: x1-190019 -->
+                                                                                                  
+                                                                                                  
+<!--l. 280--><p class="indent" >   </div><hr class="endfigure">
+   <h3 class="sectionHead"><span class="titlemark">5.   </span> <a 
+ id="x1-200005"></a>Representación de Variables y Arreglos en Registros y Memorias</h3>
+<!--l. 284--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">5.1.   </span> <a 
+ id="x1-210005.1"></a>Variables y Registros</h4>
+<!--l. 286--><p class="noindent" >Para almacenar una variable necesitábamos una representación física que permitiera almacenar una
+secuencia de bits, del tamaño indicado por el tipo de dato, además de poder identificar de alguna forma la
+representación para diferenciarla de otras. Los registros son una primera alternativa para lograr esto.
+Como se observó previamente, un registro es básicamente un conjunto de flip-flops, es decir, cajas que
+almacenan bits. Dependiendo del tipo de dato, podríamos tener registros de distinto tamaño, que
+permitan representar los distintos tipos. Si queremos un tamaño único de registro, necesitamos que sea
+del tamaño del tipo de datos de mayor cantidad de bits. Por ejemplo, si queremos almacenar a lo
+más tipos de datos de 32 bits (como el tipo <span 
+class="cmtt-10x-x-109">int </span>de Java), necesitamos registros de 32 bits. Con estos
+registros también podemos representar tipos con menor cantidad de bits, por ejemplo de 8 bits (como el
+tipo <span 
+class="cmtt-10x-x-109">byte </span>de Java), puesto que para hacerlo basta con ocupar 8 bits de los 32, y no considerar el
+resto.
+<!--l. 288--><p class="indent" >   Para implementar la identificación, es necesario tener distintos registros para las distintas variables, de manera
+de poder decidir a que registro acceder conociendo el nombre de este. Por ejemplo si queremos tener
+dos variables, necesitamos que existan dos registros distintos al menos, que podríamos llamar A y
+B, y poder acceder a estos de manera diferenciada. Esto muestra una limitante del uso de registros
+para almacenar variables: necesitaríamos tantos registros como variables posibles para permitir la
+identificación.
+<!--l. 290--><p class="indent" >   En la práctica, los registros son ocupados para almacenar variables, pero solo de manera temporal, justo antes
+de realizar operaciones sobre éstas. Dado que los registros representarán solo variables temporales, no será necesario
+tener tantos registros como variables, y por tanto necesitaremos otro mecanismo más escalable que permita
+almacenar una cantidad mayor de variables.
+<!--l. 293--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">5.2.   </span> <a 
+ id="x1-220005.2"></a>Variables y Memorias</h4>
+<!--l. 295--><p class="noindent" >Las RAM representan un mecanismo ideal para evitar los problemas de los registros y permitir almacenar una
+mayor cantidad de variables. Como se detalló previamente, las memorias pueden ser pensadas como tablas, en que
+por un lado se tiene una dirección y por otra parte una palabra, que corresponde a una secuencia de bits de un
+cierto tamaño. Esta definición nos indica directamente que las memorias poseen los dos elementos que necesitamos
+para almacenar variables: un identificador, que en este caso serían las direcciones; y un lugar donde almacenar una
+secuencia de bits, asociado al identificador.
+<!--l. 297--><p class="indent" >   Un elemento importante que se debe considerar es que un número almacenado en memoria puede estar guardado
+en varias palabras. Por ejemplo, si el tamaño de las palabras de la memoria es 1 byte = 8 bits (que es el tamaño que
+habitualmente se utiliza), y queremos almacenar el número de punto flotante de tipo <span 
+class="cmbx-10x-x-109">single-precision </span>(<span 
+class="cmtt-10x-x-109">float</span>),
+siguiendo el estándar IEEE754 necesitamos 32 bits = 4 bytes = 4 palabras. De esta forma, para poder obtener un
+número de memoria, necesitamos saber a priori al menos de que tipo es el número, y cuántas palabras
+ocupa.
+<!--l. 299--><p class="indent" >   La información del tipo de dato y su tamaño puede no ser suficiente. Siguiendo el ejemplo anterior, tomemos un
+número de tipo <span 
+class="cmtt-10x-x-109">float</span>, por ejemplo el 0<span 
+class="cmmi-10x-x-109">,</span>5 = 0<span 
+class="cmmi-10x-x-109">,</span>1<sub><span 
+class="cmr-8">2</span></sub> el cual se representa según el estándar con la secuencia de bits:
+00111111000000000000000000000000. Como las palabras de nuestra memoria eran de tamaño 8 bits, debemos
+                                                                                                  
+                                                                                                  
+dividir nuestra secuencia en 4 partes: 00111111, 00000000, 00000000 y 00000000, las cuales podríamos almacenar a
+partir de la dirección 0 de la siguiente forma:
+<div class="center" 
+>
+<!--l. 301--><p class="noindent" >
+<div class="tabular"> <table id="TBL-4" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-4-1g"><col 
+id="TBL-4-1"><col 
+id="TBL-4-2"></colgroup><colgroup id="TBL-4-3g"><col 
+id="TBL-4-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-1"  
+class="td11">Dirección en hexa</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-1-3"  
+class="td11"> Palabra </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-1"  
+class="td11"> 0x00 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-2"  
+class="td11"> 000 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-2-3"  
+class="td11">00111111</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-1"  
+class="td11">      0x01         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-2"  
+class="td11">       001           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-3-3"  
+class="td11">00000000</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-1"  
+class="td11"> 0x02 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-2"  
+class="td11"> 010 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-4-3"  
+class="td11">00000000</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-1"  
+class="td11">      0x03         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-2"  
+class="td11">       011           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-5-3"  
+class="td11">00000000</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-6-1"  
+class="td11">      0x04         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-6-2"  
+class="td11">       100           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-6-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">4</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-7-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-7-1"  
+class="td11">      0x05         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-7-2"  
+class="td11">       101           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-7-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">5</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-8-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-8-1"  
+class="td11">      0x06         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-8-2"  
+class="td11">       110           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-8-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">6</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-9-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-9-1"  
+class="td11">      0x07         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-9-2"  
+class="td11">       111           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-4-9-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">7</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-10-"><td  style="white-space:nowrap; text-align:center;" id="TBL-4-10-1"  
+class="td11">               </td></tr></table></div></div>
+<!--l. 316--><p class="indent" >   El problema está en que esta es una de las formas en que podemos almacenar las 4 palabras que corresponde al
+número. De manera equivalente, podríamos almacenar las 4 palabras en el orden contrario:
+<div class="center" 
+>
+<!--l. 318--><p class="noindent" >
+<div class="tabular"> <table id="TBL-5" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-5-1g"><col 
+id="TBL-5-1"><col 
+id="TBL-5-2"></colgroup><colgroup id="TBL-5-3g"><col 
+id="TBL-5-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-1"  
+class="td11">Dirección en hexa</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-1-3"  
+class="td11"> Palabra </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-1"  
+class="td11"> 0x00 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-2"  
+class="td11"> 000 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-2-3"  
+class="td11">00000000</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-1"  
+class="td11">      0x01         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-2"  
+class="td11">       001           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-3-3"  
+class="td11">00000000</td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-1"  
+class="td11"> 0x02 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-2"  
+class="td11"> 010 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-4-3"  
+class="td11">00000000</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-5-1"  
+class="td11">      0x03         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-5-2"  
+class="td11">       011           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-5-3"  
+class="td11">00111111</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-6-1"  
+class="td11">      0x04         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-6-2"  
+class="td11">       100           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-6-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">4</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-7-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-7-1"  
+class="td11">      0x05         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-7-2"  
+class="td11">       101           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-7-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">5</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-8-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-8-1"  
+class="td11">      0x06         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-8-2"  
+class="td11">       110           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-8-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">6</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-9-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-9-1"  
+class="td11">      0x07         </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-9-2"  
+class="td11">       111           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-5-9-3"  
+class="td11"><span 
+class="cmmi-10x-x-109">Palabra</span><sub><span 
+class="cmr-8">7</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-10-"><td  style="white-space:nowrap; text-align:center;" id="TBL-5-10-1"  
+class="td11">               </td></tr></table></div></div>
+<!--l. 333--><p class="indent" >   Esto nos indica que además de saber el tipo del número y su tamaño asociado, debemos definir un orden en el
+cual se guardarán las palabras que componen el número. Este orden de las palabras se denomina <span 
+class="cmbx-10x-x-109">endianness</span>, y
+existen dos posibles formas de ordenar: <span 
+class="cmbx-10x-x-109">big endian</span>, en la que la palabra más significativa dentro
+del número (i.e. con los bits en las posiciones más altas) se almacena en la dirección menor (como el
+primer caso del ejemplo); <span 
+class="cmbx-10x-x-109">little endian</span>, en la que la palabra más significativa dentro del número se
+almacena en la dirección mayor (como el segundo caso del ejemplo). Al diseñar un computador, se
+deberá definir cuál de los dos órdenes se utiliza, y mantener la consistencia del orden para todos los tipos de
+datos.
+<!--l. 335--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">5.3.   </span> <a 
+ id="x1-230005.3"></a>Arreglos y Memorias</h4>
+<!--l. 337--><p class="noindent" >Las memorias también resultan útiles para almacenar estructuras de datos más complejas como los arreglos. Un
+arreglo requería un identificador de la lista de valores, la capacidad de guardar múltiples valores, y la posibilidad de
+acceder a estos múltiples valores de manera indexada. Veamos como almacenaríamos en memoria un
+arreglo unidimensional, comenzando con un arreglo de valores de tipo <span 
+class="cmtt-10x-x-109">byte</span>, con el siguiente contenido:
+0<span 
+class="cmmi-10x-x-109">x</span>00<span 
+class="cmmi-10x-x-109">,</span>0<span 
+class="cmmi-10x-x-109">x</span>05<span 
+class="cmmi-10x-x-109">,</span>0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">A,</span>0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">F</span>.
+<div class="center" 
+>
+<!--l. 339--><p class="noindent" >
+                                                                                                  
+                                                                                                  
+<div class="tabular"> <table id="TBL-6" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-6-1g"><col 
+id="TBL-6-1"><col 
+id="TBL-6-2"></colgroup><colgroup id="TBL-6-3g"><col 
+id="TBL-6-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-6-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-1-1"  
+class="td11">Dirección en hexadecimal</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-1-3"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-2-1"  
+class="td11"> 0x00 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-2-2"  
+class="td11"> 000 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-2-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>00</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-3-1"  
+class="td11">         0x01              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-3-2"  
+class="td11">       001           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-3-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>05  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-4-1"  
+class="td11">         0x02              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-4-2"  
+class="td11">       010           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-4-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">A </span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-5-1"  
+class="td11">         0x03              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-5-2"  
+class="td11">       011           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-6-5-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">F  </span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-6-6-1"  
+class="td11">                      </td></tr></table></div></div>
+<!--l. 350--><p class="indent" >   Se observa que podemos ocupar distintas direcciones de memoria para guardar los distintos valores.
+El identificador del arreglo va a corresponder a la dirección del primer valor, en este caso, estamos
+guardando el arreglo a partir de la dirección 0x00. Se observa también que para poder acceder al
+i-ésimo elemento, nos basta con sumarle i a la dirección del primer valor. Por ejemplo, para acceder al
+valor arreglo[1], accedemos a la dirección de arreglo (0x00) sumada con la posición (0x01), es decir
+accedemos a la dirección 0x01. Esta es en parte la razón por la cual los arreglos comienzan con índice
+0.
+<!--l. 352--><p class="indent" >   El largo del arreglo en general se almacenará de manera independiente, y al acceder al arreglo habrá que estar al
+tanto de este largo para no salirnos de los valores válidos.
+<!--l. 354--><p class="indent" >   Al igual que como se mencionó en el caso de las variables, un arreglo puede almacenar valores de tipos que
+tengan un tamaño mayor que la palabra. Revisemos un ejemplo de un arreglo de char (palabras de 2 bytes, 16 bits)
+0<span 
+class="cmmi-10x-x-109">x</span>0000<span 
+class="cmmi-10x-x-109">,</span>0<span 
+class="cmmi-10x-x-109">x</span>0005<span 
+class="cmmi-10x-x-109">,</span>0<span 
+class="cmmi-10x-x-109">x</span>000<span 
+class="cmmi-10x-x-109">A,</span>0<span 
+class="cmmi-10x-x-109">x</span>000<span 
+class="cmmi-10x-x-109">F</span> :
+<div class="center" 
+>
+<!--l. 356--><p class="noindent" >
+<div class="tabular"> <table id="TBL-7" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-7-1g"><col 
+id="TBL-7-1"><col 
+id="TBL-7-2"></colgroup><colgroup id="TBL-7-3g"><col 
+id="TBL-7-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-7-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-1-1"  
+class="td11">Dirección en hexadecimal</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-1-3"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-2-1"  
+class="td11"> 0x00 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-2-2"  
+class="td11"> 000 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-2-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>00</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-3-1"  
+class="td11">         0x01              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-3-2"  
+class="td11">       001           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-3-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>00  </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-4-1"  
+class="td11"> 0x02 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-4-2"  
+class="td11"> 010 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-4-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>00</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-5-1"  
+class="td11">         0x03              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-5-2"  
+class="td11">       011           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-5-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>05  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-6-1"  
+class="td11">         0x04              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-6-2"  
+class="td11">       100           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-6-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>00  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-7-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-7-1"  
+class="td11">         0x05              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-7-2"  
+class="td11">       101           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-7-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">A </span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-8-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-8-1"  
+class="td11">         0x06              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-8-2"  
+class="td11">       110           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-8-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>00  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-9-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-9-1"  
+class="td11">         0x07              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-9-2"  
+class="td11">       111           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-7-9-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">F  </span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-10-"><td  style="white-space:nowrap; text-align:center;" id="TBL-7-10-1"  
+class="td11">                      </td></tr></table></div></div>
+<!--l. 371--><p class="indent" >   En este caso nuevamente surge el concepto de endianness: cada valor del arreglo deberá guardarse en un cierto
+orden (big o little endian), lo cual debe estar convenido previamente para poder interpretar correctamente el
+número. Otra diferencia de este caso es que ahora para poder indexar el i-ésimo valor del arreglo no basta con
+sumar la dirección del arreglo (0x00) con el índice. La fórmula correcta para el caso general de arreglos con
+tipos de tamaño distinto a 1 byte es: <span 
+class="cmmi-10x-x-109">dir</span>(<span 
+class="cmmi-10x-x-109">arreglo</span>[<span 
+class="cmmi-10x-x-109">i</span>]) = <span 
+class="cmmi-10x-x-109">dir</span>(<span 
+class="cmmi-10x-x-109">arreglo</span>) + <span 
+class="cmmi-10x-x-109">i </span><span 
+class="cmsy-10x-x-109">&#x00D7; </span><span 
+class="cmmi-10x-x-109">sizeof</span>(<span 
+class="cmmi-10x-x-109">arreglo</span>[<span 
+class="cmmi-10x-x-109">i</span>]), donde
+<span 
+class="cmmi-10x-x-109">sizeof</span>(<span 
+class="cmmi-10x-x-109">arreglo</span>[<span 
+class="cmmi-10x-x-109">i</span>]) retorna el tamaño del tipo de dato del arreglo en bytes. Para el ejemplo del arreglo de
+valores de 2 bytes, si queremos acceder a la posición 2 del arreglo, debemos acceder a la dirección:
+<span 
+class="cmmi-10x-x-109">dir</span>(<span 
+class="cmmi-10x-x-109">arreglo</span>[2]) = 0<span 
+class="cmmi-10x-x-109">x</span>00 + 2 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>2 = 0<span 
+class="cmmi-10x-x-109">x</span>04.
+<!--l. 373--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">5.3.1.   </span> <a 
+ id="x1-240005.3.1"></a>Arreglos Multidimensionales</h5>
+<!--l. 375--><p class="noindent" >Un caso más complejo son los arreglos multidimensionales. Las memorias se prestan de manera natural, como se
+mostró anteriormente, para almacenar arreglos unidimensionales. Para arreglos de mayores dimensiones la solución
+no es tan directa y se debe definir la forma como se guarda el arreglo en memoria.
+<!--l. 377--><p class="indent" >   Para el caso de matrices (arreglos de 2 dimensiones), existen dos convenciones: guardar la secuencia de filas o
+guardar la secuencia de columnas. Por ejemplo suponiendo la matriz de 2x3:
+<div class="center" 
+>
+<!--l. 379--><p class="noindent" >
+                                                                                                  
+                                                                                                  
+<div class="tabular"> <table id="TBL-8" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-8-1g"><col 
+id="TBL-8-1"></colgroup><colgroup id="TBL-8-2g"><col 
+id="TBL-8-2"></colgroup><colgroup id="TBL-8-3g"><col 
+id="TBL-8-3"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-1-1"  
+class="td11">0x02</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-1-2"  
+class="td11">0x04</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-1-3"  
+class="td11">0x07</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-2-1"  
+class="td11"> 0x05 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-2-2"  
+class="td11">0xA</td><td  style="white-space:nowrap; text-align:center;" id="TBL-8-2-3"  
+class="td11">0x09</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-8-3-1"  
+class="td11">    </td></tr></table>
+</div></div>
+<!--l. 389--><p class="indent" >   Guardándola con la convención de filas obtendríamos en memoria:
+<div class="center" 
+>
+<!--l. 391--><p class="noindent" >
+<div class="tabular"> <table id="TBL-9" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-9-1g"><col 
+id="TBL-9-1"><col 
+id="TBL-9-2"></colgroup><colgroup id="TBL-9-3g"><col 
+id="TBL-9-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-9-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-1"  
+class="td11">Dirección en hexadecimal</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-1-3"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-1"  
+class="td11"> 0x00 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-2"  
+class="td11"> 000 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-2-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>02</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-1"  
+class="td11">         0x01              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-2"  
+class="td11">       001           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-3-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>04  </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-4-1"  
+class="td11"> 0x02 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-4-2"  
+class="td11"> 010 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-4-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>07</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-5-1"  
+class="td11">         0x03              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-5-2"  
+class="td11">       011           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-5-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>05  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-6-1"  
+class="td11">         0x04              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-6-2"  
+class="td11">       100           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-6-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">A </span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-7-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-7-1"  
+class="td11">         0x05              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-7-2"  
+class="td11">       101           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-9-7-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>09  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-8-"><td  style="white-space:nowrap; text-align:center;" id="TBL-9-8-1"  
+class="td11">                      </td></tr></table></div></div>
+<!--l. 404--><p class="indent" >   Guardándola con la convención de columnas obtendríamos en memoria:
+<div class="center" 
+>
+<!--l. 406--><p class="noindent" >
+<div class="tabular"> <table id="TBL-10" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-10-1g"><col 
+id="TBL-10-1"><col 
+id="TBL-10-2"></colgroup><colgroup id="TBL-10-3g"><col 
+id="TBL-10-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-10-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-1"  
+class="td11">Dirección en hexadecimal</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-2"  
+class="td11">Dirección en binario</td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-1-3"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-1"  
+class="td11"> 0x00 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-2"  
+class="td11"> 000 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-2-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>02</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-1"  
+class="td11">         0x01              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-2"  
+class="td11">       001           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-3-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>05  </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-4-1"  
+class="td11"> 0x02 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-4-2"  
+class="td11"> 010 </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-4-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>04</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-5-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-5-1"  
+class="td11">         0x03              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-5-2"  
+class="td11">       011           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-5-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>0<span 
+class="cmmi-10x-x-109">A </span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-6-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-6-1"  
+class="td11">         0x04              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-6-2"  
+class="td11">       100           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-6-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>07  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-7-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-7-1"  
+class="td11">         0x05              </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-7-2"  
+class="td11">       101           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-10-7-3"  
+class="td11"> 0<span 
+class="cmmi-10x-x-109">x</span>09  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-8-"><td  style="white-space:nowrap; text-align:center;" id="TBL-10-8-1"  
+class="td11">                      </td></tr></table></div></div>
+<!--l. 419--><p class="indent" >   La convención de filas es la más habitualmente usada. En este caso, para acceder a un valor matriz[i,j] se debe
+ocupar la fórmula: <span 
+class="cmmi-10x-x-109">dir</span>(<span 
+class="cmmi-10x-x-109">matriz</span>[<span 
+class="cmmi-10x-x-109">i,j</span>]) = <span 
+class="cmmi-10x-x-109">dir</span>(<span 
+class="cmmi-10x-x-109">matriz</span>) + <span 
+class="cmmi-10x-x-109">i</span><span 
+class="cmsy-10x-x-109">&#x00D7;</span><span 
+class="cmmi-10x-x-109">sizeof</span>(<span 
+class="cmmi-10x-x-109">matriz</span>[<span 
+class="cmmi-10x-x-109">i,j</span>]) <span 
+class="cmsy-10x-x-109">&#x00D7;</span><span 
+class="cmmi-10x-x-109">columnas </span>+ <span 
+class="cmmi-10x-x-109">j </span><span 
+class="cmsy-10x-x-109">&#x00D7;</span><span 
+class="cmmi-10x-x-109">sizeof</span>(<span 
+class="cmmi-10x-x-109">matriz</span>[<span 
+class="cmmi-10x-x-109">i,j</span>])
+<!--l. 421--><p class="indent" >   En nuestro ejemplo, para acceder al valor [1,1], en convención de filas, debemos acceder a la dirección:
+<span 
+class="cmmi-10x-x-109">dir</span>(<span 
+class="cmmi-10x-x-109">matriz</span>[1<span 
+class="cmmi-10x-x-109">,</span>1]) = 0<span 
+class="cmmi-10x-x-109">x</span>00 + 1 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>1 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>3 + 1 <span 
+class="cmsy-10x-x-109">&#x00D7; </span>1 = 0<span 
+class="cmmi-10x-x-109">x</span>04
+<!--l. 423--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">6.   </span> <a 
+ id="x1-250006"></a>Referencias</h3>
+     <ul class="itemize1">
+     <li class="itemize">Shannon, C.; A Symbolic Analysis of Relays and Switching Circuits, MIT Press, 1937.</li></ul>
+    
+</body></html> 
+
+                                                                                                  
+
+

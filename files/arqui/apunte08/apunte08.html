@@ -1,0 +1,3011 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html xml:lang="es" > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="apunte08.tex"> 
+<meta name="date" content="2014-04-05 21:35:00"> 
+<link rel="stylesheet" type="text/css" href="apunte08.css"> 
+</head><body 
+>
+<div class="center" 
+>
+<!--l. 16--><p class="noindent" >
+<!--l. 17--><p class="noindent" ><span 
+class="cmbx-10">IIC2343 Arquitectura de Computadores</span><br />
+<span 
+class="cmbx-12x-x-120">Arquitecturas de Computadores</span><br />
+<span 
+class="cmbsy-6">©</span><span 
+class="cmbx-6">Alejandro Echeverría, Hans-Albert L</span><span 
+class="cmbx-6">öbel</span><br />
+</div>
+   <h3 class="sectionHead"><span class="titlemark">1.   </span> <a 
+ id="x1-10001"></a>Motivación</h3>
+<!--l. 27--><p class="noindent" >El computador básico visto hasta ahora contiene todos los elementos fundamentales de un computador. Sin
+embargo, existe una diversa variedad de computadores distintos que aunque mantienen este core de funcionalidades
+en común, presentan diferencias tanto a nivel de hardware como a nivel de software.
+<!--l. 29--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2.   </span> <a 
+ id="x1-20002"></a>Arquitecturas de Computadores</h3>
+<!--l. 31--><p class="noindent" >Los distintos computadores existentes, aunque similares en los elementos fundamentales, presentan diversas
+diferencias en sus componentes de hardware y su definición de instrucciones. Las variaciones existentes dependerán
+del uso en que esté enfocado el computador particular, pudiendo incluir mayores funcionalidades o mejoras
+en la eficiencia. En general la arquitectura de un computador se puede caracterizar en base a dos
+elementos fundamentales: la <span 
+class="cmbx-10x-x-109">microarquitectura </span>y la <span 
+class="cmbx-10x-x-109">arquitectura del set de instrucciones o</span>
+<span 
+class="cmbx-10x-x-109">ISA</span>.
+<!--l. 33--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.1.   </span> <a 
+ id="x1-30002.1"></a>Microarquitecturas</h4>
+<!--l. 35--><p class="noindent" >La microarquitectura de un computador se refiere a los distintos componentes de hardware que estarán presente en
+un sistema computacional. Los elementos básicos de la microarquitectura de un computador se presentan a
+continuación. Además de estos elementos básicos, existe una variedad mayor de elementos diferenciadores que tienen
+que ver con mejorar la eficiencia de la comunicación entre las partes del computador, y en el procesamiento de
+información. Estos elementos irán siendo incluidos más adelante al modelo de computador visto hasta
+ahora.
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Registros: </span>distintos computadores tendrán distinta cantidad y tamaño de registros. En el caso del
+     computador básico visto hasta ahora se tienen dos registros de 8 bits. Aumentar la cantidad de registros
+     de un sistema permite reducir los traspasos de datos a memoria; aumentar el tamaño de los registros
+                                                                                                  
+                                                                                                  
+     (y por consiguiente de la unidad de ejecución) permite realizar operaciones con números de mayor
+     rango y precisión. Otro elemento diferenciador en el caso de los registros es la existencia de registros
+     de propósito especial. En el caso del computador básico, el registro <span 
+class="cmmi-10x-x-109">B </span>es registro de operaciones y de
+     direccionamiento, mientras que el registro <span 
+class="cmmi-10x-x-109">A </span>es sólo registro de operaciones.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Unidades de ejecución: </span>la unidad básica de ejecución de todo computador es la <span 
+class="cmmi-10x-x-109">ALU </span>y como tal
+     estará presente en toda microarquitectura. Sin embargo, es posible modificar las funcionalidades de la
+     <span 
+class="cmmi-10x-x-109">ALU</span>, por ejemplo eliminando los shifters, o agregando shifters con rotación, que en el caso de un <span 
+class="cmbx-10x-x-109">rotate</span>
+     <span 
+class="cmbx-10x-x-109">left </span>vuelve a incluir el bit más significativo que fue desplazado en el bit menos significativo, y de manera
+     inversa para un <span 
+class="cmbx-10x-x-109">rotate right</span>. También es posible agregar operaciones aritméticas más complejas,
+     como multiplicación y división. Adicionalmente, se pueden incluir otras unidades de ejecución como
+     una <span 
+class="cmmi-10x-x-109">FPU </span>e incluso varias unidades repetidas (varias <span 
+class="cmmi-10x-x-109">ALU</span>) por ejemplo para permitir realizar más
+     cálculos de manera simultánea.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Unidad  de  control:  </span>la  unidad  de  control  también  puede  presentar  variaciones  dependiendo
+     del  computador.  En  particular  existen  dos  modelos  de  unidades  de  control  principales:  sistemas
+     <span 
+class="cmbx-10x-x-109">hard-wired  </span>en  los  cuales  cada  instrucción  tiene  asociado  directamente  las  señales  de  control
+     que  ejecutan  una  función  en  el  computador  (como  en  el  computador  básico)  y  sistemas
+     <span 
+class="cmbx-10x-x-109">micro-programados </span>o de <span 
+class="cmbx-10x-x-109">microcode</span>. En estos últimos sistemas, la unidad de control es de mayor
+     complejidad, y cada instrucción del programa se traduce en un conjunto de microinstrucciones, que
+     ejecutan subfunciones muy específicas.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Condition codes: </span>los condition codes presentes en un computador también variarán de sistema en sistema.
+     Sistemas minimalistas trabajarán sólo con los condition codes <span 
+class="cmmi-10x-x-109">Z </span>y <span 
+class="cmmi-10x-x-109">C </span>por ejemplo. Condition codes adicionales
+     a los del computador básico son los siguientes:
+          <ul class="itemize2">
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Parity  (P)</span>:  indica  si  el  resultado  de  la  operación  es  par  o  impar,  revisando  el  bit  menos
+          significativo (si ese bit es 1, el resultado es impar).
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Auxiliary carry (AC, DC o A) </span>indica si hubo carry en el primer <span 
+class="cmti-10x-x-109">nibble </span>del número, es decir
+          en los primeros 4 bits.</li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Stack: </span>la presencia de un stack para subrutinas también es un elemento que variará según el sistema
+     computacional. Adicionalmente, algunos sistemas tendrán un stack manejado de manera independiente a la
+     memoria de datos, y por tanto con una limitación de niveles de profundidad menor que si estuviese integrado
+     en la memoria
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Memorias: </span>la cantidad de palabras de las memorias y el tamaño de cada una de estas también será un
+     elemento que variará entre distintos computadores. En el caso del computador básico visto hasta ahora, la
+     memoria de datos tiene dirección de 8 bits es decir 2<sup><span 
+class="cmr-8">8</span></sup> = 256 palabras, cada una de 8 bits. La memoria de
+     instrucciones por su parte tiene dirección de 8 bits es decir 2<sup><span 
+class="cmr-8">8</span></sup> = 256 palabras, cada una de 15
+     bits.
+     </li></ul>
+                                                                                                  
+                                                                                                  
+<!--l. 56--><p class="indent" >   Una característica relevante del computador básico respecto a sus memorias, es la presencia de dos memorias
+separadas: una de instrucciones y una de datos. Este paradigma arquitectónico se conoce como <span 
+class="cmbx-10x-x-109">arquitectura</span>
+<span 
+class="cmbx-10x-x-109">Harvard</span>, nombrado en honor al computador Havard Mark 1, que fue diseñado con esta arquitectura. Una
+alternativa a esto, es tener sólo una memoria, que tenga datos e instrucciones, lo que se conoce como <span 
+class="cmbx-10x-x-109">arquitectura</span>
+<span 
+class="cmbx-10x-x-109">Von Neumann</span>, nombrada en honor al matemático John von Neumann quien ideó esta arquitectura. A
+continuación se presentan las características de ambos paradigmas, contextualizados en el computador básico y en
+microarquitecturas reales.
+<!--l. 59--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.1.1.   </span> <a 
+ id="x1-40002.1.1"></a>Arquitectura Harvard</h5>
+<!--l. 61--><p class="noindent" >La arquitectura Harvard se caracteriza por tener dos memorias, una de instrucciones y una de datos. Esta
+arquitectura presenta una serie de ventajas:
+     <ul class="itemize1">
+     <li class="itemize">Permite tener tamaños distintos de palabras de datos y de instrucciones.
+     </li>
+     <li class="itemize">Permite tener tamaño de direcciones distintas para memoria de datos e instrucciones.
+     </li>
+     <li class="itemize">Permite tener tecnologías distintas en las memorias. En el caso del computador básico, por ejemplo se
+     ocupa una ROM para la memoria de instrucciones y una RAM para la de datos.</li></ul>
+<!--l. 69--><p class="indent" >   En general, esta arquitectura se utiliza principalmente en microcontroladores o en sistemas embebidos. A
+continuación se presenta un ejemplo de microarquitectura Harvard, el microcontrolador PIC16F877A:
+<!--l. 71--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-50002.1.1"></a>Microcontrolador PIC16F877A</h5>
+<!--l. 73--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Características</span>:
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Registros: </span>el PIC16F877A tiene un solo registro de trabajo para realizar operaciones, denominado
+     registro   <span 
+class="cmbx-10x-x-109">W</span>.   Adicionalmente   cuenta   con   un   registro   de   propósito   específico   para   realizar
+     direccionamiento indirecto, el registro <span 
+class="cmbx-10x-x-109">FSR</span>. Ambos registros son de 8 bits.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Unidades de ejecución: </span>el PIC16F877A tiene como única unidad de ejecución una <span 
+class="cmmi-10x-x-109">ALU </span>de 8 bits
+     sin shift aritmético, pero con rotate left y right (shift lógico).
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Unidad de control: </span>el mecanismo de control del PIC16F877A es hard-wired.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Condition codes: </span>los condition codes presentes en el PIC16F877A son el bit cero (Z), carry (C) y
+     carry auxiliar (AC).
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Stack: </span>el PIC16F877A tiene un stack independiente de la memoria de datos, de 8 niveles y palabras
+     de 13 bits.
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Memorias: </span>la memoria de instrucciones del PIC16F877A tiene dirección de 13 bits, es decir contiene
+     2<sup><span 
+class="cmr-8">13</span></sup>  = 8<span 
+class="cmmi-10x-x-109">K </span>palabras, cada una de 14 bits. La memoria de datos tiene dirección de 9 bits, es decir
+     2<sup><span 
+class="cmr-8">9</span></sup> = 512 palabras de 8 bits. Parte de la memoria está reservada para funciones especiales, por lo que
+     el tamaño efectivo es de 368 palabras. Esta memoria se caracteriza por estar subdividida en 4 regiones
+     lógicas denominadas bancos. La ventaja de esto es que ocupando un selector de banco de 2 bits es
+     posible direccionar la memoria con sólo 7 bits.</li></ul>
+<!--l. 88--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.1.2.   </span> <a 
+ id="x1-60002.1.2"></a>Arquitectura Von Neumann</h5>
+<!--l. 90--><p class="noindent" >El segundo paradigma arquitectónico predominante corresponde a la arquitectura Von Neumann. En esta
+arquitectura, tanto instrucciones como datos están almacenados juntos en una misma memoria. La gran
+ventaja de esto, es la capacidad de <span 
+class="cmbx-10x-x-109">poder crear programas para el computador, ocupando el</span>
+<span 
+class="cmbx-10x-x-109">propio computador</span>. En un computador con arquitectura Harvard los programas deben ser creados
+externamente y escritos en la ROM con mecanismos especiales. En un computador con arquitectura Von
+Neumann, en cambio, al poder trabajar los programas como si fueran datos, permite crearlos directamente
+en el mismo equipo, y es por esto que esta es la arquitectura predominante en computadores de uso
+personal.
+<!--l. 92--><p class="indent" >   La arquitectura de Von Neumann tiene una implementación más simple que la arquitectura de Harvard, gracias
+a tener una sola vía de acceso para datos e instrucciones. Una desventaja, sin embargo, es el «cuello de
+botella»
+que se genera debido a no poder acceder a las instrucciones y datos en paralelo. Otra desventaja pasa por la
+seguridad: al tener las instrucciones y datos juntos, es teóricamente posible modificar en tiempo de ejecución un
+programa, pudiendo insertar código malicioso. Estas desventajas, no obstante, fueron consideradas menores respecto
+a las ventajas de simpleza y programabilidad, por lo cual esta arquitectura es la más usada hoy en
+día.
+<!--l. 94--><p class="indent" >   La microarquitectura más importante que sigue el paradigma de Von Neumann es la de los procesadores Intel. A
+continuación se detallan las características del primer microprocesador Intel usado en computadores personales, el
+Intel 80186.
+<!--l. 96--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-70002.1.2"></a>Intel 80186</h5>
+<!--l. 98--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Características:</span><br 
+class="newline" />
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Registros: </span>El Intel 80186 posee 4 registros de uso general: AX, BX, CX, DX, todos de 16 bits. Para
+     estos registros, se permite también acceder a los subregistros <span 
+class="cmti-10x-x-109">high </span>y low que corresponden a los 8 bits
+     más y menos significativos respectivamente. De esta forma, el registro AX, puede ser trabajado como
+     dos registros de 8 bits, AH y AL, lo mismo para BX (BH y BL), CX (CH y CL) y DX (DH y DL).
+     Además cuenta con registros de uso específico también de 16 bits: SP y BP, para manejo del stack; SI
+     y DI para direccionamiento indexado; y registros especiales para acceder a distintos segmentos de la
+     memoria: CS, DS, ES y SS.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Unidades  de  ejecución: </span>El  Intel  80186  cuenta  con  una  ALU  de  16  bits  que  tiene  operaciones
+     aritméticas y lógicas básicas, así como también multiplicación, división y shifts lógicos y aritméticos.
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Unidad de control: </span>el mecanismo de control del Intel 80186 es una mezcla entre hard-wired y
+     microcode.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Condition codes: </span>el Intel 80186 tiene los siguientes condition codes: carry (C), overflow (O), cero
+     (Z), signo o negativo (S), carry auxiliar (A) y paridad (P).
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Stack: </span>El Intel 80186 tiene stack integrado en la memoria y controlado con dos registros: el stack
+     pointer (SP) y el base pointer (BP).
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Memorias: </span>El Intel 80186 tiene un bus de direcciones de 16 bits y bus de datos de 16 bits.</li></ul>
+<!--l. 109--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.2.   </span> <a 
+ id="x1-80002.2"></a>Arquitectura del Set de Instrucciones (ISA)</h4>
+<!--l. 111--><p class="noindent" >El segundo elemento que define la arquitectura de un computador es la arquitectura del set de instrucciones o ISA.
+Las instrucciones de un computador definirán como se deben escribir programas, y se diferenciarán por los
+siguientes factores.
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Tipos de instrucciones: </span>Dependiendo del ISA, existirán distintos tipos de instrucciones disponibles. En
+     general los tipos de instrucciones mínimos que se soportan en un ISA son:
+          <ul class="itemize2">
+          <li class="itemize">Instrucciones de carga
+          </li>
+          <li class="itemize">Instrucciones aritméticas
+          </li>
+          <li class="itemize">Instrucciones lógicas y shifts
+          </li>
+          <li class="itemize">Instrucciones de salto
+          </li>
+          <li class="itemize">Instrucciones de subrutina</li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Tipos de datos: </span>Distintos ISA pueden definir distintos tipos de datos que son soportados.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Modos de direccionamiento: </span>Además de las instrucciones, el ISA debe definir que modos de
+     direccionamiento son soportados por el sistema para generar la dirección efectiva (<span 
+class="cmbx-10x-x-109">effective address</span>)
+     con la que se accederá a memoria. Algunos de los posibles modos de direccionamiento son los
+     siguientes:
+                                                                                                  
+                                                                                                  
+          <ul class="itemize2">
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento inmediato o literal: </span>la forma más simple de acceder a información en un
+          computador es almacenar el dato en la instrucción misma como un literal que puede ser cargado
+          en un registro u ocupado como operando, lo que se conoce como direccionamiento inmediato o
+          literal.
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento por registros</span>: otra forma de acceder a la información del computador es
+          accediendo a la información almacenada en los registros</li></ul>
+     <!--l. 130--><p class="noindent" >Aunque los modos anteriores son clasificados como modos de direccionamiento, el concepto se utiliza
+     principalmente para referirse a como acceder a la información en la memoria de datos. Distintos computadores
+     tendrán distintos modos de acceder a las palabras de la memoria, a continuación se presentan los principales
+     modos usados:
+          <ul class="itemize2">
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento directo: </span>el direccionamiento directo corresponde a indicar en la instrucción
+          la dirección de memoria específica donde se encuentra el dato. Una instrucción que carga un valor
+          de memoria en un registro, por ejemplo, contendrá el opcode que indica la carga, y además como
+          parámetro, la dirección de la memoria de datos desde donde se obtendrá el valor. De esta forma,
+          se está indicando <span 
+class="cmbx-10x-x-109">directamente </span>en la instrucción desde donde se obtendrá el valor de memoria:
+          <div class="center" 
+>
+<!--l. 135--><p class="noindent" >
+<!--l. 136--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Memoria de instrucciones</span><br />
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1"></colgroup><colgroup id="TBL-1-2g"><col 
+id="TBL-1-2"><col 
+id="TBL-1-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-2"  
+class="td11">Opcode</td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-1-3"  
+class="td11">Parámetro</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-1"  
+class="td11">0x00       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-2"  
+class="td11">000100 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-2-3"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x02      </span></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-1"  
+class="td11">0x01 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-2"  
+class="td11">... </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-3-3"  
+class="td11">...</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-4-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-5-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-1"  
+class="td11">0x04       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-1-6-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-1-7-1"  
+class="td11">        </td></tr></table></div><br />
+<span 
+class="cmbx-10x-x-109">Memoria de datos</span><br />
+<div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1"></colgroup><colgroup id="TBL-2-2g"><col 
+id="TBL-2-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-2"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-1"  
+class="td11">0x00 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-2"  
+class="td11">Dato 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-1"  
+class="td11">0x01       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-2"  
+class="td11">Dato 1 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x02     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-2"  
+class="td11">Dato 2 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-2"  
+class="td11">Dato 3 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-1"  
+class="td11">0x04       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-2"  
+class="td11">Dato 4 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-1"  
+class="td11">        </td></tr></table></div><br />
+</div>
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento indirecto por registro: </span>el siguiente nivel de direccionamiento corresponde a no
+          indicar directamente la dirección sino a indicar en que registro se encuentra almacenada la dirección que
+          se utilizará para acceder a un valor de memoria. Por ejemplo, si el registro <span 
+class="cmmi-10x-x-109">B </span>tiene almacenado el valor
+          0<span 
+class="cmmi-10x-x-109">x</span>03, al ocupar direccionamiento indirecto por registro con el registro B estamos diciendo que el dato de
+          memoria que queremos ocupar es el que está almacenado en la dirección que tiene almacenado el registro
+          B, es decir, el dato en la dirección 0<span 
+class="cmmi-10x-x-109">x</span>03:
+                                                                                                  
+                                                                                                  
+          <div class="center" 
+>
+<!--l. 163--><p class="noindent" >
+<!--l. 164--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Registros</span><br />
+<div class="tabular"> <table id="TBL-3" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-3-1g"><col 
+id="TBL-3-1"></colgroup><colgroup id="TBL-3-2g"><col 
+id="TBL-3-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-1"  
+class="td11">Registro</td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-2"  
+class="td11">Valor</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-1"  
+class="td11">A          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-2"  
+class="td11">...     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-1"  
+class="td11">B          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-2"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x03</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-1"  
+class="td11">        </td></tr></table></div><br />
+<span 
+class="cmbx-10x-x-109">Memoria de datos</span><br />
+<div class="tabular"> <table id="TBL-4" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-4-1g"><col 
+id="TBL-4-1"></colgroup><colgroup id="TBL-4-2g"><col 
+id="TBL-4-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-2"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-1"  
+class="td11">0x00 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-2"  
+class="td11">Dato 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-1"  
+class="td11">0x01       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-2"  
+class="td11">Dato 1 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-2"  
+class="td11">Dato 2 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x03     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-2"  
+class="td11">Dato 3 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-6-1"  
+class="td11">0x04       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-6-2"  
+class="td11">Dato 4 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-7-1"  
+class="td11">        </td></tr></table></div><br />
+</div>
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento indirecto por registro base + offset: </span>el direccionamiento indirecto por registro
+          puede ser extendido de distintas maneras. Una de estas maneras incluye que la dirección para obtener el
+          dato se calcule ocupando el valor del registro como <span 
+class="cmbx-10x-x-109">base </span>y a esa base sumarle un <span 
+class="cmbx-10x-x-109">offset </span>o desplazamiento
+          que puede venir incluido como parámetro en la instrucción. Por ejemplo si el registro <span 
+class="cmmi-10x-x-109">B </span>tiene
+          almacenado el valor 0<span 
+class="cmmi-10x-x-109">x</span>01 y el parámetro de la instrucción es 0<span 
+class="cmmi-10x-x-109">x</span>02, la dirección apuntada es
+          0<span 
+class="cmmi-10x-x-109">x</span>01 + 0<span 
+class="cmmi-10x-x-109">x</span>02 = 0<span 
+class="cmmi-10x-x-109">x</span>03:
+          <div class="center" 
+>
+<!--l. 189--><p class="noindent" >
+<!--l. 190--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Registros</span><br />
+<div class="tabular"> <table id="TBL-5" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-5-1g"><col 
+id="TBL-5-1"></colgroup><colgroup id="TBL-5-2g"><col 
+id="TBL-5-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-5-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-1"  
+class="td11">Registro</td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-1-2"  
+class="td11">Valor</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-1"  
+class="td11">A          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-2-2"  
+class="td11">...     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-1"  
+class="td11">B          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-5-3-2"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x01</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-5-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-4-1"  
+class="td11">        </td></tr></table></div><br />
+<span 
+class="cmbx-10x-x-109">Memoria de instrucciones</span><br />
+<div class="tabular"> <table id="TBL-6" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-6-1g"><col 
+id="TBL-6-1"></colgroup><colgroup id="TBL-6-2g"><col 
+id="TBL-6-2"><col 
+id="TBL-6-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-6-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-2"  
+class="td11">Opcode</td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-1-3"  
+class="td11">Parámetro</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-1"  
+class="td11">0x00       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-2"  
+class="td11">000101 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-2-3"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x02      </span></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-1"  
+class="td11">0x01 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-2"  
+class="td11">... </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-3-3"  
+class="td11">...</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-4-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-5-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-1"  
+class="td11">0x04       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-6-6-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-6-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-6-7-1"  
+class="td11">        </td></tr></table></div><br />
+                                                                                                  
+                                                                                                  
+<span 
+class="cmbx-10x-x-109">Memoria de datos</span><br />
+<div class="tabular"> <table id="TBL-7" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-7-1g"><col 
+id="TBL-7-1"></colgroup><colgroup id="TBL-7-2g"><col 
+id="TBL-7-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-7-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-1-2"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-2-1"  
+class="td11">0x00 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-2-2"  
+class="td11">Dato 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-3-1"  
+class="td11">0x01       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-3-2"  
+class="td11">Dato 1 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-4-2"  
+class="td11">Dato 2 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-5-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x03     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-5-2"  
+class="td11">Dato 3 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-6-1"  
+class="td11">0x04       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-7-6-2"  
+class="td11">Dato 4 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-7-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-7-7-1"  
+class="td11">        </td></tr></table></div><br />
+</div>
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento indirecto por registro base + registro índice: </span>otra manera de extender el
+          direccionamiento indirecto por registro es ocupar dos registros para almacenar la dirección: un registro
+          base y un registro que almacena el offset, conocido como registro <span 
+class="cmbx-10x-x-109">índice</span>. Por ejemplo, si el registro B se
+          ocupa como base y tiene el valor 0<span 
+class="cmmi-10x-x-109">x</span>01 y el registro A se ocupa como índice y tiene el valor 0<span 
+class="cmmi-10x-x-109">x</span>03, la
+          dirección indicada es 0<span 
+class="cmmi-10x-x-109">x</span>01 + 0<span 
+class="cmmi-10x-x-109">x</span>03 = 0<span 
+class="cmmi-10x-x-109">x</span>04:
+          <div class="center" 
+>
+<!--l. 225--><p class="noindent" >
+<!--l. 226--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Registros</span><br />
+<div class="tabular"> <table id="TBL-8" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-8-1g"><col 
+id="TBL-8-1"></colgroup><colgroup id="TBL-8-2g"><col 
+id="TBL-8-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-8-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-1"  
+class="td11">Registro</td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-1-2"  
+class="td11">Valor</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-1"  
+class="td11">A          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-2-2"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x03</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-1"  
+class="td11">B          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-8-3-2"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x01</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-8-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-8-4-1"  
+class="td11">        </td></tr></table></div><br />
+<span 
+class="cmbx-10x-x-109">Memoria de datos</span><br />
+<div class="tabular"> <table id="TBL-9" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-9-1g"><col 
+id="TBL-9-1"></colgroup><colgroup id="TBL-9-2g"><col 
+id="TBL-9-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-9-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-1-2"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-2-1"  
+class="td11">0x00 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-2-2"  
+class="td11">Dato 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-3-1"  
+class="td11">0x01       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-3-2"  
+class="td11">Dato 1 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-4-2"  
+class="td11">Dato 2 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-5-2"  
+class="td11">Dato 3 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-6-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x04     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-6-2"  
+class="td11">Dato 4 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-9-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-9-7-1"  
+class="td11">        </td></tr></table></div><br />
+</div>
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento indirecto por registro con post incremento:  </span>el direccionamiento indirecto por
+          registro puede ser extendido para automáticamente incrementar el valor del registro base en 1 lo que es
+          útil para ir recorriendo una secuencia de valores relacionados de palabras de memoria, lo que se conoce
+          como un <span 
+class="cmbx-10x-x-109">arreglo </span>de datos:
+          <div class="center" 
+>
+<!--l. 248--><p class="noindent" >
+<!--l. 249--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Registros</span><br />
+<div class="tabular"> <table id="TBL-10" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-10-1g"><col 
+id="TBL-10-1"></colgroup><colgroup id="TBL-10-2g"><col 
+id="TBL-10-2"><col 
+id="TBL-10-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-10-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-1"  
+class="td11">Registro</td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-2"  
+class="td11">Valor actual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-1-3"  
+class="td11">Valor siguiente</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-1"  
+class="td11">A          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-2"  
+class="td11">...              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-2-3"  
+class="td11">...                 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-1"  
+class="td11">B          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-2"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x00        </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-3-3"  
+class="td11">0x01             </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-10-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-1"  
+class="td11">        </td></tr></table></div><br />
+<span 
+class="cmbx-10x-x-109">Memoria de datos</span><br />
+                                                                                                  
+                                                                                                  
+<div class="tabular"> <table id="TBL-11" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-11-1g"><col 
+id="TBL-11-1"></colgroup><colgroup id="TBL-11-2g"><col 
+id="TBL-11-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-11-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-1-2"  
+class="td11">Palabra          </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x00 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-2-2"  
+class="td11">Dato Arreglo 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-1"  
+class="td11">0x01       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-3-2"  
+class="td11">Dato Arreglo 1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-4-2"  
+class="td11">Dato Arreglo 2</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-5-2"  
+class="td11">Dato Arreglo 3</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-1"  
+class="td11">0x04       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-11-6-2"  
+class="td11">Dato Arreglo 4</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-11-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-11-7-1"  
+class="td11">        </td></tr></table></div><br />
+</div>
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento indirecto por registro con post decremento</span>: Similar al anterior, pero el valor
+          del registro de dirección se decrementa luego de ser usado:
+          <div class="center" 
+>
+<!--l. 273--><p class="noindent" >
+<!--l. 274--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Registros</span><br />
+<div class="tabular"> <table id="TBL-12" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-12-1g"><col 
+id="TBL-12-1"></colgroup><colgroup id="TBL-12-2g"><col 
+id="TBL-12-2"><col 
+id="TBL-12-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-12-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-1"  
+class="td11">Registro</td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-2"  
+class="td11">Valor actual</td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-3"  
+class="td11">Valor siguiente</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-1"  
+class="td11">A          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-2"  
+class="td11">...              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-3"  
+class="td11">...                 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-1"  
+class="td11">B          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-2"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x04        </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-3"  
+class="td11">0x03             </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-12-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-4-1"  
+class="td11">        </td></tr></table></div><br />
+<span 
+class="cmbx-10x-x-109">Memoria de datos</span><br />
+<div class="tabular"> <table id="TBL-13" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-13-1g"><col 
+id="TBL-13-1"></colgroup><colgroup id="TBL-13-2g"><col 
+id="TBL-13-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-13-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-1-2"  
+class="td11">Palabra          </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-2-1"  
+class="td11">0x00 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-2-2"  
+class="td11">Dato Arreglo 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-3-1"  
+class="td11">0x01       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-3-2"  
+class="td11">Dato Arreglo 1</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-4-2"  
+class="td11">Dato Arreglo 2</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-5-2"  
+class="td11">Dato Arreglo 3</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-6-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x04     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-6-2"  
+class="td11">Dato Arreglo 4</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-7-1"  
+class="td11">        </td></tr></table></div><br />
+</div>
+          </li>
+          <li class="itemize"><span 
+class="cmbx-10x-x-109">Direccionamiento indirecto: </span>El direccionamiento indirecto extiende la idea del indirecto por registro,
+          pero ocupando una palabra de memoria para almacenar la dirección. Este modo es similar al
+          modo directo, en que se utiliza el parámetro de la instrucción para direccionar, pero la
+          diferencia es que el parámetro indica la palabra en memoria que tiene la dirección del dato, es
+          decir indica <span 
+class="cmbx-10x-x-109">indirectamente </span>como acceder al dato. Por ejemplo, si la instrucción tiene el
+          parámetro 0<span 
+class="cmmi-10x-x-109">x</span>02, ocupando direccionamiento indirecto indica que la palabra almacenada en
+          la dirección 0<span 
+class="cmmi-10x-x-109">x</span>02 (por ejemplo 0<span 
+class="cmmi-10x-x-109">x</span>04) corresponde a la dirección del dato requerido en la
+          memoria:
+          <div class="center" 
+>
+<!--l. 298--><p class="noindent" >
+<!--l. 299--><p class="noindent" ><span 
+class="cmbx-10x-x-109">Memoria de instrucciones</span><br />
+<div class="tabular"> <table id="TBL-14" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-14-1g"><col 
+id="TBL-14-1"></colgroup><colgroup id="TBL-14-2g"><col 
+id="TBL-14-2"><col 
+id="TBL-14-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-14-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-14-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-1-2"  
+class="td11">Opcode</td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-1-3"  
+class="td11">Parámetro</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-14-2-1"  
+class="td11">0x00       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-2-2"  
+class="td11">000101 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-2-3"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x02      </span></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-14-3-1"  
+class="td11">0x01 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-3-2"  
+class="td11">... </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-3-3"  
+class="td11">...</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-14-4-1"  
+class="td11">0x02       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-4-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-4-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-14-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-5-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-5-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-14-6-1"  
+class="td11">0x04       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-6-2"  
+class="td11">...        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-14-6-3"  
+class="td11">...           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-14-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-14-7-1"  
+class="td11">        </td></tr></table></div><br />
+<span 
+class="cmbx-10x-x-109">Memoria de datos</span><br />
+                                                                                                  
+                                                                                                  
+<div class="tabular"> <table id="TBL-15" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-15-1g"><col 
+id="TBL-15-1"></colgroup><colgroup id="TBL-15-2g"><col 
+id="TBL-15-2"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-15-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-15-1-1"  
+class="td11">Dirección</td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-1-2"  
+class="td11">Palabra</td></tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-15-2-1"  
+class="td11">0x00 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-2-2"  
+class="td11">Dato 0</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-15-3-1"  
+class="td11">0x01       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-3-2"  
+class="td11">Dato 1 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-15-4-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x02     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-4-2"  
+class="td11">0x04    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-15-5-1"  
+class="td11">0x03       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-5-2"  
+class="td11">Dato 3 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-15-6-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">0x04     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-15-6-2"  
+class="td11">Dato 4 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-15-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-15-7-1"  
+class="td11">        </td></tr></table></div><br />
+</div>
+          </li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Manejo del stack: </span>El manejo del stack variará según cada computador, lo que se ve reflejado en las
+     instrucciones disponibles en el ISA. En general, el mínimo manejo de stack corresponde a usarlo para
+     almacenar el valor del <span 
+class="cmmi-10x-x-109">PC </span>en los llamados a subrutinas. Adicionalmente, el stack puede ser usado como
+     almacenamiento general para los registros y también como mecanismo de paso de parámetros y retorno de
+     subrutinas.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Formato de la instrucción: </span>El formato de la instrucción especifica la traducción en lenguaje de máquina de
+     una instrucción particular del set. Dependiendo del ISA, este formato será general para todas las
+     instrucciones, o existirán distintos formatos específicos.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Palabras por instrucción: </span>La cantidad de palabras que se requieran para almacenar una instrucción
+     variará en distintos ISA, y también en un mismo ISA, distintas instrucciones pueden tener distinto
+     largo.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Ciclos por instrucción: </span>La cantidad de ciclos que se demora en ejecutar cada instrucción también
+     variará en distintos ISA, y también en un mismo ISA, distintas instrucciones pueden tener distinto
+     largo.</li></ul>
+<!--l. 329--><p class="indent" >   El ISA está estrechamente vinculado con el <span 
+class="cmbx-10x-x-109">lenguaje assembly</span>, pero no son equivalentes. Es posible definir
+varios assembly para un mismo ISA, ya que elementos como las secciones de datos, uso de labels y sintaxis numérica
+pueden ser definidos de manera distinta en distintos assembly.
+<!--l. 331--><p class="indent" >   Existen dos paradigmas principales para implementar ISA: Reduced Instruccion Set Computer (RISC) y
+Complex Instruction Set Computer (CISC), los cuales se presentan a continuación.
+<!--l. 333--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.2.1.   </span> <a 
+ id="x1-90002.2.1"></a>Reduced Instruction Set Computer (RISC)</h5>
+<!--l. 335--><p class="noindent" >Los sets de instrucciones RISC fueron desarrollados con el objetivo de minimizar la complejidad del hardware del
+computador, simplificando la arquitectura y diseño de este. En general un computador con ISA RISC se califica
+como que tiene «énfasis en el software»
+ya que el hardware del computador sólo provee funcionalidades básicas, y las funcionalidades avanzadas son
+implementadas por software. Sus características principales son las siguientes:
+     <ul class="itemize1">
+     <li class="itemize">Instrucciones de un solo ciclo de clock.
+     </li>
+     <li class="itemize">Unidad de control hard-wired
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize">Formato de instrucción uniforme e idealmente almacenado en sólo una palabra.
+     </li>
+     <li class="itemize">Registros de propósito general idénticos, que permiten a todos realizar las mismas funciones.
+     </li>
+     <li class="itemize">Modos de direccionamiento simples.
+     </li>
+     <li class="itemize">Códigos en assembly largos.
+     </li>
+     <li class="itemize">Pocos tipos de datos soportados directamente en hardware.</li></ul>
+<!--l. 347--><p class="indent" >   El computador básico tiene un ISA que se puede clasificar como RISC, cumpliendo con todos los requisitos
+anteriores, salvo el hecho de tener registros de propósito general con las mismas funciones. El microcontrolador
+PIC16F877A también tiene un ISA que se puede clasificar como RISC. Sus características se describen a
+continuación.
+<!--l. 350--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-100002.2.1"></a>ISA PIC16F877A</h5>
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Tipos de instrucciones:</span>
+          <ul class="itemize2">
+          <li class="itemize">Instrucciones de carga: Instrucciones especiales para cargar entre el registro <span 
+class="cmmi-10x-x-109">W </span>y memoria y para
+          cargar un literal al registro <span 
+class="cmmi-10x-x-109">W </span>(ver modos de direccionamiento).
+          </li>
+          <li class="itemize">Instrucciones aritméticas: Instrucciones para sumar y restar.
+          </li>
+          <li class="itemize">Instrucciones lógicas y shifts: Instrucciones para implementar las operaciones lógicas <span 
+class="cmmi-10x-x-109">AND</span>, <span 
+class="cmmi-10x-x-109">OR</span>
+          y <span 
+class="cmmi-10x-x-109">XOR</span>. Además cuenta con instrucciones para realizar shift rotates.
+          </li>
+          <li class="itemize">Instrucciones de salto: El PIC tiene dos tipos de instrucciones de salto: salto con comparación en
+          un ciclo, implementado en las instrucciones <span 
+class="cmtt-10x-x-109">DECFSZ f,d </span>e <span 
+class="cmtt-10x-x-109">INCFSZ f,d </span>que decrementan
+          o incrementan el valor de memoria guardado en <span 
+class="cmmi-10x-x-109">f </span>y se saltan la siguiente instrucción si
+          <span 
+class="cmmi-10x-x-109">Z </span>= 0; salto con bit test, implementado en las instrucciones <span 
+class="cmtt-10x-x-109">BTFSC f,b </span>y <span 
+class="cmtt-10x-x-109">BTFSS f,b </span>que se
+          saltan la siguiente instrucción si el bit <span 
+class="cmmi-10x-x-109">b </span>del valor de memoria guardado en <span 
+class="cmmi-10x-x-109">f </span>está en 0
+          («Clear»
+          ) o está en 1 («Set»
+          ) respectivamente.
+          </li>
+          <li class="itemize">Instrucciones de subrutina:</li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Tipos de datos: </span>Las variables sólo pueden ser de 8 bits, es decir de 1 byte, que es el tamaño de palabras de
+     la memoria de datos.
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Modos de direccionamiento: </span>El ISA implementa los siguientes modos de direccionamiento:
+          <ul class="itemize2">
+          <li class="itemize">Direccionamiento inmediato: realizado mediante instrucciones especiales de la forma «inst»
+          <span 
+class="cmtt-10x-x-109">LW</span>, como por ejemplo <span 
+class="cmtt-10x-x-109">MOVLW k</span>, que copia en el registro W el valor de k. Soporta literales de 8
+          bits.
+          </li>
+          <li class="itemize">Direccionamiento directo: realizado mediante instrucciones especiales de la forma «inst»
+          <span 
+class="cmtt-10x-x-109">WF </span>para mover de <span 
+class="cmmi-10x-x-109">W </span>a <span 
+class="cmmi-10x-x-109">f</span>, como <span 
+class="cmtt-10x-x-109">MOVWF f</span>, e instrucciones de la forma «inst»
+          <span 
+class="cmtt-10x-x-109">WF </span>para mover de <span 
+class="cmmi-10x-x-109">f </span>a <span 
+class="cmmi-10x-x-109">W</span>, como <span 
+class="cmtt-10x-x-109">MOVF f,d</span>. Debido a que se utiliza una instrucción especial, distinta a la
+          del literal, no se ocupan elementos de sintaxis especial (como los paréntesis) para diferenciar la dirección
+          de memoria del valor asociado a esta.
+          </li>
+          <li class="itemize">Direccionamiento indirecto por registro: el direccionamiento indirecto se implementa ocupando el registro
+          especial <span 
+class="cmmi-10x-x-109">FSR</span>.</li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Manejo del stack: </span>Sólo para almacenar el <span 
+class="cmmi-10x-x-109">PC </span>al hacer llamados a subrutinas con <span 
+class="cmtt-10x-x-109">CALL</span>, no se puede ocupar
+     para almacenamiento general.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Formato de la instrucción: </span>Distintos tipos de instrucción tienen distintos formatos:
+          <ul class="itemize2">
+          <li class="itemize">Byte-oriented:<br 
+class="newline" />
+          <div class="center" 
+>
+<!--l. 372--><p class="noindent" >
+<div class="tabular"> <table id="TBL-16" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-16-1g"><col 
+id="TBL-16-1"><col 
+id="TBL-16-2"><col 
+id="TBL-16-3"></colgroup><colgroup id="TBL-16-4g"><col 
+id="TBL-16-4"></colgroup><colgroup id="TBL-16-5g"><col 
+id="TBL-16-5"><col 
+id="TBL-16-6"><col 
+id="TBL-16-7"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-16-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-16-1-1"  
+class="td11"><span 
+class="cmr-8">13</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-1-2"  
+class="td11">        </td><td  style="white-space:nowrap; text-align:right;" id="TBL-16-1-3"  
+class="td11"><span 
+class="cmr-8">8</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-1-4"  
+class="td11"><span 
+class="cmr-8">7</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-16-1-5"  
+class="td11"><span 
+class="cmr-8">6</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-1-6"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:right;" id="TBL-16-1-7"  
+class="td11"><span 
+class="cmr-8">0</span></td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-16-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-16-2-1"  
+class="td11">  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-2-2"  
+class="td11">OPCODE</td><td  style="white-space:nowrap; text-align:right;" id="TBL-16-2-3"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-2-4"  
+class="td11">d</td><td  style="white-space:nowrap; text-align:left;" id="TBL-16-2-5"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-16-2-6"  
+class="td11">f</td><td  style="white-space:nowrap; text-align:right;" id="TBL-16-2-7"  
+class="td11"> </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-16-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-16-3-1"  
+class="td11">  </td></tr></table>
+</div></div>
+          </li>
+          <li class="itemize">Bit-oriented:<br 
+class="newline" />
+          <div class="center" 
+>
+<!--l. 382--><p class="noindent" >
+<div class="tabular"> <table id="TBL-17" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-17-1g"><col 
+id="TBL-17-1"><col 
+id="TBL-17-2"><col 
+id="TBL-17-3"></colgroup><colgroup id="TBL-17-4g"><col 
+id="TBL-17-4"><col 
+id="TBL-17-5"><col 
+id="TBL-17-6"></colgroup><colgroup id="TBL-17-7g"><col 
+id="TBL-17-7"><col 
+id="TBL-17-8"><col 
+id="TBL-17-9"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-17-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-17-1-1"  
+class="td11"><span 
+class="cmr-8">13</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-1-2"  
+class="td11">        </td><td  style="white-space:nowrap; text-align:right;" id="TBL-17-1-3"  
+class="td11"><span 
+class="cmr-8">10</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-17-1-4"  
+class="td11"><span 
+class="cmr-8">9</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-1-5"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:right;" id="TBL-17-1-6"  
+class="td11"><span 
+class="cmr-8">7</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-17-1-7"  
+class="td11"><span 
+class="cmr-8">6</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-1-8"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:right;" id="TBL-17-1-9"  
+class="td11"><span 
+class="cmr-8">0</span></td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-17-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-17-2-1"  
+class="td11">  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-2-2"  
+class="td11">OPCODE</td><td  style="white-space:nowrap; text-align:right;" id="TBL-17-2-3"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-17-2-4"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-2-5"  
+class="td11">b</td><td  style="white-space:nowrap; text-align:right;" id="TBL-17-2-6"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-17-2-7"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-17-2-8"  
+class="td11">f</td><td  style="white-space:nowrap; text-align:right;" id="TBL-17-2-9"  
+class="td11"> </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-17-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-17-3-1"  
+class="td11">  </td></tr></table>
+</div></div>
+          </li>
+          <li class="itemize">Literal:<br 
+class="newline" />
+          <div class="center" 
+>
+<!--l. 392--><p class="noindent" >
+                                                                                                  
+                                                                                                  
+<div class="tabular"> <table id="TBL-18" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-18-1g"><col 
+id="TBL-18-1"><col 
+id="TBL-18-2"><col 
+id="TBL-18-3"></colgroup><colgroup id="TBL-18-4g"><col 
+id="TBL-18-4"><col 
+id="TBL-18-5"><col 
+id="TBL-18-6"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-18-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-18-1-1"  
+class="td11"><span 
+class="cmr-8">13</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-1-2"  
+class="td11">        </td><td  style="white-space:nowrap; text-align:right;" id="TBL-18-1-3"  
+class="td11"><span 
+class="cmr-8">8</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-18-1-4"  
+class="td11"><span 
+class="cmr-8">7</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-1-5"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:right;" id="TBL-18-1-6"  
+class="td11"><span 
+class="cmr-8">0</span></td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-18-2-1"  
+class="td11">  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-2-2"  
+class="td11">OPCODE</td><td  style="white-space:nowrap; text-align:right;" id="TBL-18-2-3"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-18-2-4"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-18-2-5"  
+class="td11">k</td><td  style="white-space:nowrap; text-align:right;" id="TBL-18-2-6"  
+class="td11"> </td></tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-18-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-18-3-1"  
+class="td11"> </td>
+</tr></table>
+</div></div>
+          </li>
+          <li class="itemize">Saltos:
+          <div class="center" 
+>
+<!--l. 402--><p class="noindent" >
+<div class="tabular"> <table id="TBL-19" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-19-1g"><col 
+id="TBL-19-1"><col 
+id="TBL-19-2"><col 
+id="TBL-19-3"></colgroup><colgroup id="TBL-19-4g"><col 
+id="TBL-19-4"><col 
+id="TBL-19-5"><col 
+id="TBL-19-6"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-19-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-19-1-1"  
+class="td11"><span 
+class="cmr-8">13</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-1-2"  
+class="td11">        </td><td  style="white-space:nowrap; text-align:right;" id="TBL-19-1-3"  
+class="td11"><span 
+class="cmr-8">11</span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-19-1-4"  
+class="td11"><span 
+class="cmr-8">10</span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-1-5"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:right;" id="TBL-19-1-6"  
+class="td11"><span 
+class="cmr-8">0</span></td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-19-2-1"  
+class="td11">  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-2-2"  
+class="td11">OPCODE</td><td  style="white-space:nowrap; text-align:right;" id="TBL-19-2-3"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:left;" id="TBL-19-2-4"  
+class="td11"> </td><td  style="white-space:nowrap; text-align:center;" id="TBL-19-2-5"  
+class="td11">k</td><td  style="white-space:nowrap; text-align:right;" id="TBL-19-2-6"  
+class="td11"> </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-19-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-19-3-1"  
+class="td11">  </td></tr></table>
+</div></div>
+          <!--l. 411--><p class="noindent" >Donde:
+              <ul class="itemize3">
+              <li class="itemize"><span 
+class="cmmi-10x-x-109">d </span>representa el destino: <span 
+class="cmmi-10x-x-109">d </span>= 0 representa el registro <span 
+class="cmmi-10x-x-109">W</span>; <span 
+class="cmmi-10x-x-109">d </span>= 1 representa la dirección de
+              memoria <span 
+class="cmmi-10x-x-109">f</span>
+              </li>
+              <li class="itemize"><span 
+class="cmmi-10x-x-109">f </span>representa la dirección de memoria de datos.
+              </li>
+              <li class="itemize"><span 
+class="cmmi-10x-x-109">b </span>representa un bit, comenzando en 0 desde el menos significativo.
+              </li>
+              <li class="itemize"><span 
+class="cmmi-10x-x-109">k </span>representa un literal.</li></ul>
+          </li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Palabras por instrucción: </span>Una palabra de 14 bits por instrucción.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Ciclos por instrucción: </span>Salvo algunas excepciones, las instrucciones son de 1 ciclo.</li></ul>
+<!--l. 425--><p class="noindent" >A modo de ejemplo, el siguiente código de multiplicación en lenguaje de alto nivel:<br 
+class="newline" />
+   <!--l. 430-->
+   <div class="lstlisting" id="listing-1"><span class="label"><a 
+ id="x1-10001r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">2;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10002r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">3;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10003r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10004r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10005r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">do</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10006r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10007r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">+=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10008r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">--;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10009r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10010r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">while</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">!=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0);</span>
+   
+   </div>
+<!--l. 445--><p class="indent" >   que se escribe así en el assembly del computador básico:
+   <!--l. 450-->
+   <div class="lstlisting" id="listing-2"><span class="label"><a 
+ id="x1-10013r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">DATA</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10014r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">2</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10015r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">3</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10016r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10017r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10018r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CODE</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10019r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10020r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">),</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10021r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,(</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10022r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,(</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10023r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">),</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10024r12"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10025r13"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SUB</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,1</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10026r14"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">),</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10027r15"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CMP</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">A</span><span 
+class="cmtt-8">,0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10028r16"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">JNE</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span>
+   
+   </div>
+<!--l. 470--><p class="indent" >   se escribe de la siguiente forma en el assembly de PIC16F877A:
+   <!--l. 475-->
+   <div class="lstlisting" id="listing-3"><span class="label"><a 
+ id="x1-10029r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10030r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">EQU</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">H</span><span 
+class="cmtt-8">&#8217;20&#8217;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10031r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">EQU</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">H</span><span 
+class="cmtt-8">&#8217;21&#8217;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10032r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">EQU</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">H</span><span 
+class="cmtt-8">&#8217;22&#8217;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10033r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">EQU</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">H</span><span 
+class="cmtt-8">&#8217;23&#8217;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10034r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10035r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVLW</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">2</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10036r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVWF</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10037r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVLW</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">3</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10038r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVWF</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10039r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVF</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">,0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10040r12"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVWF</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10041r13"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVF</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">,0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10042r14"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADDWF</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">,0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10043r15"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOVWF</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10044r16"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">DECFSZ</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">,1</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-10045r17"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">GOTO</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span>
+   
+   </div>
+                                                                                                  
+                                                                                                  
+<!--l. 497--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.2.2.   </span> <a 
+ id="x1-110002.2.2"></a>Complex Instruction Set Computer (CISC)</h5>
+<!--l. 499--><p class="noindent" >Los sets de instrucciones CISC se caracterizan por tener muchas instrucciones y de alta complejidad, enfocándose en
+tener componentes de hardware específicos para implementar distintas funcionalidades. Los computadores con ISA
+CISC se califican con «énfasis en el hardware»
+ya que poseen diversos componentes de hardware para soportar instrucciones avanzadas, y habitualmente incluyen
+una unidad de control con microcode.
+<!--l. 501--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-120002.2.2"></a>Características</h5>
+     <ul class="itemize1">
+     <li class="itemize">Instrucciones de múltiples clock.
+     </li>
+     <li class="itemize">Unidad de control con algún grado de microcode.
+     </li>
+     <li class="itemize">Códigos cortos.
+     </li>
+     <li class="itemize">Tipos de datos complejos implementados en hardware.</li></ul>
+<!--l. 509--><p class="noindent" >El ejemplo clásico de un set ISA es el set de instrucciones de las arquitecturas de Intel, denominado <span 
+class="cmbx-10x-x-109">x86</span>. A
+continuación se presentan sus características principales.
+<!--l. 511--><p class="noindent" >
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-130002.2.2"></a>ISA Intel x86</h5>
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Tipos de instrucciones:</span>
+          <ul class="itemize2">
+          <li class="itemize">Instrucciones de carga: Instrucción general <span 
+class="cmtt-10x-x-109">MOV </span>para realizar transferencias ocupando distintos
+          tipos de direccionamiento.
+          </li>
+          <li class="itemize">Instrucciones   aritméticas:   Instrucciones   de   suma   y   resta,   además   de   instrucciones   de
+          multiplicación con y sin signo (<span 
+class="cmtt-10x-x-109">IMUL </span>y <span 
+class="cmtt-10x-x-109">MUL</span>) y división con y sin signo (<span 
+class="cmtt-10x-x-109">IDIV </span>y <span 
+class="cmtt-10x-x-109">DIV</span>).
+          </li>
+          <li class="itemize">Instrucciones lógicas: Instrucciones para implementar las operaciones lógicas <span 
+class="cmmi-10x-x-109">AND</span>, <span 
+class="cmmi-10x-x-109">OR</span>, <span 
+class="cmmi-10x-x-109">XOR</span>,
+          <span 
+class="cmmi-10x-x-109">NOT</span>. Además cuenta con instrucciones para realizar shift rotates y shift normales.
+          </li>
+          <li class="itemize">Instrucciones de salto y subrutina: saltos condicionales, sin signo y con signo, además de saltos
+          por excepciones (overflow y carry).</li></ul>
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Tipos de datos: </span>Soporta variables del tamaño de la palabra de memoria (16 bits), lo que se
+     conoce como tipo <span 
+class="cmbx-10x-x-109">word </span>y también variables de 1 byte (8 bits). Esto se puede debido a que los
+     registros generales se pueden ocupar completos (e.g. AX) o como dos registros de 8 bits (e.g. AH y
+     AL). Un elemento importante a considerar debido a lo anterior, es que al definir una variable de
+     un cierto tipo (byte o word), esa variable sólo se podrá almacenar en un registro de tamaño
+     equivalente.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Modos de direccionamiento: </span>El ISA x86 soporta una gran variedad de modos de direccionamiento, los
+     cuales no requieren instrucciones especiales.
+          <ul class="itemize2">
+          <li class="itemize">Direccionamiento  inmediato:  se  implementa  indicando  directamente  el  literal  como  segundo
+          parámetro: <span 
+class="cmtt-10x-x-109">MOV AX, 10</span>
+          </li>
+          <li class="itemize">Direccionamiento  por  registros:  se  implementa  indicando  los  registros  fuente  como  segundo
+          parámetro y destino como primer parámetro: <span 
+class="cmtt-10x-x-109">MOV AX, BX</span>
+          </li>
+          <li class="itemize">Direccionamiento directo: se implementa usando la sintaxis especial de paréntesis cuadrados: <span 
+class="cmtt-10x-x-109">MOV</span>
+          <span 
+class="cmtt-10x-x-109">AX, [var1]</span>. En este caso la variable <span 
+class="cmtt-10x-x-109">var1 </span>tiene que haber sido definida del tipo word para que
+          la instrucción sea válida.
+          </li>
+          <li class="itemize">Direccionamiento indirecto por registros: se implementa usando la sintaxis especial de paréntesis
+          cuadrados: <span 
+class="cmtt-10x-x-109">MOV AX, [BX]</span>
+          </li>
+          <li class="itemize">Direccionamiento indexado con registro base y offset: se implementa usando la sintaxis especial
+          de paréntesis cuadrados e indicando con una suma los registros a usar: <span 
+class="cmtt-10x-x-109">MOV AX, [BX + SI]</span>
+          </li>
+          <li class="itemize">Direccionamiento indexado con registro base, registro índice y offset: se implementa usando la
+          sintaxis especial de paréntesis cuadrados e indicando con una suma los registros a usar y el offset:
+          <span 
+class="cmtt-10x-x-109">MOV AX, [BX + SI + 2]</span></li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Manejo del stack y subrutinas: </span>Stack usado para almacenar el <span 
+class="cmmi-10x-x-109">PC </span>luego de llamado a subrutinas,
+     para carga de registros generales individuales, carga de todos los registros de propósito general
+     (instrucciones <span 
+class="cmtt-10x-x-109">PUSHA </span>y <span 
+class="cmtt-10x-x-109">POPA</span>) del registro de status (instrucciones <span 
+class="cmtt-10x-x-109">PUSHF </span>y <span 
+class="cmtt-10x-x-109">POPF</span>) y usado para el paso de
+     parámetros.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Formato de la instrucción: </span>El formato depende del tipo de instrucción. Los formatos más relevantes
+     son:
+          <ul class="itemize2">
+          <li class="itemize">Operaciones entre dos registros o registro y memoria con direccionamiento indirecto:<br 
+class="newline" />
+          <div class="center" 
+>
+                                                                                                  
+                                                                                                  
+<!--l. 535--><p class="noindent" >
+<div class="tabular"> <table id="TBL-20" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-20-1g"><col 
+id="TBL-20-1"></colgroup><colgroup id="TBL-20-2g"><col 
+id="TBL-20-2"></colgroup><colgroup id="TBL-20-3g"><col 
+id="TBL-20-3"></colgroup><colgroup id="TBL-20-4g"><col 
+id="TBL-20-4"></colgroup><colgroup id="TBL-20-5g"><col 
+id="TBL-20-5"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-20-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-20-1-1"  
+class="td11">Opcode</td><td  style="white-space:nowrap; text-align:center;" id="TBL-20-1-2"  
+class="td11">Size</td><td  style="white-space:nowrap; text-align:center;" id="TBL-20-1-3"  
+class="td11">Opmode</td><td  style="white-space:nowrap; text-align:center;" id="TBL-20-1-4"  
+class="td11">Reg Dest/Address mode</td><td  style="white-space:nowrap; text-align:center;" id="TBL-20-1-5"  
+class="td11">Reg Src/Address mode</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-20-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-20-2-1"  
+class="td11">       </td></tr></table>
+</div></div>
+          </li>
+          <li class="itemize">Operaciones entre registro y literal:<br 
+class="newline" />
+          <div class="center" 
+>
+<!--l. 543--><p class="noindent" >
+<div class="tabular"> <table id="TBL-21" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-21-1g"><col 
+id="TBL-21-1"></colgroup><colgroup id="TBL-21-2g"><col 
+id="TBL-21-2"></colgroup><colgroup id="TBL-21-3g"><col 
+id="TBL-21-3"></colgroup><colgroup id="TBL-21-4g"><col 
+id="TBL-21-4"></colgroup><colgroup id="TBL-21-5g"><col 
+id="TBL-21-5"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-21-1-1"  
+class="td11">Opcode</td><td  style="white-space:nowrap; text-align:center;" id="TBL-21-1-2"  
+class="td11">Size</td><td  style="white-space:nowrap; text-align:center;" id="TBL-21-1-3"  
+class="td11">Opmode</td><td  style="white-space:nowrap; text-align:center;" id="TBL-21-1-4"  
+class="td11">Reg Dest</td><td  style="white-space:nowrap; text-align:center;" id="TBL-21-1-5"  
+class="td11">Literal</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-21-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-21-2-1"  
+class="td11">       </td></tr></table>
+</div></div>
+                                                                                                  
+                                                                                                  
+          </li>
+          <li class="itemize">Operaciones entre registro y memoria con direccionamiento directo:<br 
+class="newline" />
+          <div class="center" 
+>
+<!--l. 552--><p class="noindent" >
+<div class="tabular"> <table id="TBL-22" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-22-1g"><col 
+id="TBL-22-1"></colgroup><colgroup id="TBL-22-2g"><col 
+id="TBL-22-2"></colgroup><colgroup id="TBL-22-3g"><col 
+id="TBL-22-3"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-22-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-22-1-1"  
+class="td11">Opcode</td><td  style="white-space:nowrap; text-align:center;" id="TBL-22-1-2"  
+class="td11">Size</td><td  style="white-space:nowrap; text-align:center;" id="TBL-22-1-3"  
+class="td11">Address</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-22-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-22-2-1"  
+class="td11">       </td></tr></table>
+</div></div>
+          </li>
+          <li class="itemize">Saltos:
+          <div class="center" 
+>
+<!--l. 560--><p class="noindent" >
+<div class="tabular"> <table id="TBL-23" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-23-1g"><col 
+id="TBL-23-1"></colgroup><colgroup id="TBL-23-2g"><col 
+id="TBL-23-2"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-23-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-23-1-1"  
+class="td11">Opcode</td><td  style="white-space:nowrap; text-align:center;" id="TBL-23-1-2"  
+class="td11">Address</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-23-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-23-2-1"  
+class="td11">       </td></tr></table>
+</div></div>
+          <!--l. 567--><p class="noindent" >Donde:
+              <ul class="itemize3">
+              <li class="itemize"><span 
+class="cmmi-10x-x-109">Size </span>representa el tamaño del registro: <span 
+class="cmmi-10x-x-109">Size </span>= 0 representa 8 bits; <span 
+class="cmmi-10x-x-109">Size </span>= 1 representa 16
+              bits.
+              </li>
+              <li class="itemize"><span 
+class="cmmi-10x-x-109">Opmode </span>representa el modo de la operación, indicando si los operandos son dos registros o
+              un registro y un valor de memoria direccionado indirectamente.
+              </li>
+              <li class="itemize"><span 
+class="cmmi-10x-x-109">Addressmode </span>indica que modo de direccionamiento indirecto se utilizó y con que registros.</li></ul>
+          </li></ul>
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Palabras por instrucción: </span>Variable, desde 1 hasta 2 palabras de 16 bits.
+     </li>
+     <li class="itemize"><span 
+class="cmbx-10x-x-109">Ciclos por instrucción: </span>Variable, pero en general la mayoría de las instrucciones requiere múltiples ciclos
+     del clock.</li></ul>
+<!--l. 579--><p class="noindent" >Como ejemplo, a continuación se escribe el mismo código de multiplicación antes descrito, ocupando el ISA
+x86.
+   <!--l. 584-->
+   <div class="lstlisting" id="listing-4"><span class="label"><a 
+ id="x1-13001r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">JMP</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13002r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13003r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">3</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13004r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">2</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13005r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13006r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13007r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13008r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CL</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">[</span><span 
+class="cmtt-8">var1</span><span 
+class="cmtt-8">]</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13009r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">while</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">AL</span><span 
+class="cmtt-8">,[</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">]</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13010r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">AL</span><span 
+class="cmtt-8">,[</span><span 
+class="cmtt-8">var2</span><span 
+class="cmtt-8">]</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13011r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">[</span><span 
+class="cmtt-8">res</span><span 
+class="cmtt-8">],</span><span 
+class="cmtt-8">AL</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13012r12"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SUB</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CL</span><span 
+class="cmtt-8">,1</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13013r13"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CMP</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CL</span><span 
+class="cmtt-8">,0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13014r14"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">JNE</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">while</span>
+   
+   </div>
+<!--l. 602--><p class="indent" >   A continuación se muestra un segundo ejemplo, que calcula el promedio de un arreglo de datos, basado en el
+siguiente código de alto nivel:
+   <!--l. 607-->
+   <div class="lstlisting" id="listing-5"><span class="label"><a 
+ id="x1-13015r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">arreglo</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">new</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">[]{6,7,3,4,5};</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13016r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">n</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">5;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13017r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">prom</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13018r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">byte</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">=0;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13019r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">while</span><span 
+class="cmtt-8">(</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">&#x003C;</span><span 
+class="cmtt-8">n</span><span 
+class="cmtt-8">)</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13020r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">{</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13021r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">prom</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">+=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">arreglo</span><span 
+class="cmtt-8">[</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">];</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13022r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">i</span><span 
+class="cmtt-8">++;</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13023r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">}</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13024r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">prom</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">/=</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">n</span><span 
+class="cmtt-8">;</span>
+   
+                                                                                                  
+                                                                                                  
+   </div>
+   <!--l. 625-->
+   <div class="lstlisting" id="listing-6"><span class="label"><a 
+ id="x1-13027r1"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">jmp</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13028r2"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13029r3"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">arreglo</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">6</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13030r4"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">7</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13031r5"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">4</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13032r6"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">5</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13033r7"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">3</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13034r8"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">n</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">5</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13035r9"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">prom</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">db</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13036r10"></a></span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13037r11"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">start</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13038r12"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SI</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13039r13"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">AX</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">0</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13040r14"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">BX</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">arreglo</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13041r15"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CL</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">[</span><span 
+class="cmtt-8">n</span><span 
+class="cmtt-8">]</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13042r16"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">while</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13043r17"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CMP</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SI</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CX</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13044r18"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">JGE</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">end</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13045r19"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">DX</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">[</span><span 
+class="cmtt-8">BX</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">+</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SI</span><span 
+class="cmtt-8">]</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13046r20"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">ADD</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">AL</span><span 
+class="cmtt-8">,</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">DL</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13047r21"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">INC</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">SI</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13048r22"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">JMP</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">while</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13049r23"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">end</span><span 
+class="cmtt-8">:</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13050r24"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">DIV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">CL</span><span 
+class="cmtt-8">&#x00A0;</span><br /><span class="label"><a 
+ id="x1-13051r25"></a></span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">MOV</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">[</span><span 
+class="cmtt-8">prom</span><span 
+class="cmtt-8">],</span><span 
+class="cmtt-8">&#x00A0;</span><span 
+class="cmtt-8">AL</span>
+   
+   </div>
+<!--l. 654--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.2.3.   </span> <a 
+ id="x1-140002.2.3"></a>One Instruction Set Computer (OISC)</h5>
+<!--l. 656--><p class="noindent" >El concepto de RISC, de buscar un ISA minimalista para simplificar el diseño de la microarquitectura de un
+computador, se puede llevar a un extremo, en lo que se denomina ultra-RISC donde se busca encontrar un ISA que
+tenga el menor número de instrucciones, pero que le permitan seguir ejecutando todas las funcionalidades de un
+computador.
+<!--l. 658--><p class="indent" >   El mínimo de instrucciones necesarias para definir un computador completo es una, y por tanto el modelo de
+computador con una ISA de una instrucción se conoce como One Instruction Set Computer (OISC). Existen
+distintas instrucciones que se pueden ocupar para lograr un computador OISC, en particular una de ellas es: <span 
+class="cmtt-10x-x-109">SUBLEQ</span>
+<span 
+class="cmtt-10x-x-109">a,b,c </span>, la cual se interpreta como:
+     <ul class="itemize1">
+     <li class="itemize">Mem[a] = Mem[a] - Mem[b]
+     </li>
+     <li class="itemize">if(Mem[a] <span 
+class="cmsy-10x-x-109">&#x2264; </span>0) goto c</li></ul>
+<!--l. 664--><p class="indent" >   Con esta instrucción se pueden emular muchas de las instrucciones típicas de un ISA:
+<!--l. 666--><p class="indent" >   <span 
+class="cmtt-10x-x-109">JMP c</span>
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmtt-10x-x-109">SUBLEQ Z,Z, c </span>//Z es una variable que tiene almacenado un 0</li></ul>
+<!--l. 671--><p class="indent" >   <span 
+class="cmtt-10x-x-109">ADD a, b</span>
+     <ul class="itemize1">
+     <li class="itemize">dir0: <span 
+class="cmtt-10x-x-109">SUBLEQ Z,b, dir1 </span>//Z = 0 - b = -b
+     </li>
+     <li class="itemize">dir1: <span 
+class="cmtt-10x-x-109">SUBLEQ a,Z, dir2 </span>//a = a - Z = a - -b = a + b
+     </li>
+     <li class="itemize">dir2: <span 
+class="cmtt-10x-x-109">SUBLEQ Z,Z, dir3 </span>//Z = Z - Z = 0</li></ul>
+<!--l. 678--><p class="indent" >   <span 
+class="cmtt-10x-x-109">MOV a, b</span>
+     <ul class="itemize1">
+     <li class="itemize">dir0: <span 
+class="cmtt-10x-x-109">SUBLEQ a,a, dir1 </span>//a = a - a = 0
+     </li>
+     <li class="itemize">dir1: <span 
+class="cmtt-10x-x-109">SUBLEQ Z,b, dir2 </span>//Z = 0 - b = -b
+     </li>
+     <li class="itemize">dir2: <span 
+class="cmtt-10x-x-109">SUBLEQ a,Z, dir3 </span>//a = 0 - -b = b
+                                                                                                  
+                                                                                                  
+     </li>
+     <li class="itemize">dir3: <span 
+class="cmtt-10x-x-109">SUBLEQ Z,Z, dir4 </span>//Z = Z - Z = 0</li></ul>
+    
+</body></html> 
+
+                                                                                                  
+
+

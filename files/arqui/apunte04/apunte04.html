@@ -1,0 +1,507 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html xml:lang="es" > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="apunte04.tex"> 
+<meta name="date" content="2014-04-05 21:15:00"> 
+<link rel="stylesheet" type="text/css" href="apunte04.css"> 
+</head><body 
+>
+<div class="center" 
+>
+<!--l. 13--><p class="noindent" >
+<!--l. 14--><p class="noindent" ><span 
+class="cmbx-10">IIC2343 Arquitectura de Computadores</span><br />
+<span 
+class="cmbx-12x-x-120">Interacción Humano-Computador</span><br />
+<span 
+class="cmbsy-6">©</span><span 
+class="cmbx-6">Alejandro Echeverría, Hans-Albert L</span><span 
+class="cmbx-6">öbel</span><br />
+</div>
+   <h3 class="sectionHead"><span class="titlemark">1.   </span> <a 
+ id="x1-10001"></a>Motivación</h3>
+<!--l. 23--><p class="noindent" >Construir una máquina que sea capaz de realizar operaciones y almacenar datos no tiene mayor utilidad a menos
+que una persona pueda interactuar con ella, para entregarle indicaciones e información y para obtener los resultados
+de los procesamientos realizados o la información almacenada. De esta forma para completar un computador
+funcional debemos agregar la capacidad de interacción entre humano y computador, y estudiar como implementar
+dicha interacción.
+<!--l. 25--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">2.   </span> <a 
+ id="x1-20002"></a>Interacción simple</h3>
+<!--l. 27--><p class="noindent" >La comunicación entre persona y computador debe ser idealmente en ambas direcciones. En general se dice que un
+dispositivo que permite que un humano interactúe con un computador se denomina dispositivo de <span 
+class="cmbx-10x-x-109">entrada </span>o <span 
+class="cmbx-10x-x-109">input</span>.
+Cuando el dispositivo es controlado por el computador para entregar información a un humano se denomina
+dispositivo de <span 
+class="cmbx-10x-x-109">salida </span>o <span 
+class="cmbx-10x-x-109">output</span>. Al conjunto de estos dispositivos se les denomina de Entrada y Salida, <span 
+class="cmbx-10x-x-109">E/S</span>, o
+Input y Output, <span 
+class="cmbx-10x-x-109">I/O</span>.
+<!--l. 29--><p class="indent" >   La forma más simple de interactuar con un computador es realizarlo directamente en el lenguaje que este
+maneja: números binarios. De manera similar la forma más simple para que un computador se comunique con
+nosotros es a través de mecanismos que fácilmente puedan ser controlados mediante representación
+binaria.
+<!--l. 31--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">2.1.   </span> <a 
+ id="x1-30002.1"></a>Dispositivos de entrada</h4>
+<!--l. 33--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.1.1.   </span> <a 
+ id="x1-40002.1.1"></a>Interruptores y botones</h5>
+<!--l. 35--><p class="noindent" >Un primer dispositivo de entrada que permite entregar información binaria al computador es el <span 
+class="cmbx-10x-x-109">interruptor</span>. Un
+interruptor es básicamente un mecanismo con dos estados, conectado y desconectado, que en caso de estar
+                                                                                                  
+                                                                                                  
+conectado permite el paso de corriente eléctrica entre sus extremos, y en caso de estar desconectado no lo permite.
+Estos dos estados pueden ser fácilmente interpretados como los dos posibles números binarios: si el interruptor
+está desconectado, se interpreta como un 0, si el interruptor está conectado, se interpreta como un
+1.
+<!--l. 37--><p class="indent" >   Los interruptores nos permiten interactuar de manera directa con los componentes vistos previamente. Por
+ejemplo, podemos usar interruptores para cargar los bits de datos almacenados en un par de registros que estén
+conectados a una ALU, como se observa en la figura <a 
+href="#x1-40011">1<!--tex4ht:ref: fig:interruptoresdatos --></a>. Es importante señalar que el valor <span 
+class="cmbx-10x-x-109">5V</span>, conectado a los
+interruptores en la figura, significa <span 
+class="cmti-10x-x-109">5 volts </span>y representa el voltaje eléctrico más comúnmente usado para representar
+un 1 en circuitos binarios.
+                                                                                                  
+                                                                                                  
+<!--l. 41--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-40011"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 43--><p class="noindent" ><img 
+src="png/interruptoresdatos.png" alt="PIC" class="graphics" width="280" ><!--tex4ht:graphics  
+name="apunte041x.png" src="figs1/interruptoresdatos.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;1: </span><span  
+class="content">Interruptores usados para cargar valor en registro. En el diagrama los interruptores se representan
+como una línea cortada.</span></div><!--tex4ht:label?: x1-40011 -->
+                                                                                                  
+                                                                                                  
+<!--l. 46--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 48--><p class="indent" >   También es posible usar interruptores para representar bits de control: por ejemplo, podemos usar
+tres interruptores para indicar la operación seleccionada por la ALU, como se observa en la figura
+<a 
+href="#x1-40022">2<!--tex4ht:ref: fig:interruptorescontrol --></a>.
+<!--l. 50--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-40022"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 52--><p class="noindent" ><img 
+src="png/interruptorescontrol.png" alt="PIC" class="graphics" width="400" ><!--tex4ht:graphics  
+name="apunte042x.png" src="figs1/interruptorescontrol.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;2: </span><span  
+class="content">Interruptores usados para seleccionar operación de la ALU.</span></div><!--tex4ht:label?: x1-40022 -->
+                                                                                                  
+                                                                                                  
+<!--l. 55--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 57--><p class="indent" >   Para completar el circuito anterior, falta agregar la señal de control de los registros, para permitir el
+almacenamiento de los números entregados a través de los interruptores. Una opción sería agregar otro interruptor,
+que al estar conectado indique un 1 en la señal de control y permita el almacenamiento. Dado que los registros
+tienen señal de control activada por flanco de subida, no necesitamos tener la señal 1 todo el tiempo, y nos basta
+con enviar un «pulso»
+que indique un 1 para que deje almacenar, pero que luego la señal de control vuelva a 0. Para esto podemos
+ocupar otro dispositivo: un <span 
+class="cmbx-10x-x-109">botón</span>. Al igual que un interruptor, un botón puede tener dos estados,
+conectado y desconectado, pero la diferencia es que el botón debe permanecer presionado para mantener la
+conexión, mientras que el interruptor queda fijo en el estado de conexión, sin necesidad de tener que estar
+presionándolo.
+<!--l. 59--><p class="indent" >   Podemos agregar entonces un botón para controlar la señal de almacenamiento de los registros, como se observa
+en la figura <a 
+href="#x1-40033">3<!--tex4ht:ref: fig:interruptoresbotones --></a>.
+<!--l. 62--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-40033"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 64--><p class="noindent" ><img 
+src="png/interruptoresbotones.png" alt="PIC" class="graphics" width="440" ><!--tex4ht:graphics  
+name="apunte043x.png" src="figs1/interruptoresbotones.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;3: </span><span  
+class="content">Botones usados para almacenar resultados en registros.</span></div><!--tex4ht:label?: x1-40033 -->
+                                                                                                  
+                                                                                                  
+<!--l. 67--><p class="indent" >   </div><hr class="endfigure">
+   <h5 class="subsubsectionHead"><span class="titlemark">2.1.2.   </span> <a 
+ id="x1-50002.1.2"></a>Problemas y limitaciones</h5>
+<!--l. 71--><p class="noindent" >Si los interruptores y botones fueran ideales, cuando se conectan deberían inmediatamente representar un 1, y
+cuando se desconectan, inmediatamente un 0, como se observa en la figura <a 
+href="#x1-50014">4<!--tex4ht:ref: fig:sinrebote --></a>.
+<!--l. 73--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-50014"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 75--><p class="noindent" ><img 
+src="png/sinrebote.png" alt="PIC" class="graphics" width="400" ><!--tex4ht:graphics  
+name="apunte044x.png" src="figs1/sinrebote.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;4: </span><span  
+class="content">Interruptor ideal.</span></div><!--tex4ht:label?: x1-50014 -->
+                                                                                                  
+                                                                                                  
+<!--l. 78--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 80--><p class="indent" >   Sin embargo, esto no ocurre en la práctica, debido a que los circuitos eléctricos no son ideales, y por tanto no
+tienen transiciones instantáneas. Lo que ocurre en la práctica es lo que se observa en la figura <a 
+href="#x1-50025">5<!--tex4ht:ref: fig:rebote --></a>: al cerrar el
+interruptor, la señal eléctrica «<span 
+class="cmbx-10x-x-109">rebota</span>»
+varias veces en torno al valor de voltaje asociado al 1 binario, hasta que finalmente se regula en el estado correcto.
+Mientras la señal está rebotando se dice que esta está en <span 
+class="cmbx-10x-x-109">régimen transiente</span>, y cuando se estabiliza, entra en
+<span 
+class="cmbx-10x-x-109">régimen permanente</span>.
+<!--l. 82--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-50025"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 84--><p class="noindent" ><img 
+src="png/rebote.png" alt="PIC" class="graphics" width="400" ><!--tex4ht:graphics  
+name="apunte045x.png" src="figs1/rebote.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;5: </span><span  
+class="content">Interruptor real.</span></div><!--tex4ht:label?: x1-50025 -->
+                                                                                                  
+                                                                                                  
+<!--l. 87--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 89--><p class="indent" >   El problema del período transiente es que la señal va a cambiar de 0 binario a 1 binario varias veces, ya
+que ambos valores son detectados para ciertos rangos, no para valores específicos. Así, presionar un
+botón una vez, lo que debería interpretarse como un solo 1, podría percibirse como una secuencia
+de 1s seguidos, lo que dependiendo de qué estemos haciendo con el dato ingresado puede presentar
+problemas.
+<!--l. 91--><p class="indent" >   La solución a este problema consiste en agregar entre el interruptor y el componente un circuito de retraso, que
+sólo dejará pasar la señal luego de un cierto tiempo. De esta forma, si este circuito se calibra para dejar pasar la
+señal sólo después del transiente, se evita el problema del rebote.
+   <h4 class="subsectionHead"><span class="titlemark">2.2.   </span> <a 
+ id="x1-60002.2"></a>Dispositivos de salida</h4>
+<!--l. 96--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">2.2.1.   </span> <a 
+ id="x1-70002.2.1"></a>LEDs y displays</h5>
+<!--l. 98--><p class="noindent" >Para que el computador despliegue información de manera simple, necesitamos algo similar a los interruptores, es
+decir que funcionen con dos estados representables por los números 0 y 1, y que dependiendo del estado, se
+modifique alguna propiedad del dispositivo que sea percibible por el ser humano. Un dispositivo que cumple con lo
+anterior es el <span 
+class="cmbx-10x-x-109">led </span>(light-emitting diode). Un led es un componente con dos conectores, que cumple que cuando pasa
+corriente entre estos se ilumina, y cuando no pasa corriente, no se ilumina. De esta forma podemos interpretar un 1
+como una luz prendida, y un 0 como una luz apagada.
+<!--l. 100--><p class="indent" >   En la figura <a 
+href="#x1-70016">6<!--tex4ht:ref: fig:displaybinario --></a> se observan 4 ledes conectados a la salida de la ALU para representar la información del resultado
+de la operación como un número binario, mediante ledes encendidos y apagados. Los ledes se representan con el
+símbolo de un diodo (triángulo) más dos flechas que indican que emite luz. El símbolo al cual se conecta el led en el
+diagrama se conoce como «tierra»
+y se interpreta como el punto en que se completa el circuito eléctrico.
+<!--l. 102--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70016"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 104--><p class="noindent" ><img 
+src="png/displaybinario.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte046x.png" src="figs1/displaybinario.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;6: </span><span  
+class="content">Display binario para mostrar operación realizada con la ALU.</span></div><!--tex4ht:label?: x1-70016 -->
+                                                                                                  
+                                                                                                  
+<!--l. 107--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 109--><p class="indent" >   Ocupando directamente los ledes para representar números binarios ya nos permite percibir información desde el
+computador, sin embargo, nos gustaría que esta información estuviera en un formato más fácil de leer y entender
+que un número binario. Para lograr esto se pueden utilizar varios ledes, que en conjunto formen símbolos más
+complejos, por ejemplo todos los dígitos decimales. Un componente que permite esto es el denominado <span 
+class="cmbx-10x-x-109">display de</span>
+<span 
+class="cmbx-10x-x-109">7 segmentos</span>, que corresponde a un arreglo de 7 ledes ubicados en forma de 8. Con este display es posible,
+encendiendo ciertos ledes específicos, formar los símbolos de los dígitos decimales. Más aún, podemos incluso
+representar algunas letras, lo que nos permite representar números en hexadecimal, como se observa en la figura
+<a 
+href="#x1-70027">7<!--tex4ht:ref: fig:display7segnums --></a>.
+<!--l. 111--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70027"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 113--><p class="noindent" ><img 
+src="png/display7segnums.png" alt="PIC" class="graphics" width="200" ><!--tex4ht:graphics  
+name="apunte047x.png" src="figs1/display7segnums.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;7: </span><span  
+class="content">Dígitos hexadecimales representados con displays de 7 segmentos.</span></div><!--tex4ht:label?: x1-70027 -->
+                                                                                                  
+                                                                                                  
+<!--l. 116--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 118--><p class="indent" >   Podemos entonces, reemplazar nuestro display binario del circuito anterior por un display de 7 segmentos que
+entregará el resultado en representación hexadecimal. Para lograr esto, sin embargo, debemos diseñar un circuito
+que convierta el número binario de 4 bits en los 7 bits necesarios para prender los ledes que correspondan en el
+display y, de esta forma, representar el número correcto. Este circuito tendrá 4 entradas y 7 salidas y
+puede ser fácilmente diseñado con compuertas básicas. En la figura <a 
+href="#x1-70038">8<!--tex4ht:ref: fig:display7seg --></a> se muestra una abstracción de
+este componente o controlador del display, completando el cicruito para desplegar el resultado de la
+ALU.
+<!--l. 120--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-70038"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 122--><p class="noindent" ><img 
+src="png/display7seg.png" alt="PIC" class="graphics" width="480" ><!--tex4ht:graphics  
+name="apunte048x.png" src="figs1/display7seg.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;8: </span><span  
+class="content">Display de 7 segmentos para mostrar operación realizada con la ALU.</span></div><!--tex4ht:label?: x1-70038 -->
+                                                                                                  
+                                                                                                  
+<!--l. 125--><p class="indent" >   </div><hr class="endfigure">
+   <h3 class="sectionHead"><span class="titlemark">3.   </span> <a 
+ id="x1-80003"></a>Interacción avanzada: Señales continuas</h3>
+<!--l. 129--><p class="noindent" >Los dispositivos mostrados en la sección previa permiten tener una interacción básica con los computadores. Sin
+embargo, no nos bastan para realizar interacciones más complejas. La comunicación de entrada vista previamente,
+por ejemplo, obliga al humano a ingresar el número en binario, lo que no es lo ideal, ya que limita la complejidad de
+la información que se puede enviar.
+<!--l. 131--><p class="indent" >   La solución al problema de interactuar con información más compleja se basa en primer lugar en el uso de
+sensores y dispositivos que sean capaces de convertir información en señales eléctricas (y viceversa). Una vez
+convertida la información en señal eléctrica, se procederá a convertir en números binarios entendibles por el
+computador.
+<!--l. 133--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.1.   </span> <a 
+ id="x1-90003.1"></a>Dispositivos de entrada</h4>
+<!--l. 135--><p class="noindent" >Para explicar como ingresar información compleja a un computador, utilizaremos como ejemplo el sonido. El sonido
+se puede interpretar físicamente como el movimiento del aire, producido por ondas de presión. Como se
+señaló anteriormente, el primer paso para poder ingresar información al computador es convertirla a una señal
+eléctrica. En el caso del sonido, el dispositivo que convierte movimiento de aire en señal eléctrica es un micrófono.
+Un micrófono consiste en un imán que se mueve por la presión del aire y que al moverse induce corriente eléctrica
+proporcional al movimiento. De esta manera el movimiento del aire se traduce en una señal de corriente
+eléctrica.
+<!--l. 137--><p class="indent" >   Para convertir la señal eléctrica en información almacenable en el computador se requieren realizar diversos
+pasos que se describen en la siguiente sección.
+<!--l. 139--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.1.1.   </span> <a 
+ id="x1-100003.1.1"></a>Conversión de señal continua a información digital</h5>
+<!--l. 141--><p class="noindent" >Siguiendo el ejemplo anterior, luego de usar el micrófono obtenemos una señal eléctrica, la cual se puede graficar
+como una variación en la intensidad de corriente en el tiempo, como se observa en la figura <a 
+href="#x1-100019">9<!--tex4ht:ref: fig:continua --></a>. La señal en este
+momento se caracteriza por ser una <span 
+class="cmbx-10x-x-109">señal continua </span>o <span 
+class="cmbx-10x-x-109">análogica</span>, es decir para todo tiempo tiene un valor, no hay
+saltos entre instantes de tiempo.
+<!--l. 143--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-100019"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 145--><p class="noindent" ><img 
+src="png/continua.png" alt="PIC" class="graphics" width="400" ><!--tex4ht:graphics  
+name="apunte049x.png" src="figs1/continua.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;9: </span><span  
+class="content">Señal continua.</span></div><!--tex4ht:label?: x1-100019 -->
+                                                                                                  
+                                                                                                  
+<!--l. 148--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 150--><p class="indent" >   Podemos pensar la función descrita en la figura <a 
+href="#x1-100019">9<!--tex4ht:ref: fig:continua --></a> como un conjunto de valores asociados a un
+determinado tiempo. Nos interesaría entonces poder almacenar estos números en el computador y
+de esta forma almacenar la señal completa. Sin embargo, como la señal es continua este conjunto
+de valores es infinito, ya que para cada posible tiempo en el rango determinado, existirá un número
+particular que indicará el valor de la señal. Esto nos presenta un problema, ya que el computador no tiene
+espacio de almacenamiento infinito, y por tanto, debemos reducir la cantidad de números para poder
+almacenarlos.
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-110003.1.1"></a>Muestreo</h5>
+<!--l. 154--><p class="noindent" >Un proceso que permite reducir la información de una señal es el <span 
+class="cmbx-10x-x-109">muestreo </span>el cual consiste en obtener una
+muestra representativa de valores de la señal, separados por deltas de tiempo iguales, como se observa en
+la figura <a 
+href="#x1-1100110">10<!--tex4ht:ref: fig:sampled --></a>. Esta muestra de valores también se interpreta como una señal, denominada <span 
+class="cmbx-10x-x-109">señal de</span>
+<span 
+class="cmbx-10x-x-109">tiempo discreto </span>o <span 
+class="cmbx-10x-x-109">señal discreta</span>, y debido a esto este proceso también se denomina <span 
+class="cmbx-10x-x-109">discretizar </span>la
+señal.
+<!--l. 156--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1100110"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 158--><p class="noindent" ><img 
+src="png/sampled.png" alt="PIC" class="graphics" width="400" ><!--tex4ht:graphics  
+name="apunte0410x.png" src="figs1/sampled.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;10: </span><span  
+class="content">Señal discreta.</span></div><!--tex4ht:label?: x1-1100110 -->
+                                                                                                  
+                                                                                                  
+<!--l. 161--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 163--><p class="indent" >   El delta de tiempo entre cada muestra se denomina el <span 
+class="cmbx-10x-x-109">período de muestreo</span>, simbolizado por la letra <span 
+class="cmmi-10x-x-109">T</span>, que
+representa cada cuánto estamos obteniendo una nueva muestra. La <span 
+class="cmbx-10x-x-109">frecuencia de muestreo</span>, <span 
+class="cmmi-10x-x-109">f</span>, es una medida
+equivalente que representa el inverso multiplicativo del período (<span 
+class="cmmi-10x-x-109">T </span>= <img 
+src="apunte0411x.png" alt="1
+f"  class="frac" align="middle">).
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-120003.1.1"></a>Cuantización</h5>
+<!--l. 167--><p class="noindent" >Se podría pensar que luego de discretizar la señal estamos listos para almacenar la información en el computador.
+Esto no es así, debido a que aunque ahora tenemos un número finito de valores, cada uno de estos valores puede
+estar dentro de un rango infinito de posibilidades. El proceso que se utiliza para reducir este rango infinito se
+denomina <span 
+class="cmbx-10x-x-109">cuantización</span>, y consiste en definir que un valor en un determinado rango puede tomar sólo un valor de
+una serie finita. Al igual que en el muestreo la distancia entre estos posibles valores es constante. La cantidad de
+valores disponible se denomina <span 
+class="cmbx-10x-x-109">resolución </span>y puede ser medida tanto como cantidad de números, como en bits (esto
+último es lo más habitual).
+<!--l. 169--><p class="indent" >   Si se realiza una cuantización directamente sobre la señal continua se obtiene una señal como la de la figura <a 
+href="#x1-1200111">11<!--tex4ht:ref: fig:quantized --></a>,
+la cual tiene infinitos valores en el tiempo, pero cada uno de estos valores toma sólo un valor dentro de un conjunto
+finito de posibilidades.
+<!--l. 171--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1200111"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 173--><p class="noindent" ><img 
+src="png/quantized.png" alt="PIC" class="graphics" width="400" ><!--tex4ht:graphics  
+name="apunte0412x.png" src="figs1/quantized.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;11: </span><span  
+class="content">Señal cuantizada de tiempo continuo.</span></div><!--tex4ht:label?: x1-1200111 -->
+                                                                                                  
+                                                                                                  
+<!--l. 176--><p class="indent" >   </div><hr class="endfigure">
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-130003.1.1"></a>Conversión análogica/digital</h5>
+<!--l. 180--><p class="noindent" >La conversión de una señal análogica a información almacenable por el computador involucra, como es de
+esperar, la mezcla de los dos procesos visto anteriormente: muestreo y cuantización, en ese orden.
+Luego de realizar ambos procesos, se dice que se ha obtenido una <span 
+class="cmbx-10x-x-109">señal digital</span>, es decir un conjunto
+de valores numéricos que sí puede ser almacenado por el computador, lo que se observa en la figura
+<a 
+href="#x1-1300112">12<!--tex4ht:ref: fig:digital --></a>.
+<!--l. 182--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                                                  
+                                                                                                  
+<a 
+ id="x1-1300112"></a>
+                                                                                                  
+                                                                                                  
+<!--l. 184--><p class="noindent" ><img 
+src="png/digital.png" alt="PIC" class="graphics" width="400" ><!--tex4ht:graphics  
+name="apunte0413x.png" src="figs1/digital.eps"  
+-->
+<br /> <div class="caption" 
+><span class="id">Figura&#x00A0;12: </span><span  
+class="content">Señal digital.</span></div><!--tex4ht:label?: x1-1300112 -->
+                                                                                                  
+                                                                                                  
+<!--l. 187--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 189--><p class="indent" >   El componente que se utiliza para convertir una señal eléctrica continua en una señal digital se denomina
+<span 
+class="cmbx-10x-x-109">conversor análogico-digital</span>, el cual recibe una entrada análogica y entrega con un período <span 
+class="cmmi-10x-x-109">T </span>segundos valores
+representados por <span 
+class="cmmi-10x-x-109">n </span>bits de resolución.
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-140003.1.1"></a>Problemas y limitaciones</h5>
+<!--l. 193--><p class="noindent" >El principal problema de este proceso antes descrito es la pérdida de información. Dado que estamos reduciendo
+infinitos valores de rango infinito, a un número finito de valores de rango finito, se está reduciendo también la
+información. Para aumentar la cantidad de información obtenida, es necesario aumentar los dos parámetros de la
+conversión: frecuencia de muestreo y resolución. Si queremos almacenar más valores por segundo, debemos
+aumentar la frecuencia de muestreo; si queremos que cada valor tenga mayor precisión, aumentamos la
+resolución.
+<!--l. 195--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">3.2.   </span> <a 
+ id="x1-150003.2"></a>Dispositivos de salida</h4>
+<!--l. 197--><p class="noindent" >
+   <h5 class="subsubsectionHead"><span class="titlemark">3.2.1.   </span> <a 
+ id="x1-160003.2.1"></a>Conversión de información digital a señal continua</h5>
+<!--l. 199--><p class="noindent" >La conversión de una señal digital a una análogica corresponde al proceso inverso que el antes descrito. Para realizar
+este proceso se utiliza un componente denominado <span 
+class="cmbx-10x-x-109">conversor digital-análogico</span>, el cual recibe <span 
+class="cmmi-10x-x-109">n </span>bits cada <span 
+class="cmmi-10x-x-109">T</span>
+segundos y entrega una señal eléctrica continua.
+<!--l. 201--><p class="indent" >   El proceso consiste en utilizar lo que se denomina un <span 
+class="cmbx-10x-x-109">filtro de reconstrucción </span>que a partir de cada par de
+valores digitales, interpola los valores intermedios, completando la señal. Una vez reconstruida la señal continua, se
+pasa a convertirla nuevamente a la representación física que corresponda. Por ejemplo en el caso del audio, se ocupa
+un parlante, el cual recibe una señal eléctrica, y la utiliza para mover un imán, el cual a su vez induce movimiento
+en el aire, generando el sonido que corresponde.
+<!--l. 203--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.   </span> <a 
+ id="x1-170004"></a>Referencias e información adicional</h3>
+     <ul class="itemize1">
+     <li class="itemize">Buxton, B., Human Input to Computer Systems: Theories, Techniques and Technology,<br 
+class="newline" />http://billbuxton.com/inputManuscript.html
+     </li>
+     <li class="itemize">Shannon, C., Communication in the Presence of Noise, 1949, <br 
+class="newline" />http://www.stanford.edu/class/ee104/shannonpaper.pdf
+     </li>
+     <li class="itemize">Englebart, D., A Research Center for Augmenting Human Inteligence, 1968, <br 
+class="newline" />http://video.google.com/videoplay?docid=-8734787622017763097</li></ul>
+    
+</body></html> 
+
+                                                                                                  
+
+
