@@ -1,4 +1,4 @@
-		body { 
+		body {
 			background-color: #000;
 			color: #FFF;
 		}
@@ -12,13 +12,13 @@
 		.container .footer {
 			font-size: 11px;
 		}
-		
+
 		.container .controls {
 			position: absolute;
 			top: 0;
 			right: 0;
 			background: #222;
-			
+
 			border: 1px solid white;
 			padding: 20px;
 			width: 340px;
@@ -33,16 +33,15 @@
 			font-size: 11px;
 		}
 
-		#navlist li
+		.navlist li
 		{
 			display: inline;
 			list-style-type: none;
 			padding-right: 20px;
-			
+
 		}
 
 		.icon
 		{
 			border: 1px solid white;
 		}
-		

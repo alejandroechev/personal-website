@@ -1,22 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<title>Alejandro Echeverria @ Vreyn</title>
 
 	<link rel="stylesheet" type="text/css" href="styles/style.css" media="screen" />
 
 </head>
 <body>
+	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+
+
 	<script type="text/javascript">
+
+	var projectsAndToys = [
+		{
+			"name": "boids",
+			"url": "boids/index.html",
+			"thumbnail": "files/images/boids.png",
+			"description": "A javascript implementation of the boids flocking algorithm."
+		},
+		{
+			"name": "solvers",
+			"url": "kinematics/index.html",
+			"thumbnail": "files/images/kinematics.png",
+			"description": "A comparison of numerical solvers for physics simulation."
+		},
+		{
+			"name": "cornell",
+			"url": "https://www.shadertoy.com/view/Xs3SzM",
+			"thumbnail": "files/images/cornell.png",
+			"description": "A raytracer implemented as a pixel shader."
+		},
+		{
+			"name": "csg",
+			"url": "https://www.shadertoy.com/view/MddSD7",
+			"thumbnail": "files/images/csg.png",
+			"description": "An interactive Constructive Solid Geometry (CSG) editor implemented in a pixel shader."
+		},
+		{
+			"name": "pong",
+			"url": "https://www.shadertoy.com/view/lscXRM",
+			"thumbnail": "files/images/pong.png",
+			"description": "A 3D pong game implemented in a pixel shader."
+		}
+	];
+
 	document.addEventListener('DOMContentLoaded', function(){
+		var diventer = d3.select("#projectsToys").selectAll("ul")
+		.data(projectsAndToys)
+		.enter().append("li");
+
+		var link = diventer.append("a")
+		.attr("target", "_blank")
+		.attr("href", function(d) { return d.url; });
+
+		link.append("img")
+		.attr("title", function(d) { return d.description; })
+		.attr("src", function(d) { return d.thumbnail; })
+		.attr("width", 128)
+		.attr("height", 128);
+
 
 	});
 	</script>
 
 	<div class="container">
 		<div class="menu">
-			<p> work and research projects </p>
+			<!-- <p> work and research projects </p>
 				<ul id="navlist">
 					<li>
 						<a href="http://www.boamine.com" target="_blank">
@@ -39,11 +91,9 @@
 						</a>
 					</li>
 
-				</ul>
+				</ul> -->
 
-
-
-			<p> teaching </p>
+			<!-- <p> teaching </p>
 				<ul id="navlist">
 					<li>
 						<a href="https://www.flickr.com/photos/63440838@N06/sets/72157626703818149/" target="_blank">
@@ -55,37 +105,11 @@
 							<img src="files/images/arqui.png" alt="" width="128" height="128"/>
 						</a>
 					</li>
-				</ul>
+				</ul> -->
 
-			<p> personal projects and toys </p>
-				<ul id="navlist">
-					<li>
-						<a href="http://vreyn.itch.io/archipelago-generator" target="_blank">
-							<img src="files/images/archipelago.png" alt="" width="128" height="128"/>
-						</a>
-					</li>
-					<li>
-						<a href="boids/index.html" target="_blank">
-							<img src="files/images/boids.png" alt="" width="128" height="128"/>
-						</a>
-					</li>
-					<li>
-						<a href="kinematics/index.html" target="_blank">
-							<img src="files/images/kinematics.png" alt="" width="128" height="128"/>
-						</a>
-					</li>
-					<li>
-						<a href="https://www.shadertoy.com/view/MsX3W7" target="_blank">
-							<img src="files/images/crystalball.jpg" alt="" width="128" height="128"/>
-						</a>
-					</li>
-
-					<li>
-						<a href="https://www.shadertoy.com/view/MdfGDM" target="_blank">
-							<img src="files/images/spheres.png" alt="" width="128" height="128"/>
-						</a>
-					</li>
-				</ul>
+			<p> toys </p>
+			<ul id="projectsToys" class="navlist"/>
+			</ul>
 		</div>
 		<div class="footer">
 			<p >Alejandro Echeverria 2016.</p>
