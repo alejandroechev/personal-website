@@ -25,6 +25,20 @@
 			font-family: "Arial";
 			font-size: 11px;
 		}
+		
+		.container .tooltip {
+			position: absolute;
+			top: 0;
+			right: 0;
+			background: #222;
+			text-align: left;
+
+			border: 1px solid white;
+			padding: 20px;
+			width: 240px;
+			font-family: "Arial";
+			font-size: 11px;
+		}
 
 		.container .menu {
 			padding: 20px;
@@ -44,4 +58,9 @@
 		.icon
 		{
 			border: 1px solid white;
+		}
+		
+		div.tooltip {	
+    		position: absolute;			
+    		text-align: center;	
 		}

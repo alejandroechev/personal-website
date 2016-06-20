@@ -13,6 +13,59 @@
 
 
 	<script type="text/javascript">
+	var researchWork = [
+		{
+			"name": "akselos",
+			"url": "http://www.akselos.com/",
+			"thumbnail": "files/images/akselos.png",
+			"description": "I work as a software engineer at Akselos developing next generation simulation software for engineering. You can learn more about Akselos by clicking this link."
+		},
+		{
+			"name": "boamine",
+			"url": "http://www.boamine.com",
+			"thumbnail": "files/images/dm.png",
+			"description": "I worked for 3 years as a software engineer at Boamine, developing DeepMine, an innovative strategic mine planning tool. You can learn more about DeepMine by clicking this link."
+		},
+		{
+			"name": "researchPaper",
+			"url": "files/atomicintrinsicintegration.pdf",
+			"thumbnail": "files/images/atomic.png",
+			"description": "I did a PhD on educational games, where I developed the Atomic Intrinsic Integration Approach, a model for designing eductional games to teach physics. You can read the full paper, published in Computers & Education journal by clicking this link (PDF)."
+		},
+		{
+			"name": "firstColony",
+			"url": "https://www.youtube.com/watch?v=3dmGCSC5odY",
+			"thumbnail": "files/images/astro.jpg",
+			"description": "As part of my PhD thesis on educational games, I designed and developed a game to teach eletrostatics called First Colony. You can watch a trailer of the game clicking by clicking this link."
+		},
+		{
+			"name": "ar",
+			"url": "http://www.youtube.com/watch?v=hiAQbpYaBlE",
+			"thumbnail": "files/images/ar.jpg",
+			"description": "As part of my PhD thesis on educational games, I designed and developed an augmented reality platform to integrate physics games in the classroom. You can watch a demo of the platform clicking by clicking this link."
+		}
+	];
+	
+	var teaching = [
+		{
+			"name": "grafica",
+			"url": "https://www.flickr.com/photos/63440838@N06/sets/72157626703818149",
+			"thumbnail": "http://farm6.static.flickr.com/5190/5769408543_fb633e9f51_b.jpg",
+			"description": "I currently teach the Computer Graphics course at PUC, where students developed there own renderers (raytracing and rasterization). You can see some of the results generated with the student's renderers by clicking this link."
+		},
+		{
+			"name": "arqui",
+			"url": "files/arqui/index.html",
+			"thumbnail": "files/images/arqui.png",
+			"description": "I taught for several years the Computer Architecture course at PUC, which I designed. You can review the complete lecture notes of the course by clicking this link (in Spanish)."
+		},
+		{
+			"name": "grafica2",
+			"url": "https://www.youtube.com/watch?v=QMa9yobO99k",
+			"thumbnail": "files/images/grafica2.png",
+			"description": "I taught the Advanced Topics in Computer Graphics course at PUC, where students developed several interesting 3d graphicss applications. You can watch the course show reel by clicking this link."
+		}
+	];
 
 	var projectsAndToys = [
 		{
@@ -46,10 +99,13 @@
 			"description": "A 3D pong game implemented in a pixel shader."
 		}
 	];
-
-	document.addEventListener('DOMContentLoaded', function(){
-		var diventer = d3.select("#projectsToys").selectAll("ul")
-		.data(projectsAndToys)
+	
+	function configureSection(name, data)
+	{
+		var divTooltip = d3.select('#description');
+		
+		var diventer = d3.select(name).selectAll("ul")
+		.data(data)
 		.enter().append("li");
 
 		var link = diventer.append("a")
@@ -57,59 +113,42 @@
 		.attr("href", function(d) { return d.url; });
 
 		link.append("img")
-		.attr("title", function(d) { return d.description; })
 		.attr("src", function(d) { return d.thumbnail; })
 		.attr("width", 128)
-		.attr("height", 128);
+		.attr("height", 128)
+		.on("mouseenter", function(d){
+			 divTooltip.html(d.description)
+			    .style("display", "inline")
+			    .style("left", (d3.event.pageX) + "px")		
+				.style("top", (d3.event.pageY + 60) + "px");	
+		})
+		.on("mouseout", function(d){
+  			divTooltip.style("display", "none");	
+		});
 
+	}
+
+	document.addEventListener('DOMContentLoaded', function(){
+		configureSection("#workResearch", researchWork);
+		configureSection("#courses", teaching);
+		configureSection("#projectsToys", projectsAndToys);
 
 	});
 	</script>
+	
+	
 
 	<div class="container">
+		<div id="description" class="tooltip"></div>
+		
 		<div class="menu">
-			<!-- <p> work and research projects </p>
-				<ul id="navlist">
-					<li>
-						<a href="http://www.boamine.com" target="_blank">
-										<img  src="files/images/dm.png" alt="" width="128" height="128"/>
-						</a>
-					</li>
-					<li>
-						<a href="http://www.youtube.com/watch?v=hiAQbpYaBlE" target="_blank">
-							<img src="files/images/ar.jpg" alt="" width="128" height="128"/>
-						</a>
-					</li>
-					<li>
-						<a href="http://www.youtube.com/watch?v=KvWk-mc6_9k" target="_blank">
-							<img src="files/images/laser.jpg" alt="" width="128" height="128"/>
-						</a>
-					</li>
-					<li>
-						<a href="https://www.youtube.com/watch?v=3dmGCSC5odY" target="_blank">
-							<img src="files/images/astro.jpg" alt="" width="128" height="128"/>
-						</a>
-					</li>
-
-				</ul> -->
-
-			<!-- <p> teaching </p>
-				<ul id="navlist">
-					<li>
-						<a href="https://www.flickr.com/photos/63440838@N06/sets/72157626703818149/" target="_blank">
-							<img src="http://farm6.static.flickr.com/5190/5769408543_fb633e9f51_b.jpg" alt="" width="128" height="128"/>
-						</a>
-					</li>
-					<li>
-						<a href="files/arqui/index.html" target="_blank">
-							<img src="files/images/arqui.png" alt="" width="128" height="128"/>
-						</a>
-					</li>
-				</ul> -->
-
-			<p> toys </p>
-			<ul id="projectsToys" class="navlist"/>
-			</ul>
+			
+			<p> work and research projects </p>
+			<ul id="workResearch" class="navlist"/></ul>
+			<p> teaching courses </p>
+			<ul id="courses" class="navlist"/></ul>
+			<p> personal projects and toys </p>
+			<ul id="projectsToys" class="navlist"/></ul>
 		</div>
 		<div class="footer">
 			<p >Alejandro Echeverria 2016.</p>
@@ -122,7 +161,7 @@
 				I am a sofware engineer and researcher, interested in creating and developing interactive technologies that enhance people's ability to perform complex tasks.
 			</p>
 			<p>
-				I am currently working at <a href="http://www.akselos.com">Akselos</a>, developing next generation software for engineering design and infrastructure assessment, and I am an adjunct instructor and researcher at <a href="http://www.puc.cl">PUC</a> teaching Computer Graphics courses and researching AR and VR applications.
+				I am currently working at <a href="http://www.akselos.com" target="_blank">Akselos</a>, developing next generation software for engineering design and infrastructure assessment, and I am an adjunct instructor and researcher at <a href="http://www.puc.cl" target="_blank">PUC</a> teaching Computer Graphics courses and researching AR and VR applications.
 			</p>
 			<p>
 				<a href="https://www.linkedin.com/pub/alejandro-echeverria/14/991/4b0" target="_blank"><img src="files/images/linkedin.png" alt="" width="32" height="32"/></a>
