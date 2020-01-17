@@ -13,19 +13,39 @@
 
 
 	<script type="text/javascript">
-	var researchWork = [
+	var work = [
+		{
+			"name": "buda.com",
+			"url": "https://www.buda.com/",
+			"thumbnail": "files/images/buda.jpg",
+			"description": "I am Agile Project Manager and Lead Developer of Buda.com, the largest cryptocurrency exchange in Latin America, used by more than 100.000 users."
+		},
+		{
+			"name": "platanus",
+			"url": "https://platan.us/",
+			"thumbnail": "files/images/platanus.png",
+			"description": "I was an Agile PM at Platanus, one of the leading agile software companies in Chile."
+		},
+		{
+			"name": "thoughtworks",
+			"url": "https://www.thoughtworks.com/",
+			"thumbnail": "files/images/tw.png",
+			"description": "I was a Senior Consultant at ThoughtWorks helping agile software development methodologies adoption in some of the largest companies in Chile."
+		},
 		{
 			"name": "akselos",
 			"url": "http://www.akselos.com/",
 			"thumbnail": "files/images/akselos.png",
-			"description": "I work as a software engineer at Akselos developing next generation simulation software for engineering. You can learn more about Akselos by clicking this link."
+			"description": "I worked as a Software Engineer at Akselos developing Akselos Modeler, 3D modeling and visualization software for structural engineering simulation and analysis, currently being used to model and assess some of the largest engineering structures in the world. "
 		},
 		{
 			"name": "boamine",
-			"url": "http://www.boamine.com",
-			"thumbnail": "files/images/dm.png",
-			"description": "I worked for 3 years as a software engineer at Boamine, developing DeepMine, an innovative strategic mine planning tool. You can learn more about DeepMine by clicking this link."
-		},
+			"url": "http://gem-ing.cl/web/empresa/id/deepmine/",
+			"thumbnail": "files/images/dm.jpg",
+			"description": "I was the Lead Developer of DeepMine, an innovative strategic mine planning tool, used to operate some of the largest open pit copper mines in the world."
+		}
+	];
+	var research = [
 		{
 			"name": "researchPaper",
 			"url": "files/atomicintrinsicintegration.pdf",
@@ -45,7 +65,7 @@
 			"description": "As part of my PhD thesis on educational games, I designed and developed an augmented reality platform to integrate physics games in the classroom. You can watch a demo of the platform clicking by clicking this link."
 		}
 	];
-	
+
 	var teaching = [
 		{
 			"name": "grafica",
@@ -99,11 +119,10 @@
 			"description": "A 3D pong game implemented in a pixel shader."
 		}
 	];
-	
+
 	function configureSection(name, data)
 	{
 		var divTooltip = d3.select('#description');
-		
 		var diventer = d3.select(name).selectAll("ul")
 		.data(data)
 		.enter().append("li");
@@ -119,39 +138,38 @@
 		.on("mouseenter", function(d){
 			 divTooltip.html(d.description)
 			    .style("display", "inline")
-			    .style("left", (d3.event.pageX) + "px")		
-				.style("top", (d3.event.pageY + 60) + "px");	
+			    .style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY + 60) + "px");
 		})
 		.on("mouseout", function(d){
-  			divTooltip.style("display", "none");	
+  			divTooltip.style("display", "none");
 		});
 
 	}
 
 	document.addEventListener('DOMContentLoaded', function(){
-		configureSection("#workResearch", researchWork);
+		configureSection("#work", work);
+		configureSection("#research", research);
 		configureSection("#courses", teaching);
 		configureSection("#projectsToys", projectsAndToys);
 
 	});
 	</script>
-	
-	
 
 	<div class="container">
 		<div id="description" class="tooltip"></div>
-		
 		<div class="menu">
-			
-			<p> work and research projects </p>
-			<ul id="workResearch" class="navlist"/></ul>
+			<p> work experience </p>
+			<ul id="work" class="navlist"/></ul>
+			<p> research projects </p>
+			<ul id="research" class="navlist"/></ul>
 			<p> teaching courses </p>
 			<ul id="courses" class="navlist"/></ul>
 			<p> personal projects and toys </p>
 			<ul id="projectsToys" class="navlist"/></ul>
 		</div>
 		<div class="footer">
-			<p >Alejandro Echeverria 2016.</p>
+			<p >Alejandro Echeverria 2020.</p>
 		</div>
 		<div class="controls">
 			<h3>
@@ -161,7 +179,7 @@
 				I am a software engineer, interested in designing and developing interactive tools to enhance how we learn, think, design and create.
 			</p>
 			<p>
-				I am currently working at <a href="http://www.akselos.com" target="_blank">Akselos</a>, developing next generation simulation software for engineering, and I am an adjunct professor at <a href="http://www.puc.cl" target="_blank">PUC</a> teaching Computer Graphics courses.
+				I am currently working at <a href="http://www.buda.com" target="_blank">Buda.com</a>, developing and operating the largest cryptocurrency exchange in Latin America, and I am an adjunct professor at <a href="https://www.uandes.cl" target="_blank">Universidad Los Andes</a> teaching Software Design.
 			</p>
 			<p>
 				<a href="https://www.linkedin.com/pub/alejandro-echeverria/14/991/4b0" target="_blank"><img src="files/images/linkedin.png" alt="" width="32" height="32"/></a>
