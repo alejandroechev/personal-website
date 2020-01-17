@@ -17,16 +17,26 @@
 			position: absolute;
 			top: 0;
 			right: 0;
+			width: 340px;
 			background: #222;
 
 			border: 1px solid white;
 			padding: 20px;
-			width: 340px;
 			font-family: "Arial";
 			font-size: 11px;
 		}
-		
+
+		.container .summary {
+			background: #222;
+
+			border: 1px solid white;
+			padding: 20px;
+			font-family: "Arial";
+			font-size: 11px;
+		}
+
 		.container .tooltip {
+			display: none;
 			position: absolute;
 			top: 0;
 			right: 0;
@@ -42,9 +52,15 @@
 
 		.container .menu {
 			padding: 20px;
-			width: 860px;
 			font-family: "Arial";
 			font-size: 11px;
+		}
+
+		.navlist {
+			display: flex;
+			flex-wrap: wrap;
+			width: 100%;
+			padding: 0;
 		}
 
 		.navlist li
@@ -59,8 +75,8 @@
 		{
 			border: 1px solid white;
 		}
-		
-		div.tooltip {	
-    		position: absolute;			
-    		text-align: center;	
+
+		div.tooltip {
+    		position: absolute;
+    		text-align: center;
 		}
